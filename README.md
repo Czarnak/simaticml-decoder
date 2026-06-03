@@ -32,7 +32,7 @@ came from (so any rendered claim is traceable to a net), and anything the folder
 cannot interpret is surfaced **loudly** rather than dropped — a silent omission in
 authoritative-looking SCL is the worst possible failure.
 
-## Scope (v0)
+## Scope
 
 Covered: FC/FB blocks; LAD/FBD folding (series→AND, `O`→OR, fan-out, `Negated`→NOT,
 daisy-chained coils, structural latch detection); SCL network reconstruction;
@@ -70,12 +70,9 @@ tests/                   authored separately; run by CI
 .github/workflows/ci.yml ruff + pytest on push / PR
 ```
 
-## Status
+## Future
 
-All phases implemented and validated end-to-end against the real V21 sample
-exports: `simaticml-decode BLOCK.xml --format both` parses, folds, and writes
-readable SCL plus a JSON sidecar, surfacing any unhandled construct loudly. Tests
-are authored separately by the maintainer; CI runs `ruff` + `pytest` on push / PR.
+Support for new YAML-like S7 PLCs export formats.
 
 ---
 *Created with Claude AI*
