@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
@@ -22,14 +25,4 @@ jobs:
       - name: Lint (ruff)
         run: ruff check .
       - name: Tests (pytest)
-        run: |
-          set +e
-          # tests/ is authored separately by the maintainer and tests/fixtures/ is
-          # gitignored, so a fresh checkout can have no tests/ directory at all.
-          # Treat a missing dir (pytest exit 4) or "no tests collected" (exit 5)
-          # as a scaffold pass until real tests land.
-          if [ ! -d tests ]; then echo "No tests/ directory yet — passing scaffold."; exit 0; fi
-          pytest -q tests/
-          code=$?
-          if [ "$code" -eq 5 ]; then echo "No tests collected yet — passing scaffold."; exit 0; fi
-          exit $code
+        run: pytest -q --cov=simaticml_decoder --cov-report=term-missing --cov-fail-under=80
