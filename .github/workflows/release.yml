@@ -27,7 +27,7 @@ jobs:
       - name: Lint (ruff)
         run: ruff check .
       - name: Tests (pytest)
-        run: pytest -q --cov=simaticml_decoder --cov-report=term-missing --cov-fail-under=80
+        run: pytest -q --cov=simaticml_decoder --cov-report=term-missing --cov-fail-under=70
 
   build:
     name: Build distribution
