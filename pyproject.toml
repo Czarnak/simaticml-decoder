@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "simaticml-decoder"
+version = "0.1.0"
+description = "Translate exported SimaticML LAD/FBD blocks (TIA V21) into readable SCL plus a JSON metadata sidecar."
+requires-python = ">=3.11"
+readme = "README.md"
+# stdlib-only runtime (xml.etree.ElementTree). Keeping zero runtime deps makes the
+# eventual PyInstaller/Nuitka freeze small and the PowerShell-subprocess call trivial.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["ruff", "pytest"]
+
+[project.scripts]
+simaticml-decode = "simaticml_decoder.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/simaticml_decoder"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
