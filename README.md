@@ -76,12 +76,6 @@ tests/                   authored separately; run by CI
 .github/workflows/ci.yml ruff + pytest on push / PR
 ```
 
-## Release
-
-Publishing is handled by GitHub Actions and PyPI Trusted Publishing. A package is
-published only when a `vX.Y.Z` tag is pushed and the release workflow passes
-lint, tests, coverage, version checks, package build, and `twine check`.
-
 ## Future
 
 Support for new YAML-like S7 PLCs export formats.
