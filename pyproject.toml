@@ -8,12 +8,37 @@ version = "0.1.0"
 description = "Translate exported SimaticML LAD/FBD blocks (TIA V21) into readable SCL plus a JSON metadata sidecar."
 requires-python = ">=3.11"
 readme = "README.md"
+authors = [{ name = "Czarnak" }]
+keywords = ["simatic", "simaticml", "tia-portal", "scl", "plc"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Manufacturing",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing",
+    "Topic :: Utilities",
+]
 # stdlib-only runtime (xml.etree.ElementTree). Keeping zero runtime deps makes the
 # eventual PyInstaller/Nuitka freeze small and the PowerShell-subprocess call trivial.
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/Czarnak/simaticml-decoder"
+Issues = "https://github.com/Czarnak/simaticml-decoder/issues"
+Repository = "https://github.com/Czarnak/simaticml-decoder"
+
 [project.optional-dependencies]
-dev = ["ruff", "pytest"]
+dev = [
+    "build",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "twine",
+]
 
 [project.scripts]
 simaticml-decode = "simaticml_decoder.cli:main"
