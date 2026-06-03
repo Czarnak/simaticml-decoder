@@ -318,6 +318,8 @@ data/
 .tmp_pytest/
 graphify-out/manifest.json
 graphify-out/cost.json
+graphify-out/.graphify_python
+graphify-out/.graphify_root
 graphify-out/cache/
 docs/
 tests/fixtures/
