@@ -82,28 +82,6 @@ Publishing is handled by GitHub Actions and PyPI Trusted Publishing. A package i
 published only when a `vX.Y.Z` tag is pushed and the release workflow passes
 lint, tests, coverage, version checks, package build, and `twine check`.
 
-Before the first public release:
-
-1. Create or confirm the `simaticml-decoder` project on PyPI.
-2. Enable 2FA on the PyPI account.
-3. Add a PyPI Trusted Publisher for `Czarnak/simaticml-decoder`, workflow
-   `.github/workflows/release.yml`, environment `pypi`.
-4. Create the GitHub environment `pypi`; requiring manual approval is recommended.
-5. Confirm ownership metadata and licensing before publishing.
-
-Release commands:
-
-```bash
-python -m pip install -e ".[dev]"
-ruff check .
-pytest -q --cov=simaticml_decoder --cov-report=term-missing --cov-fail-under=80
-python scripts/check_release_version.py v0.1.0
-python -m build
-python -m twine check dist/*
-git tag v0.1.0
-git push origin v0.1.0
-```
-
 ## Future
 
 Support for new YAML-like S7 PLCs export formats.
