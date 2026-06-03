@@ -72,8 +72,10 @@ tests/                   authored separately; run by CI
 
 ## Status
 
-Scaffold with defined phase interfaces. Implementation proceeds phase by phase,
-parse first, validated against real V21 exports.
+All phases implemented and validated end-to-end against the real V21 sample
+exports: `simaticml-decode BLOCK.xml --format both` parses, folds, and writes
+readable SCL plus a JSON sidecar, surfacing any unhandled construct loudly. Tests
+are authored separately by the maintainer; CI runs `ruff` + `pytest` on push / PR.
 
 ---
 *Created with Claude AI*
