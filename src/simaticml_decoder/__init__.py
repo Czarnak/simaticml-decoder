@@ -10,4 +10,4 @@ Supporting modules: instructions.py (part catalog, data not logic),
 operand.py (Access -> display string), scl_reconstruct.py (SCL networks).
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

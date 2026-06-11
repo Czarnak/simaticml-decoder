@@ -1,16 +1,16 @@
-# Graph Report - simaticml-decoder  (2026-06-03)
+# Graph Report - simaticml-decoder  (2026-06-04)
 
 ## Corpus Check
-- 18 files · ~12,578 words
+- 18 files · ~15,571 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 315 nodes · 710 edges · 13 communities
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 16 edges (avg confidence: 0.78)
+- 334 nodes · 741 edges · 14 communities
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5babe400`
+- Built from commit: `dcc027e5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -28,6 +28,7 @@
 - [[_COMMUNITY_Community 10|Community 10]]
 - [[_COMMUNITY_Community 11|Community 11]]
 - [[_COMMUNITY_Community 12|Community 12]]
+- [[_COMMUNITY_Community 13|Community 13]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `_NetFolder` - 30 edges
@@ -39,7 +40,7 @@
 7. `_parse_flgnet()` - 11 edges
 8. `_materialize()` - 10 edges
 9. `_parse_access()` - 10 edges
-10. `_access()` - 10 edges
+10. `fixture_file()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Render the SCL text artifact. Raises until implemented (Phase 3).` --rationale_for--> `emit_scl()`  [EXTRACTED]
@@ -53,7 +54,7 @@
 - `_nc()` --calls--> `Endpoint`  [INFERRED]
   tests/test_fold.py → src/simaticml_decoder/model.py
 
-## Communities (13 total, 0 thin omitted)
+## Communities (14 total, 0 thin omitted)
 
 ### Community 0 - "XML Parsing Helpers"
 Cohesion: 0.09
@@ -72,56 +73,60 @@ Cohesion: 0.17
 Nodes (29): _box_body(), _box_call_form(), _build_trace(), _claim(), emit_scl(), emit_sidecar(), _expr(), _expr_core() (+21 more)
 
 ### Community 4 - "CLI And SCL Emission"
-Cohesion: 0.14
-Nodes (20): build_parser(), main(), Command-line entry point: one exported SimaticML block in, SCL and/or JSON out., _report(), _write(), simaticml-decoder — SimaticML LAD/FBD -> readable SCL + JSON metadata sidecar., Render a model.Access into its TIA display string.  Split out because it is need, model.Access -> display string (TIA conventions; see module docstring). (+12 more)
+Cohesion: 0.1
+Nodes (19): fixture_file(), load_fixture(), Shared pytest setup and fixture-corpus helpers.  The sample XML exports live in, Return a callable name -> Path, skipping if the fixture is absent., Return a callable name -> model.Document, skipping if the fixture is absent., Unit tests for the CLI. Error/no-op paths are self-contained; happy paths and di, test_directory_in_place_no_output(), test_directory_mirrors_subtree() (+11 more)
 
 ### Community 5 - "Folding Algorithms"
 Cohesion: 0.13
 Nodes (24): And, Assign, BoxCall, Compare, DecodedBlock, Edge, FlipFlop, Literal (+16 more)
 
 ### Community 6 - "Instruction Catalog"
+Cohesion: 0.19
+Nodes (15): simaticml-decoder — SimaticML LAD/FBD -> readable SCL + JSON metadata sidecar., Render a model.Access into its TIA display string.  Split out because it is need, model.Access -> display string (TIA conventions; see module docstring)., render(), _render_address(), _render_component(), _render_constant(), _render_symbol() (+7 more)
+
+### Community 7 - "Operand Rendering"
 Cohesion: 0.17
 Nodes (15): Unit tests for emit — ir.* -> SCL text + JSON sidecar.  IR objects are construct, _scl_of(), test_box_add_with_enable_guard(), test_box_inc_under_rising_edge(), test_box_move_assignment_form(), test_box_timer_instance_call_form(), test_flipflop_reset_priority(), test_latch_is_called_out() (+7 more)
 
-### Community 7 - "Operand Rendering"
-Cohesion: 0.13
-Nodes (14): fixture_file(), load_fixture(), Shared pytest setup and fixture-corpus helpers.  The sample XML exports live in, Return a callable name -> Path, skipping if the fixture is absent., Return a callable name -> model.Document, skipping if the fixture is absent., Unit tests for the CLI. Error paths are self-contained; happy paths use the fixt, test_format_scl_only(), test_happy_path_writes_both() (+6 more)
-
 ### Community 8 - "Community 8"
+Cohesion: 0.2
+Nodes (16): build_parser(), decode_file(), _dest_dir(), discover(), _exit_code(), FileOutcome, main(), Command-line entry point: one block or a whole directory in, SCL and/or JSON out (+8 more)
+
+### Community 9 - "Community 9"
 Cohesion: 0.35
 Nodes (15): Endpoint, First endpoint is the source; the rest are sinks (fan-out)., Wire, _ic(), _nc(), _net(), _pr(), Unit tests for fold — model.* -> ir.* (the wire-graph folding).  Networks are bu (+7 more)
 
-### Community 9 - "Community 9"
+### Community 10 - "Community 10"
 Cohesion: 0.3
 Nodes (11): _access(), Unit tests for operand.render — the Access -> TIA display-string conventions., test_address_bool_byte_bit(), test_address_word(), test_array_index(), test_bit_slice_renders_percent_x(), test_dotted_local_path(), test_global_variable_quotes_root_only() (+3 more)
 
-### Community 10 - "Community 10"
+### Community 11 - "Community 11"
 Cohesion: 0.42
 Nodes (8): _box(), _cmp(), _coil(), lookup(), _pf(), The instruction catalog — deliberately *data, not logic*.  fold.py reasons about, Return the Spec for a Part name, or None (caller folds to ir.Unhandled)., Spec
 
-### Community 11 - "Community 11"
+### Community 12 - "Community 12"
 Cohesion: 0.48
 Nodes (6): check_release_version(), main(), Validate that a release tag matches the package versions., read_init_version(), read_project_version(), version_from_tag()
 
-### Community 12 - "Community 12"
+### Community 13 - "Community 13"
 Cohesion: 0.6
 Nodes (5): test_check_release_version_accepts_matching_v_tag(), test_check_release_version_rejects_non_v_tag(), test_check_release_version_reports_init_mismatch(), test_check_release_version_reports_pyproject_mismatch(), _write_project()
 
 ## Knowledge Gaps
-- **56 isolated node(s):** `Validate that a release tag matches the package versions.`, `Render the readable SCL text artifact for a decoded block.`, `Build the JSON-serialisable sidecar dict (schema in plan §7).`, `UId -> short claim, so any rendered statement is traceable to its net.`, `model.Document -> ir.DecodedBlock (folded networks + xref + inventory).` (+51 more)
+- **61 isolated node(s):** `Validate that a release tag matches the package versions.`, `Result of decoding one file. Carries enough to report without re-deriving.`, `Decode one block. Catches its own expected errors and reports them through the`, `Every ``.xml`` file under ``root`` (case-insensitive), sorted for determinism.`, `Rebuild ``source``'s parent directory, relative to ``input_root``, under     ``o` (+56 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `_NetFolder` connect `XML Parsing Helpers` to `Semantic IR Types`?**
-  _High betweenness centrality (0.109) - this node is a cross-community bridge._
-- **Why does `Wire` connect `Community 8` to `Semantic IR Types`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
-- **Why does `Category` connect `Semantic IR Types` to `XML Parsing Helpers`, `Community 10`?**
-  _High betweenness centrality (0.050) - this node is a cross-community bridge._
-- **What connects `Validate that a release tag matches the package versions.`, `Render the readable SCL text artifact for a decoded block.`, `Build the JSON-serialisable sidecar dict (schema in plan §7).` to the rest of the system?**
-  _56 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.101) - this node is a cross-community bridge._
+- **Why does `Wire` connect `Community 9` to `Semantic IR Types`?**
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `Category` connect `Semantic IR Types` to `XML Parsing Helpers`, `Community 11`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **What connects `Validate that a release tag matches the package versions.`, `Result of decoding one file. Carries enough to report without re-deriving.`, `Decode one block. Catches its own expected errors and reports them through the` to the rest of the system?**
+  _61 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `XML Parsing Helpers` be split into smaller, more focused modules?**
   _Cohesion score 0.09 - nodes in this community are weakly interconnected._
 - **Should `Network Graph Folding` be split into smaller, more focused modules?**

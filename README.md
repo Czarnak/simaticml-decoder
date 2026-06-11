@@ -63,9 +63,19 @@ extra pulls lint, test, coverage, build, and package-validation tools.
 ## Usage
 
 ```bash
-simaticml-decode BLOCK.xml --format both
-# one file at a time; --format {scl,json,both}; -o OUTDIR for output location
+# Single block -> SCL + JSON, written beside the input (or into -o OUTDIR):
+simaticml-decode BLOCK.xml --format both     # --format {scl,json,both}
+
+# Bulk: point at a directory to decode every .xml beneath it. The output tree
+# mirrors the input's folder structure (blocks/motion/Axis.xml -> OUTDIR/motion/Axis.scl).
+simaticml-decode blocks/ -o decoded/
+simaticml-decode blocks/ --no-recursive      # top level only, skip subdirectories
 ```
+
+In bulk mode each file is independent: a malformed block is reported on stderr and
+skipped rather than aborting the run, and the process exits non-zero only when at
+least one file failed. Pointing at a missing path or an empty directory is a quiet
+no-op (exit 0). `-q` silences the per-file progress summary.
 
 ## Layout
 

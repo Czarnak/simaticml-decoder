@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "simaticml-decoder"
-version = "0.1.0"
+version = "0.2.0"
 description = "Translate exported SimaticML LAD/FBD blocks (TIA V21) into readable SCL plus a JSON metadata sidecar."
 requires-python = ">=3.11"
 readme = "README.md"
@@ -19,6 +19,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Text Processing",
     "Topic :: Utilities",
 ]
@@ -32,13 +34,7 @@ Issues = "https://github.com/Czarnak/simaticml-decoder/issues"
 Repository = "https://github.com/Czarnak/simaticml-decoder"
 
 [project.optional-dependencies]
-dev = [
-    "build",
-    "pytest",
-    "pytest-cov",
-    "ruff",
-    "twine",
-]
+dev = ["build", "pytest", "pytest-cov", "ruff", "twine"]
 
 [project.scripts]
 simaticml-decode = "simaticml_decoder.cli:main"
