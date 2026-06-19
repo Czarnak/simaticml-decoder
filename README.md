@@ -1,4 +1,6 @@
-# simaticml-decoder
+# SimaticML Decoder
+
+![PyPI - Downloads](https://img.shields.io/pypi/dm/simaticml-decoder)
 
 Translate exported **SimaticML LAD/FBD** blocks (Siemens TIA Portal **V21**) into
 readability-first **SCL** plus a **JSON metadata sidecar**.
