@@ -16,10 +16,10 @@ if str(_SRC) not in sys.path:
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 
 _BLOCK_FIXTURES = {
-    "FC_Cargador": FIXTURES_DIR / "SimaticML" / "PLC_1" / "Program blocks" / "FC_Cargador.xml",
-    "MHJ-PLC-Lab-Function-S71200": (
-        FIXTURES_DIR / "SimaticML" / "PLC_1" / "Program blocks" / "MHJ-PLC-Lab-Function-S71200.xml"
+    "Inputs_FB": (
+        FIXTURES_DIR / "SimaticML" / "PLC_1" / "Program blocks" / "100_Inputs" / "Inputs_FB.xml"
     ),
+    "AnalogInput": FIXTURES_DIR / "SimaticML" / "Types" / "Blocks" / "AnalogInput.xml",
 }
 
 

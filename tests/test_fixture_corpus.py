@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
-from simaticml_decoder import cli, emit, fold, parse
+from simaticml_decoder import cli, emit, fold, ir, parse
 
 
 CORPUS_ROOT = Path(__file__).parent / "fixtures"
@@ -27,16 +28,34 @@ def _semantic_summary(decoded) -> dict:
     for network in decoded.networks:
         statements = []
         for statement in network.statements:
-            statements.append(
-                {
-                    "condition": emit._expr(statement.value),
-                    "kind": statement.kind.value,
-                    "target": statement.target.name,
-                    "type": type(statement).__name__,
-                }
-            )
+            if isinstance(statement, ir.UserCall):
+                statements.append(
+                    {
+                        "block_type": statement.block_type,
+                        "enable": emit._expr(statement.enable) if statement.enable else None,
+                        "instance": str(statement.instance) if statement.instance else None,
+                        "name": statement.name,
+                        "params": {
+                            name: emit._expr(value) for name, value in sorted(statement.params.items())
+                        },
+                        "type": type(statement).__name__,
+                    }
+                )
+            else:
+                statements.append(
+                    {
+                        "condition": emit._expr(statement.value),
+                        "kind": statement.kind.value,
+                        "target": statement.target.name,
+                        "type": type(statement).__name__,
+                    }
+                )
         networks.append({"index": network.index, "statements": statements})
     return {"kind": decoded.kind, "name": decoded.name, "networks": networks}
+
+
+def _sha256(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
 def test_manifest_declares_local_evaluation_only_corpus():
@@ -82,18 +101,18 @@ def test_cross_format_mapping_does_not_pair_resources_across_export_roots():
         assert not _path(resource).with_suffix(".s7dcl").exists()
 
 
-def test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens():
-    case = next(case for case in _manifest()["cases"] if case["id"] == "simaticml-fbd-fc")
+def test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums():
+    case = next(case for case in _manifest()["cases"] if case["id"] == "simaticml-lad-fb")
     source = _path(case["input"])
     decoded = fold.fold_block(parse.parse_file(str(source)))
 
-    assert _semantic_summary(decoded) == json.loads(
-        _path(case["goldens"]["semantic_ir"]).read_text(encoding="utf-8")
-    )
-    assert emit.emit_scl(decoded) == _path(case["goldens"]["scl"]).read_text(encoding="utf-8")
-    assert emit.emit_sidecar(decoded) == json.loads(
-        _path(case["goldens"]["json"]).read_text(encoding="utf-8")
-    )
+    expected = json.loads(_path(case["goldens"]["checksums"]).read_text(encoding="utf-8"))
+    actual = {
+        "semantic_ir": _sha256(json.dumps(_semantic_summary(decoded), sort_keys=True, separators=(",", ":"))),
+        "scl": _sha256(emit.emit_scl(decoded)),
+        "json": _sha256(json.dumps(emit.emit_sidecar(decoded), sort_keys=True, separators=(",", ":"))),
+    }
+    assert actual == expected
 
 
 def test_expected_diagnostics_are_non_skipping_and_exact(tmp_path):

@@ -9,7 +9,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L1",
       "id": "scripts_check_release_version_py",
-      "community": 14,
+      "community": 16,
       "norm_label": "check_release_version.py"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L15",
       "id": "scripts_check_release_version_read_project_version",
-      "community": 14,
+      "community": 16,
       "norm_label": "read_project_version()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L21",
       "id": "scripts_check_release_version_read_init_version",
-      "community": 14,
+      "community": 16,
       "norm_label": "read_init_version()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L29",
       "id": "scripts_check_release_version_version_from_tag",
-      "community": 14,
+      "community": 16,
       "norm_label": "version_from_tag()"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L38",
       "id": "scripts_check_release_version_check_release_version",
-      "community": 14,
+      "community": 16,
       "norm_label": "check_release_version()"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L53",
       "id": "scripts_check_release_version_main",
-      "community": 14,
+      "community": 16,
       "norm_label": "main()"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "scripts/check_release_version.py",
       "source_location": "L1",
       "id": "scripts_check_release_version_rationale_1",
-      "community": 14,
+      "community": 16,
       "norm_label": "validate that a release tag matches the package versions."
     },
     {
@@ -288,7 +288,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L1",
       "id": "src_simaticml_decoder_emit_py",
-      "community": 9,
+      "community": 8,
       "norm_label": "emit.py"
     },
     {
@@ -297,7 +297,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L35",
       "id": "simaticml_decoder_emit_emit_scl",
-      "community": 9,
+      "community": 8,
       "norm_label": "emit_scl()"
     },
     {
@@ -306,7 +306,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L49",
       "id": "simaticml_decoder_emit_render_network",
-      "community": 9,
+      "community": 8,
       "norm_label": "_render_network()"
     },
     {
@@ -315,7 +315,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L74",
       "id": "simaticml_decoder_emit_render_statement",
-      "community": 9,
+      "community": 8,
       "norm_label": "_render_statement()"
     },
     {
@@ -324,7 +324,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L88",
       "id": "simaticml_decoder_emit_render_assign",
-      "community": 9,
+      "community": 8,
       "norm_label": "_render_assign()"
     },
     {
@@ -333,7 +333,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L108",
       "id": "simaticml_decoder_emit_render_flipflop",
-      "community": 9,
+      "community": 8,
       "norm_label": "_render_flipflop()"
     },
     {
@@ -342,7 +342,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L130",
       "id": "simaticml_decoder_emit_render_box",
-      "community": 9,
+      "community": 8,
       "norm_label": "_render_box()"
     },
     {
@@ -351,7 +351,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L142",
       "id": "simaticml_decoder_emit_box_body",
-      "community": 9,
+      "community": 8,
       "norm_label": "_box_body()"
     },
     {
@@ -360,7 +360,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L165",
       "id": "simaticml_decoder_emit_box_call_form",
-      "community": 9,
+      "community": 8,
       "norm_label": "_box_call_form()"
     },
     {
@@ -369,7 +369,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L180",
       "id": "simaticml_decoder_emit_render_user_call",
-      "community": 9,
+      "community": 8,
       "norm_label": "_render_user_call()"
     },
     {
@@ -378,7 +378,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L202",
       "id": "simaticml_decoder_emit_expr",
-      "community": 9,
+      "community": 8,
       "norm_label": "_expr()"
     },
     {
@@ -387,7 +387,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L209",
       "id": "simaticml_decoder_emit_expr_core",
-      "community": 9,
+      "community": 8,
       "norm_label": "_expr_core()"
     },
     {
@@ -396,7 +396,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L235",
       "id": "simaticml_decoder_emit_wrap_if",
-      "community": 9,
+      "community": 8,
       "norm_label": "_wrap_if()"
     },
     {
@@ -405,7 +405,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L242",
       "id": "simaticml_decoder_emit_guard_block",
-      "community": 9,
+      "community": 8,
       "norm_label": "_guard_block()"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L248",
       "id": "simaticml_decoder_emit_format_call",
-      "community": 9,
+      "community": 8,
       "norm_label": "_format_call()"
     },
     {
@@ -423,7 +423,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L261",
       "id": "simaticml_decoder_emit_first",
-      "community": 9,
+      "community": 8,
       "norm_label": "_first()"
     },
     {
@@ -432,7 +432,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L271",
       "id": "simaticml_decoder_emit_sorted_pins",
-      "community": 9,
+      "community": 8,
       "norm_label": "_sorted_pins()"
     },
     {
@@ -441,7 +441,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L276",
       "id": "simaticml_decoder_emit_pin_sort_key",
-      "community": 9,
+      "community": 8,
       "norm_label": "_pin_sort_key()"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L283",
       "id": "simaticml_decoder_emit_unhandled_line",
-      "community": 9,
+      "community": 8,
       "norm_label": "_unhandled_line()"
     },
     {
@@ -459,7 +459,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L291",
       "id": "simaticml_decoder_emit_emit_sidecar",
-      "community": 9,
+      "community": 8,
       "norm_label": "emit_sidecar()"
     },
     {
@@ -468,7 +468,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L318",
       "id": "simaticml_decoder_emit_interface_json",
-      "community": 9,
+      "community": 8,
       "norm_label": "_interface_json()"
     },
     {
@@ -477,7 +477,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L327",
       "id": "simaticml_decoder_emit_member_json",
-      "community": 9,
+      "community": 8,
       "norm_label": "_member_json()"
     },
     {
@@ -486,7 +486,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L340",
       "id": "simaticml_decoder_emit_build_trace",
-      "community": 9,
+      "community": 8,
       "norm_label": "_build_trace()"
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L352",
       "id": "simaticml_decoder_emit_claim",
-      "community": 9,
+      "community": 8,
       "norm_label": "_claim()"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L1",
       "id": "simaticml_decoder_emit_rationale_1",
-      "community": 9,
+      "community": 8,
       "norm_label": "phase 3: ir.* -> readable scl text + json metadata sidecar.  two artifacts (read"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L36",
       "id": "simaticml_decoder_emit_rationale_36",
-      "community": 9,
+      "community": 8,
       "norm_label": "render the readable scl text artifact for a decoded block."
     },
     {
@@ -522,7 +522,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L292",
       "id": "simaticml_decoder_emit_rationale_292",
-      "community": 9,
+      "community": 8,
       "norm_label": "build the json-serialisable sidecar dict (schema in plan \u00a77)."
     },
     {
@@ -531,7 +531,7 @@
       "source_file": "src/simaticml_decoder/emit.py",
       "source_location": "L341",
       "id": "simaticml_decoder_emit_rationale_341",
-      "community": 9,
+      "community": 8,
       "norm_label": "uid -> short claim, so any rendered statement is traceable to its net."
     },
     {
@@ -1044,7 +1044,7 @@
       "source_file": "",
       "source_location": "",
       "id": "valueerror",
-      "community": 14,
+      "community": 16,
       "norm_label": "valueerror"
     },
     {
@@ -1125,7 +1125,7 @@
       "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L173",
       "id": "simaticml_decoder_input_policy_discover_xml",
-      "community": 1,
+      "community": 0,
       "norm_label": "discover_xml()"
     },
     {
@@ -1159,7 +1159,7 @@
       "label": "_discover_windows()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L222",
+      "source_location": "L230",
       "id": "simaticml_decoder_input_policy_discover_windows",
       "community": 1,
       "norm_label": "_discover_windows()"
@@ -1168,7 +1168,7 @@
       "label": "_walk_windows_directory()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L234",
+      "source_location": "L242",
       "id": "simaticml_decoder_input_policy_walk_windows_directory",
       "community": 1,
       "norm_label": "_walk_windows_directory()"
@@ -1177,7 +1177,7 @@
       "label": "_PosixFileHandle",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L289",
+      "source_location": "L297",
       "id": "simaticml_decoder_input_policy_posixfilehandle",
       "community": 1,
       "norm_label": "_posixfilehandle"
@@ -1186,7 +1186,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L298",
+      "source_location": "L306",
       "id": "simaticml_decoder_input_policy_posixfilehandle_init",
       "community": 1,
       "norm_label": ".__init__()"
@@ -1195,7 +1195,7 @@
       "label": ".__del__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L301",
+      "source_location": "L309",
       "id": "simaticml_decoder_input_policy_posixfilehandle_del",
       "community": 1,
       "norm_label": ".__del__()"
@@ -1204,7 +1204,7 @@
       "label": ".close()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L304",
+      "source_location": "L312",
       "id": "simaticml_decoder_input_policy_posixfilehandle_close",
       "community": 1,
       "norm_label": ".close()"
@@ -1213,7 +1213,7 @@
       "label": ".read_limited()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L312",
+      "source_location": "L320",
       "id": "simaticml_decoder_input_policy_posixfilehandle_read_limited",
       "community": 1,
       "norm_label": ".read_limited()"
@@ -1222,7 +1222,7 @@
       "label": "_dir_fd_available()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L323",
+      "source_location": "L331",
       "id": "simaticml_decoder_input_policy_dir_fd_available",
       "community": 1,
       "norm_label": "_dir_fd_available()"
@@ -1231,7 +1231,7 @@
       "label": "_discover_posix()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L336",
+      "source_location": "L344",
       "id": "simaticml_decoder_input_policy_discover_posix",
       "community": 1,
       "norm_label": "_discover_posix()"
@@ -1240,7 +1240,7 @@
       "label": "_open_posix_root()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L354",
+      "source_location": "L362",
       "id": "simaticml_decoder_input_policy_open_posix_root",
       "community": 1,
       "norm_label": "_open_posix_root()"
@@ -1249,7 +1249,7 @@
       "label": "_scandir_names()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L364",
+      "source_location": "L372",
       "id": "simaticml_decoder_input_policy_scandir_names",
       "community": 1,
       "norm_label": "_scandir_names()"
@@ -1258,7 +1258,7 @@
       "label": "_lstat_child()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L373",
+      "source_location": "L381",
       "id": "simaticml_decoder_input_policy_lstat_child",
       "community": 1,
       "norm_label": "_lstat_child()"
@@ -1267,7 +1267,7 @@
       "label": "_open_dir_child()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L380",
+      "source_location": "L388",
       "id": "simaticml_decoder_input_policy_open_dir_child",
       "community": 1,
       "norm_label": "_open_dir_child()"
@@ -1276,7 +1276,7 @@
       "label": "_open_file_child()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L390",
+      "source_location": "L398",
       "id": "simaticml_decoder_input_policy_open_file_child",
       "community": 1,
       "norm_label": "_open_file_child()"
@@ -1285,7 +1285,7 @@
       "label": "_walk_posix_directory()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L400",
+      "source_location": "L408",
       "id": "simaticml_decoder_input_policy_walk_posix_directory",
       "community": 1,
       "norm_label": "_walk_posix_directory()"
@@ -1294,7 +1294,7 @@
       "label": "_discover()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L464",
+      "source_location": "L472",
       "id": "simaticml_decoder_input_policy_discover",
       "community": 1,
       "norm_label": "_discover()"
@@ -1303,7 +1303,7 @@
       "label": "_lstat()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L492",
+      "source_location": "L500",
       "id": "simaticml_decoder_input_policy_lstat",
       "community": 1,
       "norm_label": "_lstat()"
@@ -1312,7 +1312,7 @@
       "label": "_regular_lstat()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L499",
+      "source_location": "L507",
       "id": "simaticml_decoder_input_policy_regular_lstat",
       "community": 1,
       "norm_label": "_regular_lstat()"
@@ -1321,7 +1321,7 @@
       "label": "_directory_lstat()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L508",
+      "source_location": "L516",
       "id": "simaticml_decoder_input_policy_directory_lstat",
       "community": 1,
       "norm_label": "_directory_lstat()"
@@ -1330,7 +1330,7 @@
       "label": "_is_regular_file()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L517",
+      "source_location": "L525",
       "id": "simaticml_decoder_input_policy_is_regular_file",
       "community": 1,
       "norm_label": "_is_regular_file()"
@@ -1339,7 +1339,7 @@
       "label": "_is_reparse_point()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L525",
+      "source_location": "L533",
       "id": "simaticml_decoder_input_policy_is_reparse_point",
       "community": 1,
       "norm_label": "_is_reparse_point()"
@@ -1348,7 +1348,7 @@
       "label": "_validate_xml_complexity()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L530",
+      "source_location": "L538",
       "id": "simaticml_decoder_input_policy_validate_xml_complexity",
       "community": 1,
       "norm_label": "_validate_xml_complexity()"
@@ -1357,7 +1357,7 @@
       "label": "_local_name()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L552",
+      "source_location": "L560",
       "id": "simaticml_decoder_input_policy_local_name",
       "community": 1,
       "norm_label": "_local_name()"
@@ -1467,7 +1467,7 @@
       "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L174",
       "id": "simaticml_decoder_input_policy_rationale_174",
-      "community": 1,
+      "community": 0,
       "norm_label": "discover regular xml files without following links, bounded and sorted."
     },
     {
@@ -1501,8 +1501,8 @@
       "label": "Recurse one native directory handle at a time.      `directory.entries()` is alr",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L244",
-      "id": "simaticml_decoder_input_policy_rationale_244",
+      "source_location": "L252",
+      "id": "simaticml_decoder_input_policy_rationale_252",
       "community": 1,
       "norm_label": "recurse one native directory handle at a time.      `directory.entries()` is alr"
     },
@@ -1510,8 +1510,8 @@
       "label": "A POSIX file descriptor opened relative to its parent directory's own     descri",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L290",
-      "id": "simaticml_decoder_input_policy_rationale_290",
+      "source_location": "L298",
+      "id": "simaticml_decoder_input_policy_rationale_298",
       "community": 1,
       "norm_label": "a posix file descriptor opened relative to its parent directory's own     descri"
     },
@@ -1519,8 +1519,8 @@
       "label": "Read at most `limit + 1` bytes so callers can detect oversized         input wit",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L313",
-      "id": "simaticml_decoder_input_policy_rationale_313",
+      "source_location": "L321",
+      "id": "simaticml_decoder_input_policy_rationale_321",
       "community": 1,
       "norm_label": "read at most `limit + 1` bytes so callers can detect oversized         input wit"
     },
@@ -1528,8 +1528,8 @@
       "label": "Whether this platform/Python build can do descriptor-relative,     symlink-rejec",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L324",
-      "id": "simaticml_decoder_input_policy_rationale_324",
+      "source_location": "L332",
+      "id": "simaticml_decoder_input_policy_rationale_332",
       "community": 1,
       "norm_label": "whether this platform/python build can do descriptor-relative,     symlink-rejec"
     },
@@ -1537,8 +1537,8 @@
       "label": "Recurse one dir_fd at a time, classifying children via an O_NOFOLLOW     lstat-e",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
-      "source_location": "L410",
-      "id": "simaticml_decoder_input_policy_rationale_410",
+      "source_location": "L418",
+      "id": "simaticml_decoder_input_policy_rationale_418",
       "community": 1,
       "norm_label": "recurse one dir_fd at a time, classifying children via an o_nofollow     lstat-e"
     },
@@ -1656,7 +1656,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L1",
       "id": "src_simaticml_decoder_ir_py",
-      "community": 4,
+      "community": 9,
       "norm_label": "ir.py"
     },
     {
@@ -1665,7 +1665,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L22",
       "id": "simaticml_decoder_ir_varref",
-      "community": 4,
+      "community": 9,
       "norm_label": "varref"
     },
     {
@@ -1674,7 +1674,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L30",
       "id": "simaticml_decoder_ir_literal",
-      "community": 4,
+      "community": 9,
       "norm_label": "literal"
     },
     {
@@ -1683,7 +1683,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L36",
       "id": "simaticml_decoder_ir_not",
-      "community": 4,
+      "community": 9,
       "norm_label": "not"
     },
     {
@@ -1692,7 +1692,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L41",
       "id": "simaticml_decoder_ir_and",
-      "community": 4,
+      "community": 9,
       "norm_label": "and"
     },
     {
@@ -1701,7 +1701,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L46",
       "id": "simaticml_decoder_ir_or",
-      "community": 4,
+      "community": 9,
       "norm_label": "or"
     },
     {
@@ -1710,7 +1710,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L51",
       "id": "simaticml_decoder_ir_compare",
-      "community": 4,
+      "community": 9,
       "norm_label": "compare"
     },
     {
@@ -1728,7 +1728,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L64",
       "id": "simaticml_decoder_ir_edge",
-      "community": 4,
+      "community": 9,
       "norm_label": "edge"
     },
     {
@@ -1737,7 +1737,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L72",
       "id": "simaticml_decoder_ir_rawexpr",
-      "community": 4,
+      "community": 9,
       "norm_label": "rawexpr"
     },
     {
@@ -1746,7 +1746,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L80",
       "id": "simaticml_decoder_ir_unhandled",
-      "community": 4,
+      "community": 9,
       "norm_label": "unhandled"
     },
     {
@@ -1764,7 +1764,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L104",
       "id": "simaticml_decoder_ir_assign",
-      "community": 4,
+      "community": 9,
       "norm_label": "assign"
     },
     {
@@ -1773,7 +1773,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L114",
       "id": "simaticml_decoder_ir_flipflop",
-      "community": 4,
+      "community": 9,
       "norm_label": "flipflop"
     },
     {
@@ -1782,7 +1782,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L125",
       "id": "simaticml_decoder_ir_boxcall",
-      "community": 4,
+      "community": 9,
       "norm_label": "boxcall"
     },
     {
@@ -1791,7 +1791,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L137",
       "id": "simaticml_decoder_ir_usercall",
-      "community": 4,
+      "community": 9,
       "norm_label": "usercall"
     },
     {
@@ -1800,7 +1800,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L155",
       "id": "simaticml_decoder_ir_networklogic",
-      "community": 4,
+      "community": 9,
       "norm_label": "networklogic"
     },
     {
@@ -1809,7 +1809,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L166",
       "id": "simaticml_decoder_ir_tagref",
-      "community": 4,
+      "community": 9,
       "norm_label": "tagref"
     },
     {
@@ -1818,7 +1818,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L175",
       "id": "simaticml_decoder_ir_decodedblock",
-      "community": 4,
+      "community": 9,
       "norm_label": "decodedblock"
     },
     {
@@ -1827,7 +1827,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L1",
       "id": "simaticml_decoder_ir_rationale_1",
-      "community": 4,
+      "community": 9,
       "norm_label": "phase 2 output: the folded *semantics*, with no memory of the xml.  a network be"
     },
     {
@@ -1836,7 +1836,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L23",
       "id": "simaticml_decoder_ir_rationale_23",
-      "community": 4,
+      "community": 9,
       "norm_label": "a resolved operand, already rendered to its display form by operand.py."
     },
     {
@@ -1845,7 +1845,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L73",
       "id": "simaticml_decoder_ir_rationale_73",
-      "community": 4,
+      "community": 9,
       "norm_label": "free-form expression text taken verbatim (e.g. a calculate-box equation)."
     },
     {
@@ -1854,7 +1854,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L81",
       "id": "simaticml_decoder_ir_rationale_81",
-      "community": 4,
+      "community": 9,
       "norm_label": "a construct parsed but not folded. rendered loudly by emit, never dropped."
     },
     {
@@ -1863,7 +1863,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L115",
       "id": "simaticml_decoder_ir_rationale_115",
-      "community": 4,
+      "community": 9,
       "norm_label": "rs / sr \u2014 reset- or set-priority bistable on a stored operand."
     },
     {
@@ -1872,7 +1872,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L126",
       "id": "simaticml_decoder_ir_rationale_126",
-      "community": 4,
+      "community": 9,
       "norm_label": "a system fb/fc box: ton/tof/tp, move/add/inc, rd_loc_t, ..."
     },
     {
@@ -1881,7 +1881,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L138",
       "id": "simaticml_decoder_ir_rationale_138",
-      "community": 4,
+      "community": 9,
       "norm_label": "a call/callinfo to a user fc/fb \u2014 parameters self-documented in the xml."
     },
     {
@@ -1890,7 +1890,7 @@
       "source_file": "src/simaticml_decoder/ir.py",
       "source_location": "L167",
       "id": "simaticml_decoder_ir_rationale_167",
-      "community": 4,
+      "community": 9,
       "norm_label": "one side of the cross-reference table: where a tag is written / read."
     },
     {
@@ -1899,7 +1899,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L1",
       "id": "src_simaticml_decoder_model_py",
-      "community": 5,
+      "community": 4,
       "norm_label": "model.py"
     },
     {
@@ -1926,7 +1926,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L43",
       "id": "simaticml_decoder_model_member",
-      "community": 5,
+      "community": 4,
       "norm_label": "member"
     },
     {
@@ -1935,7 +1935,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L56",
       "id": "simaticml_decoder_model_section",
-      "community": 5,
+      "community": 4,
       "norm_label": "section"
     },
     {
@@ -1944,7 +1944,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L62",
       "id": "simaticml_decoder_model_interface",
-      "community": 5,
+      "community": 4,
       "norm_label": "interface"
     },
     {
@@ -1953,7 +1953,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L70",
       "id": "simaticml_decoder_model_component",
-      "community": 5,
+      "community": 4,
       "norm_label": "component"
     },
     {
@@ -1962,7 +1962,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L81",
       "id": "simaticml_decoder_model_symbol",
-      "community": 5,
+      "community": 4,
       "norm_label": "symbol"
     },
     {
@@ -1971,7 +1971,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L86",
       "id": "simaticml_decoder_model_constant",
-      "community": 5,
+      "community": 4,
       "norm_label": "constant"
     },
     {
@@ -1980,7 +1980,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L94",
       "id": "simaticml_decoder_model_address",
-      "community": 5,
+      "community": 4,
       "norm_label": "address"
     },
     {
@@ -1989,7 +1989,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L106",
       "id": "simaticml_decoder_model_access",
-      "community": 5,
+      "community": 4,
       "norm_label": "access"
     },
     {
@@ -1998,7 +1998,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L119",
       "id": "simaticml_decoder_model_templatevalue",
-      "community": 5,
+      "community": 4,
       "norm_label": "templatevalue"
     },
     {
@@ -2007,7 +2007,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L126",
       "id": "simaticml_decoder_model_instance",
-      "community": 5,
+      "community": 4,
       "norm_label": "instance"
     },
     {
@@ -2016,7 +2016,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L134",
       "id": "simaticml_decoder_model_part",
-      "community": 5,
+      "community": 4,
       "norm_label": "part"
     },
     {
@@ -2025,7 +2025,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L149",
       "id": "simaticml_decoder_model_parameter",
-      "community": 5,
+      "community": 4,
       "norm_label": "parameter"
     },
     {
@@ -2034,7 +2034,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L157",
       "id": "simaticml_decoder_model_call",
-      "community": 5,
+      "community": 4,
       "norm_label": "call"
     },
     {
@@ -2052,7 +2052,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L178",
       "id": "simaticml_decoder_model_endpoint",
-      "community": 5,
+      "community": 12,
       "norm_label": "endpoint"
     },
     {
@@ -2061,7 +2061,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L185",
       "id": "simaticml_decoder_model_wire",
-      "community": 5,
+      "community": 12,
       "norm_label": "wire"
     },
     {
@@ -2070,7 +2070,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L193",
       "id": "simaticml_decoder_model_label",
-      "community": 5,
+      "community": 4,
       "norm_label": "label"
     },
     {
@@ -2079,7 +2079,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L203",
       "id": "simaticml_decoder_model_flgnet",
-      "community": 5,
+      "community": 4,
       "norm_label": "flgnet"
     },
     {
@@ -2088,7 +2088,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L215",
       "id": "simaticml_decoder_model_structuredtext",
-      "community": 5,
+      "community": 4,
       "norm_label": "structuredtext"
     },
     {
@@ -2097,7 +2097,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L225",
       "id": "simaticml_decoder_model_rawsource",
-      "community": 5,
+      "community": 4,
       "norm_label": "rawsource"
     },
     {
@@ -2106,7 +2106,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L234",
       "id": "simaticml_decoder_model_network",
-      "community": 5,
+      "community": 4,
       "norm_label": "network"
     },
     {
@@ -2115,7 +2115,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L246",
       "id": "simaticml_decoder_model_block",
-      "community": 5,
+      "community": 4,
       "norm_label": "block"
     },
     {
@@ -2124,7 +2124,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L262",
       "id": "simaticml_decoder_model_document",
-      "community": 5,
+      "community": 4,
       "norm_label": "document"
     },
     {
@@ -2133,7 +2133,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L1",
       "id": "simaticml_decoder_model_rationale_1",
-      "community": 5,
+      "community": 4,
       "norm_label": "phase 1 output: a faithful, behaviour-free mirror of the simaticml xml.  this la"
     },
     {
@@ -2151,7 +2151,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L71",
       "id": "simaticml_decoder_model_rationale_71",
-      "community": 5,
+      "community": 4,
       "norm_label": "one level of a (possibly dotted) symbol path, e.g. system.clk100ms."
     },
     {
@@ -2160,7 +2160,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L107",
       "id": "simaticml_decoder_model_rationale_107",
-      "community": 5,
+      "community": 4,
       "norm_label": "a data reference. per-use (never deduplicated): each occurrence is its own node."
     },
     {
@@ -2169,7 +2169,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L127",
       "id": "simaticml_decoder_model_rationale_127",
-      "community": 5,
+      "community": 4,
       "norm_label": "backing static member for a system fb (ton/ctu/...) \u2014 same shape as symbol."
     },
     {
@@ -2178,7 +2178,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L186",
       "id": "simaticml_decoder_model_rationale_186",
-      "community": 5,
+      "community": 12,
       "norm_label": "first endpoint is the source; the rest are sinks (fan-out)."
     },
     {
@@ -2187,7 +2187,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L204",
       "id": "simaticml_decoder_model_rationale_204",
-      "community": 5,
+      "community": 4,
       "norm_label": "lad/fbd network: indexed parts/calls/accesses + the wire list. uids are     scop"
     },
     {
@@ -2196,7 +2196,7 @@
       "source_file": "src/simaticml_decoder/model.py",
       "source_location": "L216",
       "id": "simaticml_decoder_model_rationale_216",
-      "community": 5,
+      "community": 4,
       "norm_label": "scl network: an ordered, interleaved token/access stream (a tokenised ast)."
     },
     {
@@ -2781,7 +2781,7 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L1",
       "id": "src_simaticml_decoder_windows_handles_py",
-      "community": 6,
+      "community": 5,
       "norm_label": "windows_handles.py"
     },
     {
@@ -2790,7 +2790,7 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L65",
       "id": "simaticml_decoder_windows_handles_nt_status",
-      "community": 6,
+      "community": 5,
       "norm_label": "_nt_status()"
     },
     {
@@ -2799,7 +2799,7 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L78",
       "id": "simaticml_decoder_windows_handles_unicode_string",
-      "community": 6,
+      "community": 5,
       "norm_label": "unicode_string"
     },
     {
@@ -2808,7 +2808,7 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L86",
       "id": "simaticml_decoder_windows_handles_object_attributes",
-      "community": 6,
+      "community": 5,
       "norm_label": "object_attributes"
     },
     {
@@ -2817,7 +2817,7 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L97",
       "id": "simaticml_decoder_windows_handles_iostatusunion",
-      "community": 6,
+      "community": 5,
       "norm_label": "_iostatusunion"
     },
     {
@@ -2826,140 +2826,167 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L104",
       "id": "simaticml_decoder_windows_handles_io_status_block",
-      "community": 6,
+      "community": 5,
       "norm_label": "io_status_block"
+    },
+    {
+      "label": "FILETIME",
+      "file_type": "code",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L112",
+      "id": "simaticml_decoder_windows_handles_filetime",
+      "community": 5,
+      "norm_label": "filetime"
+    },
+    {
+      "label": "BY_HANDLE_FILE_INFORMATION",
+      "file_type": "code",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L119",
+      "id": "simaticml_decoder_windows_handles_by_handle_file_information",
+      "community": 1,
+      "norm_label": "by_handle_file_information"
     },
     {
       "label": "FILE_ID_BOTH_DIR_INFORMATION",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L112",
+      "source_location": "L138",
       "id": "simaticml_decoder_windows_handles_file_id_both_dir_information",
-      "community": 6,
+      "community": 5,
       "norm_label": "file_id_both_dir_information"
     },
     {
       "label": "NativeEntry",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L196",
+      "source_location": "L229",
       "id": "simaticml_decoder_windows_handles_nativeentry",
-      "community": 6,
+      "community": 5,
       "norm_label": "nativeentry"
     },
     {
       "label": "_to_nt_path()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L206",
+      "source_location": "L239",
       "id": "simaticml_decoder_windows_handles_to_nt_path",
-      "community": 6,
+      "community": 5,
       "norm_label": "_to_nt_path()"
     },
     {
       "label": "_validate_child_name()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L220",
+      "source_location": "L253",
       "id": "simaticml_decoder_windows_handles_validate_child_name",
-      "community": 6,
+      "community": 5,
       "norm_label": "_validate_child_name()"
     },
     {
       "label": "_make_unicode_string()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L225",
+      "source_location": "L258",
       "id": "simaticml_decoder_windows_handles_make_unicode_string",
-      "community": 6,
+      "community": 5,
       "norm_label": "_make_unicode_string()"
     },
     {
       "label": "_raise_native_failure()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L232",
+      "source_location": "L265",
       "id": "simaticml_decoder_windows_handles_raise_native_failure",
-      "community": 6,
+      "community": 1,
       "norm_label": "_raise_native_failure()"
     },
     {
       "label": "_nt_create_file()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L239",
+      "source_location": "L272",
       "id": "simaticml_decoder_windows_handles_nt_create_file",
-      "community": 6,
+      "community": 5,
       "norm_label": "_nt_create_file()"
     },
     {
       "label": "_close_handle()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L269",
+      "source_location": "L302",
       "id": "simaticml_decoder_windows_handles_close_handle",
-      "community": 6,
+      "community": 5,
       "norm_label": "_close_handle()"
+    },
+    {
+      "label": "_reject_if_reparse_point()",
+      "file_type": "code",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L307",
+      "id": "simaticml_decoder_windows_handles_reject_if_reparse_point",
+      "community": 1,
+      "norm_label": "_reject_if_reparse_point()"
     },
     {
       "label": "NativeHandle",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L277",
+      "source_location": "L334",
       "id": "simaticml_decoder_windows_handles_nativehandle",
-      "community": 6,
+      "community": 5,
       "norm_label": "nativehandle"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L280",
+      "source_location": "L337",
       "id": "simaticml_decoder_windows_handles_nativehandle_init",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__init__()"
     },
     {
       "label": ".__enter__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L283",
+      "source_location": "L340",
       "id": "simaticml_decoder_windows_handles_nativehandle_enter",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__enter__()"
     },
     {
       "label": ".__exit__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L286",
+      "source_location": "L343",
       "id": "simaticml_decoder_windows_handles_nativehandle_exit",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__exit__()"
     },
     {
       "label": ".__del__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L289",
+      "source_location": "L346",
       "id": "simaticml_decoder_windows_handles_nativehandle_del",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__del__()"
     },
     {
       "label": ".close()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L292",
+      "source_location": "L349",
       "id": "simaticml_decoder_windows_handles_nativehandle_close",
-      "community": 6,
+      "community": 5,
       "norm_label": ".close()"
     },
     {
       "label": ".read_limited()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L296",
+      "source_location": "L353",
       "id": "simaticml_decoder_windows_handles_nativehandle_read_limited",
       "community": 1,
       "norm_label": ".read_limited()"
@@ -2968,81 +2995,81 @@
       "label": "NativeDirectory",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L311",
+      "source_location": "L368",
       "id": "simaticml_decoder_windows_handles_nativedirectory",
-      "community": 6,
+      "community": 5,
       "norm_label": "nativedirectory"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L319",
+      "source_location": "L376",
       "id": "simaticml_decoder_windows_handles_nativedirectory_init",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__init__()"
     },
     {
       "label": ".__enter__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L322",
+      "source_location": "L379",
       "id": "simaticml_decoder_windows_handles_nativedirectory_enter",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__enter__()"
     },
     {
       "label": ".__exit__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L325",
+      "source_location": "L382",
       "id": "simaticml_decoder_windows_handles_nativedirectory_exit",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__exit__()"
     },
     {
       "label": ".__del__()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L328",
+      "source_location": "L385",
       "id": "simaticml_decoder_windows_handles_nativedirectory_del",
-      "community": 6,
+      "community": 5,
       "norm_label": ".__del__()"
     },
     {
       "label": ".close()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L331",
+      "source_location": "L388",
       "id": "simaticml_decoder_windows_handles_nativedirectory_close",
-      "community": 6,
+      "community": 5,
       "norm_label": ".close()"
     },
     {
       "label": "open_root()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L336",
+      "source_location": "L393",
       "id": "simaticml_decoder_windows_handles_open_root",
-      "community": 6,
+      "community": 5,
       "norm_label": "open_root()"
     },
     {
       "label": ".open_child()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L347",
+      "source_location": "L404",
       "id": "simaticml_decoder_windows_handles_nativedirectory_open_child",
-      "community": 6,
+      "community": 5,
       "norm_label": ".open_child()"
     },
     {
       "label": ".entries()",
       "file_type": "code",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L380",
+      "source_location": "L443",
       "id": "simaticml_decoder_windows_handles_nativedirectory_entries",
-      "community": 6,
+      "community": 5,
       "norm_label": ".entries()"
     },
     {
@@ -3051,7 +3078,7 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L1",
       "id": "simaticml_decoder_windows_handles_rationale_1",
-      "community": 6,
+      "community": 5,
       "norm_label": "windows-only native handle traversal.  opens a directory exactly once as a nativ"
     },
     {
@@ -3060,51 +3087,69 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L66",
       "id": "simaticml_decoder_windows_handles_rationale_66",
-      "community": 6,
+      "community": 5,
       "norm_label": "reinterpret an unsigned 32-bit ntstatus literal as the signed value     ctypes p"
+    },
+    {
+      "label": "Exact `kernel32.h` layout. Only `dwFileAttributes` (the first field)     is used",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L120",
+      "id": "simaticml_decoder_windows_handles_rationale_120",
+      "community": 1,
+      "norm_label": "exact `kernel32.h` layout. only `dwfileattributes` (the first field)     is used"
     },
     {
       "label": "Fixed-size prefix of `FILE_ID_BOTH_DIR_INFORMATION`.      The real structure end",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L113",
-      "id": "simaticml_decoder_windows_handles_rationale_113",
-      "community": 6,
+      "source_location": "L139",
+      "id": "simaticml_decoder_windows_handles_rationale_139",
+      "community": 5,
       "norm_label": "fixed-size prefix of `file_id_both_dir_information`.      the real structure end"
     },
     {
       "label": "One directory entry discovered through a native handle.",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L197",
-      "id": "simaticml_decoder_windows_handles_rationale_197",
-      "community": 6,
+      "source_location": "L230",
+      "id": "simaticml_decoder_windows_handles_rationale_230",
+      "community": 5,
       "norm_label": "one directory entry discovered through a native handle."
     },
     {
       "label": "Turn a filesystem path into an NT native-namespace path.      Uses lexical, CWD-",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L207",
-      "id": "simaticml_decoder_windows_handles_rationale_207",
-      "community": 6,
+      "source_location": "L240",
+      "id": "simaticml_decoder_windows_handles_rationale_240",
+      "community": 5,
       "norm_label": "turn a filesystem path into an nt native-namespace path.      uses lexical, cwd-"
+    },
+    {
+      "label": "Re-check a freshly-opened handle's own attributes for     `FILE_ATTRIBUTE_REPARS",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L308",
+      "id": "simaticml_decoder_windows_handles_rationale_308",
+      "community": 1,
+      "norm_label": "re-check a freshly-opened handle's own attributes for     `file_attribute_repars"
     },
     {
       "label": "A native file handle opened relative to its parent directory's handle.",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L278",
-      "id": "simaticml_decoder_windows_handles_rationale_278",
-      "community": 6,
+      "source_location": "L335",
+      "id": "simaticml_decoder_windows_handles_rationale_335",
+      "community": 5,
       "norm_label": "a native file handle opened relative to its parent directory's handle."
     },
     {
       "label": "Read at most `limit + 1` bytes so callers can detect oversized         input wit",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L297",
-      "id": "simaticml_decoder_windows_handles_rationale_297",
+      "source_location": "L354",
+      "id": "simaticml_decoder_windows_handles_rationale_354",
       "community": 1,
       "norm_label": "read at most `limit + 1` bytes so callers can detect oversized         input wit"
     },
@@ -3112,36 +3157,36 @@
       "label": "A native directory handle anchoring all descendant opens.      Children are open",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L312",
-      "id": "simaticml_decoder_windows_handles_rationale_312",
-      "community": 6,
+      "source_location": "L369",
+      "id": "simaticml_decoder_windows_handles_rationale_369",
+      "community": 5,
       "norm_label": "a native directory handle anchoring all descendant opens.      children are open"
     },
     {
       "label": "Open the root directory exactly once, by its NT native path.",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L337",
-      "id": "simaticml_decoder_windows_handles_rationale_337",
-      "community": 17,
+      "source_location": "L394",
+      "id": "simaticml_decoder_windows_handles_rationale_394",
+      "community": 18,
       "norm_label": "open the root directory exactly once, by its nt native path."
     },
     {
       "label": "Open a child by name, relative to this directory's own handle.          Rejects",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L348",
-      "id": "simaticml_decoder_windows_handles_rationale_348",
-      "community": 6,
+      "source_location": "L405",
+      "id": "simaticml_decoder_windows_handles_rationale_405",
+      "community": 5,
       "norm_label": "open a child by name, relative to this directory's own handle.          rejects"
     },
     {
       "label": "Enumerate immediate children by this directory's own handle.          Any child",
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/windows_handles.py",
-      "source_location": "L381",
-      "id": "simaticml_decoder_windows_handles_rationale_381",
-      "community": 6,
+      "source_location": "L444",
+      "id": "simaticml_decoder_windows_handles_rationale_444",
+      "community": 5,
       "norm_label": "enumerate immediate children by this directory's own handle.          any child"
     },
     {
@@ -3168,7 +3213,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L1",
       "id": "tests_conftest_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "conftest.py"
     },
     {
@@ -3177,7 +3222,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L26",
       "id": "tests_conftest_require",
-      "community": 8,
+      "community": 6,
       "norm_label": "_require()"
     },
     {
@@ -3186,7 +3231,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L34",
       "id": "tests_conftest_fixture_file",
-      "community": 8,
+      "community": 6,
       "norm_label": "fixture_file()"
     },
     {
@@ -3195,7 +3240,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L40",
       "id": "tests_conftest_load_fixture",
-      "community": 8,
+      "community": 6,
       "norm_label": "load_fixture()"
     },
     {
@@ -3204,7 +3249,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L1",
       "id": "tests_conftest_rationale_1",
-      "community": 8,
+      "community": 6,
       "norm_label": "shared pytest setup and committed fixture-corpus helpers."
     },
     {
@@ -3213,7 +3258,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L35",
       "id": "tests_conftest_rationale_35",
-      "community": 8,
+      "community": 6,
       "norm_label": "return a callable name -> committed native simaticml path."
     },
     {
@@ -3222,7 +3267,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L41",
       "id": "tests_conftest_rationale_41",
-      "community": 8,
+      "community": 6,
       "norm_label": "return a callable name -> model.document."
     },
     {
@@ -3231,7 +3276,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L1",
       "id": "tests_test_cli_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_cli.py"
     },
     {
@@ -3240,7 +3285,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L14",
       "id": "tests_test_cli_test_missing_path_is_soft_noop",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_missing_path_is_soft_noop()"
     },
     {
@@ -3249,7 +3294,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L20",
       "id": "tests_test_cli_test_malformed_xml_returns_1",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_malformed_xml_returns_1()"
     },
     {
@@ -3258,7 +3303,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L28",
       "id": "tests_test_cli_test_happy_path_writes_both",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_happy_path_writes_both()"
     },
     {
@@ -3267,7 +3312,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L37",
       "id": "tests_test_cli_test_format_scl_only",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_format_scl_only()"
     },
     {
@@ -3276,7 +3321,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L44",
       "id": "tests_test_cli_test_quiet_suppresses_stderr",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_quiet_suppresses_stderr()"
     },
     {
@@ -3285,7 +3330,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L52",
       "id": "tests_test_cli_test_empty_directory_is_soft_noop",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_empty_directory_is_soft_noop()"
     },
     {
@@ -3294,7 +3339,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L58",
       "id": "tests_test_cli_test_directory_with_no_xml_is_soft_noop",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_directory_with_no_xml_is_soft_noop()"
     },
     {
@@ -3303,7 +3348,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L66",
       "id": "tests_test_cli_test_directory_mirrors_subtree",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_directory_mirrors_subtree()"
     },
     {
@@ -3312,7 +3357,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L79",
       "id": "tests_test_cli_test_directory_in_place_no_output",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_directory_in_place_no_output()"
     },
     {
@@ -3321,7 +3366,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L90",
       "id": "tests_test_cli_test_one_bad_file_does_not_abort_batch",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_one_bad_file_does_not_abort_batch()"
     },
     {
@@ -3330,7 +3375,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L105",
       "id": "tests_test_cli_test_no_recursive_skips_subdirs",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_no_recursive_skips_subdirs()"
     },
     {
@@ -3339,7 +3384,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L118",
       "id": "tests_test_cli_test_format_applies_to_whole_batch",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_format_applies_to_whole_batch()"
     },
     {
@@ -3348,7 +3393,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L135",
       "id": "tests_test_cli_test_directory_reports_all_unpaired_resources",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_directory_reports_all_unpaired_resources()"
     },
     {
@@ -3357,7 +3402,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L141",
       "id": "tests_test_cli_test_directory_output_uses_artifact_relative_path",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_directory_output_uses_artifact_relative_path()"
     },
     {
@@ -3366,7 +3411,7 @@
       "source_file": "tests/test_cli.py",
       "source_location": "L1",
       "id": "tests_test_cli_rationale_1",
-      "community": 8,
+      "community": 6,
       "norm_label": "unit tests for the cli with committed native simaticml fixtures."
     },
     {
@@ -3555,26 +3600,26 @@
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L1",
       "id": "tests_test_fixtures_regression_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_fixtures_regression.py"
     },
     {
-      "label": "test_fc_cargador_is_three_combinational_assignments()",
+      "label": "test_inputs_fb_preserves_digital_input_assignments()",
       "file_type": "code",
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L8",
-      "id": "tests_test_fixtures_regression_test_fc_cargador_is_three_combinational_assignments",
-      "community": 8,
-      "norm_label": "test_fc_cargador_is_three_combinational_assignments()"
+      "id": "tests_test_fixtures_regression_test_inputs_fb_preserves_digital_input_assignments",
+      "community": 6,
+      "norm_label": "test_inputs_fb_preserves_digital_input_assignments()"
     },
     {
-      "label": "test_mhj_function_keeps_its_scl_network()",
+      "label": "test_analog_input_keeps_its_scl_network()",
       "file_type": "code",
       "source_file": "tests/test_fixtures_regression.py",
-      "source_location": "L22",
-      "id": "tests_test_fixtures_regression_test_mhj_function_keeps_its_scl_network",
-      "community": 8,
-      "norm_label": "test_mhj_function_keeps_its_scl_network()"
+      "source_location": "L20",
+      "id": "tests_test_fixtures_regression_test_analog_input_keeps_its_scl_network",
+      "community": 6,
+      "norm_label": "test_analog_input_keeps_its_scl_network()"
     },
     {
       "label": "Regression assertions for representative committed native exports.",
@@ -3582,7 +3627,7 @@
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L1",
       "id": "tests_test_fixtures_regression_rationale_1",
-      "community": 8,
+      "community": 6,
       "norm_label": "regression assertions for representative committed native exports."
     },
     {
@@ -3591,97 +3636,106 @@
       "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L1",
       "id": "tests_test_fixture_corpus_py",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_fixture_corpus.py"
     },
     {
       "label": "_manifest()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "tests_test_fixture_corpus_manifest",
-      "community": 12,
+      "community": 13,
       "norm_label": "_manifest()"
     },
     {
       "label": "_path()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "tests_test_fixture_corpus_path",
-      "community": 12,
+      "community": 13,
       "norm_label": "_path()"
     },
     {
       "label": "_semantic_summary()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L25",
+      "source_location": "L26",
       "id": "tests_test_fixture_corpus_semantic_summary",
-      "community": 12,
+      "community": 13,
       "norm_label": "_semantic_summary()"
+    },
+    {
+      "label": "_sha256()",
+      "file_type": "code",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L57",
+      "id": "tests_test_fixture_corpus_sha256",
+      "community": 13,
+      "norm_label": "_sha256()"
     },
     {
       "label": "test_manifest_declares_local_evaluation_only_corpus()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L42",
+      "source_location": "L61",
       "id": "tests_test_fixture_corpus_test_manifest_declares_local_evaluation_only_corpus",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_manifest_declares_local_evaluation_only_corpus()"
     },
     {
       "label": "test_manifest_paths_are_committed_regular_files()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L57",
+      "source_location": "L76",
       "id": "tests_test_fixture_corpus_test_manifest_paths_are_committed_regular_files",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_manifest_paths_are_committed_regular_files()"
     },
     {
       "label": "test_cross_format_mapping_does_not_pair_resources_across_export_roots()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L73",
+      "source_location": "L92",
       "id": "tests_test_fixture_corpus_test_cross_format_mapping_does_not_pair_resources_across_export_roots",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_cross_format_mapping_does_not_pair_resources_across_export_roots()"
     },
     {
-      "label": "test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens()",
+      "label": "test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L85",
-      "id": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens",
-      "community": 12,
-      "norm_label": "test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens()"
+      "source_location": "L104",
+      "id": "tests_test_fixture_corpus_test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums",
+      "community": 13,
+      "norm_label": "test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums()"
     },
     {
       "label": "test_expected_diagnostics_are_non_skipping_and_exact()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L99",
+      "source_location": "L118",
       "id": "tests_test_fixture_corpus_test_expected_diagnostics_are_non_skipping_and_exact",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_expected_diagnostics_are_non_skipping_and_exact()"
     },
     {
       "label": "test_every_unpaired_resource_has_the_published_diagnostic()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L111",
+      "source_location": "L130",
       "id": "tests_test_fixture_corpus_test_every_unpaired_resource_has_the_published_diagnostic",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_every_unpaired_resource_has_the_published_diagnostic()"
     },
     {
       "label": "test_unpaired_resources_have_no_same_root_declaration()",
       "file_type": "code",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L122",
+      "source_location": "L141",
       "id": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration",
-      "community": 12,
+      "community": 13,
       "norm_label": "test_unpaired_resources_have_no_same_root_declaration()"
     },
     {
@@ -3690,16 +3744,16 @@
       "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L1",
       "id": "tests_test_fixture_corpus_rationale_1",
-      "community": 12,
+      "community": 13,
       "norm_label": "non-skipping phase 0 regression contract for committed native exports."
     },
     {
       "label": "Regression: verify fixture corpus itself is set up correctly.      If unpaired r",
       "file_type": "rationale",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L123",
-      "id": "tests_test_fixture_corpus_rationale_123",
-      "community": 12,
+      "source_location": "L142",
+      "id": "tests_test_fixture_corpus_rationale_142",
+      "community": 13,
       "norm_label": "regression: verify fixture corpus itself is set up correctly.      if unpaired r"
     },
     {
@@ -3708,7 +3762,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L1",
       "id": "tests_test_fold_py",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_fold.py"
     },
     {
@@ -3717,7 +3771,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L15",
       "id": "tests_test_fold_net",
-      "community": 5,
+      "community": 12,
       "norm_label": "_net()"
     },
     {
@@ -3726,7 +3780,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L20",
       "id": "tests_test_fold_sym",
-      "community": 5,
+      "community": 12,
       "norm_label": "_sym()"
     },
     {
@@ -3735,7 +3789,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L25",
       "id": "tests_test_fold_pr",
-      "community": 5,
+      "community": 12,
       "norm_label": "_pr()"
     },
     {
@@ -3744,7 +3798,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L29",
       "id": "tests_test_fold_ic",
-      "community": 5,
+      "community": 12,
       "norm_label": "_ic()"
     },
     {
@@ -3753,7 +3807,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L33",
       "id": "tests_test_fold_nc",
-      "community": 5,
+      "community": 12,
       "norm_label": "_nc()"
     },
     {
@@ -3762,7 +3816,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L37",
       "id": "tests_test_fold_test_contact_drives_coil",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_contact_drives_coil()"
     },
     {
@@ -3771,7 +3825,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L56",
       "id": "tests_test_fold_test_negated_contact_is_not",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_negated_contact_is_not()"
     },
     {
@@ -3780,7 +3834,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L71",
       "id": "tests_test_fold_test_or_junction_is_nary_or",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_or_junction_is_nary_or()"
     },
     {
@@ -3789,7 +3843,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L92",
       "id": "tests_test_fold_test_latch_detected_when_coil_feeds_back",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_latch_detected_when_coil_feeds_back()"
     },
     {
@@ -3798,7 +3852,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L115",
       "id": "tests_test_fold_test_daisy_chained_coils_share_upstream_flow",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_daisy_chained_coils_share_upstream_flow()"
     },
     {
@@ -3807,7 +3861,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L134",
       "id": "tests_test_fold_test_unknown_instruction_folds_to_unhandled_and_warns",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_unknown_instruction_folds_to_unhandled_and_warns()"
     },
     {
@@ -3816,7 +3870,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L143",
       "id": "tests_test_fold_test_empty_network_has_no_statements",
-      "community": 5,
+      "community": 12,
       "norm_label": "test_empty_network_has_no_statements()"
     },
     {
@@ -3825,7 +3879,7 @@
       "source_file": "tests/test_fold.py",
       "source_location": "L1",
       "id": "tests_test_fold_rationale_1",
-      "community": 5,
+      "community": 12,
       "norm_label": "unit tests for fold \u2014 model.* -> ir.* (the wire-graph folding).  networks are bu"
     },
     {
@@ -3843,7 +3897,7 @@
       "source_file": "tests/test_input_policy.py",
       "source_location": "L28",
       "id": "tests_test_input_policy_test_read_xml_rejects_oversized_file",
-      "community": 0,
+      "community": 1,
       "norm_label": "test_read_xml_rejects_oversized_file()"
     },
     {
@@ -3852,7 +3906,7 @@
       "source_file": "tests/test_input_policy.py",
       "source_location": "L36",
       "id": "tests_test_input_policy_test_read_xml_rejects_doctype",
-      "community": 0,
+      "community": 1,
       "norm_label": "test_read_xml_rejects_doctype()"
     },
     {
@@ -3870,7 +3924,7 @@
       "source_file": "tests/test_input_policy.py",
       "source_location": "L56",
       "id": "tests_test_input_policy_test_read_xml_rejects_invalid_utf8",
-      "community": 0,
+      "community": 1,
       "norm_label": "test_read_xml_rejects_invalid_utf8()"
     },
     {
@@ -3906,7 +3960,7 @@
       "source_file": "tests/test_input_policy.py",
       "source_location": "L96",
       "id": "tests_test_input_policy_test_discover_xml_is_deterministic_and_bounded",
-      "community": 1,
+      "community": 0,
       "norm_label": "test_discover_xml_is_deterministic_and_bounded()"
     },
     {
@@ -3969,7 +4023,7 @@
       "source_file": "tests/test_input_policy.py",
       "source_location": "L179",
       "id": "tests_test_input_policy_test_read_xml_rejects_a_path_changed_after_validation",
-      "community": 0,
+      "community": 1,
       "norm_label": "test_read_xml_rejects_a_path_changed_after_validation()"
     },
     {
@@ -3985,7 +4039,7 @@
       "label": "test_cli_isolates_directory_discovery_rejection()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L208",
+      "source_location": "L210",
       "id": "tests_test_input_policy_test_cli_isolates_directory_discovery_rejection",
       "community": 0,
       "norm_label": "test_cli_isolates_directory_discovery_rejection()"
@@ -3994,7 +4048,7 @@
       "label": "test_cli_isolates_fold_and_output_failures()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L218",
+      "source_location": "L220",
       "id": "tests_test_input_policy_test_cli_isolates_fold_and_output_failures",
       "community": 0,
       "norm_label": "test_cli_isolates_fold_and_output_failures()"
@@ -4003,7 +4057,7 @@
       "label": "test_cli_sanitizes_warning_output()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L237",
+      "source_location": "L247",
       "id": "tests_test_input_policy_test_cli_sanitizes_warning_output",
       "community": 0,
       "norm_label": "test_cli_sanitizes_warning_output()"
@@ -4012,7 +4066,7 @@
       "label": "test_discovered_artifact_is_relative()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L251",
+      "source_location": "L261",
       "id": "tests_test_input_policy_test_discovered_artifact_is_relative",
       "community": 0,
       "norm_label": "test_discovered_artifact_is_relative()"
@@ -4021,16 +4075,70 @@
       "label": "test_artifact_read_is_limited()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L261",
+      "source_location": "L271",
       "id": "tests_test_input_policy_test_artifact_read_is_limited",
       "community": 0,
       "norm_label": "test_artifact_read_is_limited()"
     },
     {
+      "label": "_StubHandle",
+      "file_type": "code",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L278",
+      "id": "tests_test_input_policy_stubhandle",
+      "community": 0,
+      "norm_label": "_stubhandle"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L285",
+      "id": "tests_test_input_policy_stubhandle_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".read_limited()",
+      "file_type": "code",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L289",
+      "id": "tests_test_input_policy_stubhandle_read_limited",
+      "community": 0,
+      "norm_label": ".read_limited()"
+    },
+    {
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L292",
+      "id": "tests_test_input_policy_stubhandle_close",
+      "community": 0,
+      "norm_label": ".close()"
+    },
+    {
+      "label": "test_handle_reader_closes_the_handle_immediately_after_a_successful_read()",
+      "file_type": "code",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L296",
+      "id": "tests_test_input_policy_test_handle_reader_closes_the_handle_immediately_after_a_successful_read",
+      "community": 0,
+      "norm_label": "test_handle_reader_closes_the_handle_immediately_after_a_successful_read()"
+    },
+    {
+      "label": "test_handle_reader_closes_the_handle_even_when_validation_raises()",
+      "file_type": "code",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L304",
+      "id": "tests_test_input_policy_test_handle_reader_closes_the_handle_even_when_validation_raises",
+      "community": 0,
+      "norm_label": "test_handle_reader_closes_the_handle_even_when_validation_raises()"
+    },
+    {
       "label": "test_directory_discovery_fails_closed_without_dir_fd_support()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L268",
+      "source_location": "L314",
       "id": "tests_test_input_policy_test_directory_discovery_fails_closed_without_dir_fd_support",
       "community": 0,
       "norm_label": "test_directory_discovery_fails_closed_without_dir_fd_support()"
@@ -4039,7 +4147,7 @@
       "label": "test_cli_directory_rejects_when_dir_fd_support_is_unavailable()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L281",
+      "source_location": "L327",
       "id": "tests_test_input_policy_test_cli_directory_rejects_when_dir_fd_support_is_unavailable",
       "community": 0,
       "norm_label": "test_cli_directory_rejects_when_dir_fd_support_is_unavailable()"
@@ -4048,7 +4156,7 @@
       "label": "test_discovery_enforces_traversal_depth_limit()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L297",
+      "source_location": "L343",
       "id": "tests_test_input_policy_test_discovery_enforces_traversal_depth_limit",
       "community": 0,
       "norm_label": "test_discovery_enforces_traversal_depth_limit()"
@@ -4057,7 +4165,7 @@
       "label": "test_discovery_enforces_file_count_limit()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L306",
+      "source_location": "L352",
       "id": "tests_test_input_policy_test_discovery_enforces_file_count_limit",
       "community": 0,
       "norm_label": "test_discovery_enforces_file_count_limit()"
@@ -4066,7 +4174,7 @@
       "label": "test_discovery_skips_subdirectories_when_not_recursive()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L316",
+      "source_location": "L362",
       "id": "tests_test_input_policy_test_discovery_skips_subdirectories_when_not_recursive",
       "community": 0,
       "norm_label": "test_discovery_skips_subdirectories_when_not_recursive()"
@@ -4075,7 +4183,7 @@
       "label": "test_discovery_flags_same_root_sd_declaration_without_a_second_filesystem_touch()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L327",
+      "source_location": "L373",
       "id": "tests_test_input_policy_test_discovery_flags_same_root_sd_declaration_without_a_second_filesystem_touch",
       "community": 0,
       "norm_label": "test_discovery_flags_same_root_sd_declaration_without_a_second_filesystem_touch()"
@@ -4084,7 +4192,7 @@
       "label": "_FakePosixNode",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L354",
+      "source_location": "L400",
       "id": "tests_test_input_policy_fakeposixnode",
       "community": 0,
       "norm_label": "_fakeposixnode"
@@ -4093,7 +4201,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L365",
+      "source_location": "L411",
       "id": "tests_test_input_policy_fakeposixnode_init",
       "community": 0,
       "norm_label": ".__init__()"
@@ -4102,7 +4210,7 @@
       "label": "_fake_dir()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L371",
+      "source_location": "L417",
       "id": "tests_test_input_policy_fake_dir",
       "community": 0,
       "norm_label": "_fake_dir()"
@@ -4111,7 +4219,7 @@
       "label": "_fake_file()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L375",
+      "source_location": "L421",
       "id": "tests_test_input_policy_fake_file",
       "community": 0,
       "norm_label": "_fake_file()"
@@ -4120,7 +4228,7 @@
       "label": "_fake_symlink()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L379",
+      "source_location": "L425",
       "id": "tests_test_input_policy_fake_symlink",
       "community": 0,
       "norm_label": "_fake_symlink()"
@@ -4129,7 +4237,7 @@
       "label": "_fake_racy_file()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L383",
+      "source_location": "L429",
       "id": "tests_test_input_policy_fake_racy_file",
       "community": 0,
       "norm_label": "_fake_racy_file()"
@@ -4138,7 +4246,7 @@
       "label": "_fake_racy_dir()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L387",
+      "source_location": "L433",
       "id": "tests_test_input_policy_fake_racy_dir",
       "community": 0,
       "norm_label": "_fake_racy_dir()"
@@ -4147,7 +4255,7 @@
       "label": "_FakePosixFs",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L400",
+      "source_location": "L446",
       "id": "tests_test_input_policy_fakeposixfs",
       "community": 0,
       "norm_label": "_fakeposixfs"
@@ -4156,7 +4264,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L405",
+      "source_location": "L451",
       "id": "tests_test_input_policy_fakeposixfs_init",
       "community": 0,
       "norm_label": ".__init__()"
@@ -4165,7 +4273,7 @@
       "label": "._register()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L411",
+      "source_location": "L457",
       "id": "tests_test_input_policy_fakeposixfs_register",
       "community": 0,
       "norm_label": "._register()"
@@ -4174,7 +4282,7 @@
       "label": "._child()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L417",
+      "source_location": "L463",
       "id": "tests_test_input_policy_fakeposixfs_child",
       "community": 0,
       "norm_label": "._child()"
@@ -4183,7 +4291,7 @@
       "label": ".open()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L424",
+      "source_location": "L470",
       "id": "tests_test_input_policy_fakeposixfs_open",
       "community": 0,
       "norm_label": ".open()"
@@ -4192,7 +4300,7 @@
       "label": ".stat()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L438",
+      "source_location": "L484",
       "id": "tests_test_input_policy_fakeposixfs_stat",
       "community": 0,
       "norm_label": ".stat()"
@@ -4201,7 +4309,7 @@
       "label": ".scandir()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L443",
+      "source_location": "L489",
       "id": "tests_test_input_policy_fakeposixfs_scandir",
       "community": 0,
       "norm_label": ".scandir()"
@@ -4210,7 +4318,7 @@
       "label": ".read()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L448",
+      "source_location": "L494",
       "id": "tests_test_input_policy_fakeposixfs_read",
       "community": 0,
       "norm_label": ".read()"
@@ -4219,7 +4327,7 @@
       "label": ".close()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L451",
+      "source_location": "L497",
       "id": "tests_test_input_policy_fakeposixfs_close",
       "community": 0,
       "norm_label": ".close()"
@@ -4228,7 +4336,7 @@
       "label": "_patch_posix_dir_fd()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L455",
+      "source_location": "L501",
       "id": "tests_test_input_policy_patch_posix_dir_fd",
       "community": 0,
       "norm_label": "_patch_posix_dir_fd()"
@@ -4237,7 +4345,7 @@
       "label": "test_posix_walk_discovers_nested_files_through_dir_fd_chaining()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L467",
+      "source_location": "L513",
       "id": "tests_test_input_policy_test_posix_walk_discovers_nested_files_through_dir_fd_chaining",
       "community": 0,
       "norm_label": "test_posix_walk_discovers_nested_files_through_dir_fd_chaining()"
@@ -4246,7 +4354,7 @@
       "label": "test_posix_walk_rejects_symlink_entries()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L484",
+      "source_location": "L531",
       "id": "tests_test_input_policy_test_posix_walk_rejects_symlink_entries",
       "community": 0,
       "norm_label": "test_posix_walk_rejects_symlink_entries()"
@@ -4255,7 +4363,7 @@
       "label": "test_posix_walk_treats_a_toctou_rename_race_on_a_file_as_symlink_rejection()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L492",
+      "source_location": "L539",
       "id": "tests_test_input_policy_test_posix_walk_treats_a_toctou_rename_race_on_a_file_as_symlink_rejection",
       "community": 0,
       "norm_label": "test_posix_walk_treats_a_toctou_rename_race_on_a_file_as_symlink_rejection()"
@@ -4264,7 +4372,7 @@
       "label": "test_posix_walk_treats_a_toctou_rename_race_on_a_directory_as_symlink_rejection()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L504",
+      "source_location": "L551",
       "id": "tests_test_input_policy_test_posix_walk_treats_a_toctou_rename_race_on_a_directory_as_symlink_rejection",
       "community": 0,
       "norm_label": "test_posix_walk_treats_a_toctou_rename_race_on_a_directory_as_symlink_rejection()"
@@ -4273,7 +4381,7 @@
       "label": "test_posix_walk_enforces_file_count_limit()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L512",
+      "source_location": "L559",
       "id": "tests_test_input_policy_test_posix_walk_enforces_file_count_limit",
       "community": 0,
       "norm_label": "test_posix_walk_enforces_file_count_limit()"
@@ -4282,7 +4390,7 @@
       "label": "test_posix_walk_enforces_traversal_depth_limit()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L520",
+      "source_location": "L567",
       "id": "tests_test_input_policy_test_posix_walk_enforces_traversal_depth_limit",
       "community": 0,
       "norm_label": "test_posix_walk_enforces_traversal_depth_limit()"
@@ -4291,7 +4399,7 @@
       "label": "test_posix_walk_skips_subdirectories_when_not_recursive()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L528",
+      "source_location": "L575",
       "id": "tests_test_input_policy_test_posix_walk_skips_subdirectories_when_not_recursive",
       "community": 0,
       "norm_label": "test_posix_walk_skips_subdirectories_when_not_recursive()"
@@ -4300,7 +4408,7 @@
       "label": "test_posix_walk_flags_same_root_sd_declaration_without_touching_filesystem()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L540",
+      "source_location": "L587",
       "id": "tests_test_input_policy_test_posix_walk_flags_same_root_sd_declaration_without_touching_filesystem",
       "community": 0,
       "norm_label": "test_posix_walk_flags_same_root_sd_declaration_without_touching_filesystem()"
@@ -4309,7 +4417,7 @@
       "label": "test_posix_walk_rejects_unavailable_root_open_as_input_violation()",
       "file_type": "code",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L554",
+      "source_location": "L601",
       "id": "tests_test_input_policy_test_posix_walk_rejects_unavailable_root_open_as_input_violation",
       "community": 0,
       "norm_label": "test_posix_walk_rejects_unavailable_root_open_as_input_violation()"
@@ -4324,11 +4432,20 @@
       "norm_label": "boundary tests for untrusted decoder inputs."
     },
     {
+      "label": "Minimal stand-in for `windows_handles.NativeHandle` /     `_PosixFileHandle`: ex",
+      "file_type": "rationale",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L279",
+      "id": "tests_test_input_policy_rationale_279",
+      "community": 0,
+      "norm_label": "minimal stand-in for `windows_handles.nativehandle` /     `_posixfilehandle`: ex"
+    },
+    {
       "label": "Forces the POSIX branch (regardless of the host platform) and then     forces `o",
       "file_type": "rationale",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L269",
-      "id": "tests_test_input_policy_rationale_269",
+      "source_location": "L315",
+      "id": "tests_test_input_policy_rationale_315",
       "community": 0,
       "norm_label": "forces the posix branch (regardless of the host platform) and then     forces `o"
     },
@@ -4336,8 +4453,8 @@
       "label": "One entry in an in-memory fake filesystem tree.      ``kind`` is one of ``\"dir\"`",
       "file_type": "rationale",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L355",
-      "id": "tests_test_input_policy_rationale_355",
+      "source_location": "L401",
+      "id": "tests_test_input_policy_rationale_401",
       "community": 0,
       "norm_label": "one entry in an in-memory fake filesystem tree.      ``kind`` is one of ``\"dir\"`"
     },
@@ -4345,8 +4462,8 @@
       "label": "Simulates dir_fd-relative ``os.open``/``os.stat``/``os.scandir``/     ``os.read`",
       "file_type": "rationale",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L401",
-      "id": "tests_test_input_policy_rationale_401",
+      "source_location": "L447",
+      "id": "tests_test_input_policy_rationale_447",
       "community": 0,
       "norm_label": "simulates dir_fd-relative ``os.open``/``os.stat``/``os.scandir``/     ``os.read`"
     },
@@ -4354,8 +4471,8 @@
       "label": "The lstat classifies ``race.xml`` as a plain regular file, but the     subsequen",
       "file_type": "rationale",
       "source_file": "tests/test_input_policy.py",
-      "source_location": "L493",
-      "id": "tests_test_input_policy_rationale_493",
+      "source_location": "L540",
+      "id": "tests_test_input_policy_rationale_540",
       "community": 0,
       "norm_label": "the lstat classifies ``race.xml`` as a plain regular file, but the     subsequen"
     },
@@ -4365,7 +4482,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L1",
       "id": "tests_test_operand_py",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_operand.py"
     },
     {
@@ -4374,7 +4491,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L8",
       "id": "tests_test_operand_access",
-      "community": 13,
+      "community": 14,
       "norm_label": "_access()"
     },
     {
@@ -4383,7 +4500,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L12",
       "id": "tests_test_operand_test_local_variable_symbol",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_local_variable_symbol()"
     },
     {
@@ -4392,7 +4509,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L17",
       "id": "tests_test_operand_test_dotted_local_path",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_dotted_local_path()"
     },
     {
@@ -4401,7 +4518,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L23",
       "id": "tests_test_operand_test_global_variable_quotes_root_only",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_global_variable_quotes_root_only()"
     },
     {
@@ -4410,7 +4527,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L29",
       "id": "tests_test_operand_test_bit_slice_renders_percent_x",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_bit_slice_renders_percent_x()"
     },
     {
@@ -4419,7 +4536,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L35",
       "id": "tests_test_operand_test_array_index",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_array_index()"
     },
     {
@@ -4428,7 +4545,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L42",
       "id": "tests_test_operand_test_address_word",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_address_word()"
     },
     {
@@ -4437,7 +4554,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L47",
       "id": "tests_test_operand_test_address_bool_byte_bit",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_address_bool_byte_bit()"
     },
     {
@@ -4446,7 +4563,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L52",
       "id": "tests_test_operand_test_literal_constant_verbatim",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_literal_constant_verbatim()"
     },
     {
@@ -4455,7 +4572,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L57",
       "id": "tests_test_operand_test_unresolved_scope_is_loud_placeholder",
-      "community": 13,
+      "community": 14,
       "norm_label": "test_unresolved_scope_is_loud_placeholder()"
     },
     {
@@ -4464,7 +4581,7 @@
       "source_file": "tests/test_operand.py",
       "source_location": "L1",
       "id": "tests_test_operand_rationale_1",
-      "community": 13,
+      "community": 14,
       "norm_label": "unit tests for operand.render \u2014 the access -> tia display-string conventions."
     },
     {
@@ -4473,7 +4590,7 @@
       "source_file": "tests/test_release_version.py",
       "source_location": "L1",
       "id": "tests_test_release_version_py",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_release_version.py"
     },
     {
@@ -4482,7 +4599,7 @@
       "source_file": "tests/test_release_version.py",
       "source_location": "L15",
       "id": "tests_test_release_version_write_project",
-      "community": 16,
+      "community": 17,
       "norm_label": "_write_project()"
     },
     {
@@ -4491,7 +4608,7 @@
       "source_file": "tests/test_release_version.py",
       "source_location": "L29",
       "id": "tests_test_release_version_test_check_release_version_accepts_matching_v_tag",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_check_release_version_accepts_matching_v_tag()"
     },
     {
@@ -4500,7 +4617,7 @@
       "source_file": "tests/test_release_version.py",
       "source_location": "L35",
       "id": "tests_test_release_version_test_check_release_version_reports_pyproject_mismatch",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_check_release_version_reports_pyproject_mismatch()"
     },
     {
@@ -4509,7 +4626,7 @@
       "source_file": "tests/test_release_version.py",
       "source_location": "L43",
       "id": "tests_test_release_version_test_check_release_version_reports_init_mismatch",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_check_release_version_reports_init_mismatch()"
     },
     {
@@ -4518,7 +4635,7 @@
       "source_file": "tests/test_release_version.py",
       "source_location": "L51",
       "id": "tests_test_release_version_test_check_release_version_rejects_non_v_tag",
-      "community": 16,
+      "community": 17,
       "norm_label": "test_check_release_version_rejects_non_v_tag()"
     },
     {
@@ -4585,6 +4702,24 @@
       "norm_label": "test_open_root_missing_path_raises_input_violation()"
     },
     {
+      "label": "test_open_child_succeeds_for_plain_file_and_directory()",
+      "file_type": "code",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L85",
+      "id": "tests_test_windows_handles_test_open_child_succeeds_for_plain_file_and_directory",
+      "community": 15,
+      "norm_label": "test_open_child_succeeds_for_plain_file_and_directory()"
+    },
+    {
+      "label": "test_open_child_rejects_a_junction_opened_directly_without_prior_enumeration()",
+      "file_type": "code",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L104",
+      "id": "tests_test_windows_handles_test_open_child_rejects_a_junction_opened_directly_without_prior_enumeration",
+      "community": 15,
+      "norm_label": "test_open_child_rejects_a_junction_opened_directly_without_prior_enumeration()"
+    },
+    {
       "label": "Windows-only native handle traversal tests.",
       "file_type": "rationale",
       "source_file": "tests/test_windows_handles.py",
@@ -4592,6 +4727,213 @@
       "id": "tests_test_windows_handles_rationale_1",
       "community": 15,
       "norm_label": "windows-only native handle traversal tests."
+    },
+    {
+      "label": "Regression guard for the post-open reparse-point recheck added to     `open_chil",
+      "file_type": "rationale",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L86",
+      "id": "tests_test_windows_handles_rationale_86",
+      "community": 15,
+      "norm_label": "regression guard for the post-open reparse-point recheck added to     `open_chil"
+    },
+    {
+      "label": "Exercises the new post-open attribute recheck in `open_child` in     isolation f",
+      "file_type": "rationale",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L105",
+      "id": "tests_test_windows_handles_rationale_105",
+      "community": 15,
+      "norm_label": "exercises the new post-open attribute recheck in `open_child` in     isolation f"
+    },
+    {
+      "label": "Recurse one native directory handle at a time.      `directory.entries()` is alr",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L244",
+      "community": 1,
+      "norm_label": "recurse one native directory handle at a time.      `directory.entries()` is alr",
+      "id": "simaticml_decoder_input_policy_rationale_244"
+    },
+    {
+      "label": "A POSIX file descriptor opened relative to its parent directory's own     descri",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L290",
+      "community": 1,
+      "norm_label": "a posix file descriptor opened relative to its parent directory's own     descri",
+      "id": "simaticml_decoder_input_policy_rationale_290"
+    },
+    {
+      "label": "Read at most `limit + 1` bytes so callers can detect oversized         input wit",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L313",
+      "community": 1,
+      "norm_label": "read at most `limit + 1` bytes so callers can detect oversized         input wit",
+      "id": "simaticml_decoder_input_policy_rationale_313"
+    },
+    {
+      "label": "Whether this platform/Python build can do descriptor-relative,     symlink-rejec",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L324",
+      "community": 1,
+      "norm_label": "whether this platform/python build can do descriptor-relative,     symlink-rejec",
+      "id": "simaticml_decoder_input_policy_rationale_324"
+    },
+    {
+      "label": "Recurse one dir_fd at a time, classifying children via an O_NOFOLLOW     lstat-e",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L410",
+      "community": 1,
+      "norm_label": "recurse one dir_fd at a time, classifying children via an o_nofollow     lstat-e",
+      "id": "simaticml_decoder_input_policy_rationale_410"
+    },
+    {
+      "label": "Fixed-size prefix of `FILE_ID_BOTH_DIR_INFORMATION`.      The real structure end",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L113",
+      "community": 5,
+      "norm_label": "fixed-size prefix of `file_id_both_dir_information`.      the real structure end",
+      "id": "simaticml_decoder_windows_handles_rationale_113"
+    },
+    {
+      "label": "One directory entry discovered through a native handle.",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L197",
+      "community": 5,
+      "norm_label": "one directory entry discovered through a native handle.",
+      "id": "simaticml_decoder_windows_handles_rationale_197"
+    },
+    {
+      "label": "Turn a filesystem path into an NT native-namespace path.      Uses lexical, CWD-",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L207",
+      "community": 5,
+      "norm_label": "turn a filesystem path into an nt native-namespace path.      uses lexical, cwd-",
+      "id": "simaticml_decoder_windows_handles_rationale_207"
+    },
+    {
+      "label": "A native file handle opened relative to its parent directory's handle.",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L278",
+      "community": 5,
+      "norm_label": "a native file handle opened relative to its parent directory's handle.",
+      "id": "simaticml_decoder_windows_handles_rationale_278"
+    },
+    {
+      "label": "Read at most `limit + 1` bytes so callers can detect oversized         input wit",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L297",
+      "community": 1,
+      "norm_label": "read at most `limit + 1` bytes so callers can detect oversized         input wit",
+      "id": "simaticml_decoder_windows_handles_rationale_297"
+    },
+    {
+      "label": "A native directory handle anchoring all descendant opens.      Children are open",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L312",
+      "community": 5,
+      "norm_label": "a native directory handle anchoring all descendant opens.      children are open",
+      "id": "simaticml_decoder_windows_handles_rationale_312"
+    },
+    {
+      "label": "Open the root directory exactly once, by its NT native path.",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L337",
+      "community": 19,
+      "norm_label": "open the root directory exactly once, by its nt native path.",
+      "id": "simaticml_decoder_windows_handles_rationale_337"
+    },
+    {
+      "label": "Open a child by name, relative to this directory's own handle.          Rejects",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L348",
+      "community": 5,
+      "norm_label": "open a child by name, relative to this directory's own handle.          rejects",
+      "id": "simaticml_decoder_windows_handles_rationale_348"
+    },
+    {
+      "label": "Enumerate immediate children by this directory's own handle.          Any child",
+      "file_type": "rationale",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L381",
+      "community": 5,
+      "norm_label": "enumerate immediate children by this directory's own handle.          any child",
+      "id": "simaticml_decoder_windows_handles_rationale_381"
+    },
+    {
+      "label": "test_fc_cargador_is_three_combinational_assignments()",
+      "file_type": "code",
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L8",
+      "community": 6,
+      "norm_label": "test_fc_cargador_is_three_combinational_assignments()",
+      "id": "tests_test_fixtures_regression_test_fc_cargador_is_three_combinational_assignments"
+    },
+    {
+      "label": "test_mhj_function_keeps_its_scl_network()",
+      "file_type": "code",
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L22",
+      "community": 6,
+      "norm_label": "test_mhj_function_keeps_its_scl_network()",
+      "id": "tests_test_fixtures_regression_test_mhj_function_keeps_its_scl_network"
+    },
+    {
+      "label": "test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens()",
+      "file_type": "code",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L85",
+      "community": 13,
+      "norm_label": "test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens()",
+      "id": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens"
+    },
+    {
+      "label": "Regression: verify fixture corpus itself is set up correctly.      If unpaired r",
+      "file_type": "rationale",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L123",
+      "community": 13,
+      "norm_label": "regression: verify fixture corpus itself is set up correctly.      if unpaired r",
+      "id": "tests_test_fixture_corpus_rationale_123"
+    },
+    {
+      "label": "Forces the POSIX branch (regardless of the host platform) and then     forces `o",
+      "file_type": "rationale",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L269",
+      "community": 0,
+      "norm_label": "forces the posix branch (regardless of the host platform) and then     forces `o",
+      "id": "tests_test_input_policy_rationale_269"
+    },
+    {
+      "label": "One entry in an in-memory fake filesystem tree.      ``kind`` is one of ``\"dir\"`",
+      "file_type": "rationale",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L355",
+      "community": 0,
+      "norm_label": "one entry in an in-memory fake filesystem tree.      ``kind`` is one of ``\"dir\"`",
+      "id": "tests_test_input_policy_rationale_355"
+    },
+    {
+      "label": "The lstat classifies ``race.xml`` as a plain regular file, but the     subsequen",
+      "file_type": "rationale",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L493",
+      "community": 0,
+      "norm_label": "the lstat classifies ``race.xml`` as a plain regular file, but the     subsequen",
+      "id": "tests_test_input_policy_rationale_493"
     },
     {
       "label": "Result of decoding one file. Carries enough to report without re-deriving.",
@@ -4688,7 +5030,7 @@
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L109",
-      "community": 1,
+      "community": 0,
       "norm_label": "discover regular xml files without following links, bounded and sorted.",
       "id": "simaticml_decoder_input_policy_rationale_109"
     },
@@ -4742,7 +5084,7 @@
       "file_type": "rationale",
       "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L92",
-      "community": 1,
+      "community": 0,
       "norm_label": "discover regular xml files without following links, bounded and sorted.",
       "id": "simaticml_decoder_input_policy_rationale_92"
     },
@@ -4904,7 +5246,7 @@
       "file_type": "rationale",
       "source_file": "tests/conftest.py",
       "source_location": "L34",
-      "community": 8,
+      "community": 6,
       "norm_label": "return a callable name -> path, skipping if the fixture is absent.",
       "id": "tests_conftest_rationale_34"
     },
@@ -4913,7 +5255,7 @@
       "file_type": "rationale",
       "source_file": "tests/conftest.py",
       "source_location": "L40",
-      "community": 8,
+      "community": 6,
       "norm_label": "return a callable name -> model.document, skipping if the fixture is absent.",
       "id": "tests_conftest_rationale_40"
     },
@@ -4922,7 +5264,7 @@
       "file_type": "code",
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L19",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_decode_pipeline_runs()",
       "id": "tests_test_fixtures_regression_test_decode_pipeline_runs"
     },
@@ -4931,7 +5273,7 @@
       "file_type": "code",
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L36",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_motor_is_combinational_no_latch()",
       "id": "tests_test_fixtures_regression_test_motor_is_combinational_no_latch"
     },
@@ -4940,7 +5282,7 @@
       "file_type": "code",
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L48",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_singlealarm_constructs()",
       "id": "tests_test_fixtures_regression_test_singlealarm_constructs"
     },
@@ -4949,7 +5291,7 @@
       "file_type": "code",
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L58",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_fbsystem_scl_network_and_slices()",
       "id": "tests_test_fixtures_regression_test_fbsystem_scl_network_and_slices"
     },
@@ -4958,7 +5300,7 @@
       "file_type": "code",
       "source_file": "tests/test_cli.py",
       "source_location": "L11",
-      "community": 8,
+      "community": 6,
       "norm_label": "test_missing_file_returns_2()",
       "id": "tests_test_cli_test_missing_file_returns_2"
     },
@@ -4976,7 +5318,7 @@
       "file_type": "code",
       "source_file": "emit.py",
       "source_location": "L1",
-      "community": 9,
+      "community": 8,
       "norm_label": "emit.py",
       "id": "emit_py"
     },
@@ -5003,7 +5345,7 @@
       "file_type": "code",
       "source_file": "ir.py",
       "source_location": "L1",
-      "community": 4,
+      "community": 9,
       "norm_label": "ir.py",
       "id": "ir_py"
     },
@@ -5012,7 +5354,7 @@
       "file_type": "code",
       "source_file": "model.py",
       "source_location": "L1",
-      "community": 5,
+      "community": 4,
       "norm_label": "model.py",
       "id": "model_py"
     },
@@ -5057,7 +5399,7 @@
       "file_type": "rationale",
       "source_file": "emit.py",
       "source_location": "L27",
-      "community": 9,
+      "community": 8,
       "norm_label": "render the scl text artifact. raises until implemented (phase 3).",
       "id": "simaticml_decoder_emit_rationale_27"
     },
@@ -5066,7 +5408,7 @@
       "file_type": "rationale",
       "source_file": "emit.py",
       "source_location": "L32",
-      "community": 9,
+      "community": 8,
       "norm_label": "build the json-serialisable sidecar dict. raises until implemented.",
       "id": "simaticml_decoder_emit_rationale_32"
     }
@@ -8465,6 +8807,16 @@
       "source_file": "tests/test_input_policy.py",
       "source_location": "L16",
       "weight": 0.8,
+      "source": "tests_test_input_policy_stubhandle",
+      "target": "simaticml_decoder_input_policy_inputlimits",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L16",
+      "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_input_policy_fakeposixnode",
       "target": "simaticml_decoder_input_policy_inputlimits"
@@ -8532,6 +8884,28 @@
       "source_location": "L265",
       "weight": 1.0,
       "source": "tests_test_input_policy_test_artifact_read_is_limited",
+      "target": "simaticml_decoder_input_policy_inputlimits"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_test_handle_reader_closes_the_handle_immediately_after_a_successful_read",
+      "target": "simaticml_decoder_input_policy_inputlimits"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L309",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_test_handle_reader_closes_the_handle_even_when_validation_raises",
       "target": "simaticml_decoder_input_policy_inputlimits"
     },
     {
@@ -8957,6 +9331,26 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L26",
       "weight": 0.8,
+      "source": "simaticml_decoder_windows_handles_filetime",
+      "target": "simaticml_decoder_input_policy_inputviolation",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L26",
+      "weight": 0.8,
+      "source": "simaticml_decoder_windows_handles_by_handle_file_information",
+      "target": "simaticml_decoder_input_policy_inputviolation",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L26",
+      "weight": 0.8,
       "confidence_score": 0.5,
       "source": "simaticml_decoder_windows_handles_file_id_both_dir_information",
       "target": "simaticml_decoder_input_policy_inputviolation"
@@ -8990,6 +9384,16 @@
       "confidence_score": 0.5,
       "source": "simaticml_decoder_windows_handles_nativedirectory",
       "target": "simaticml_decoder_input_policy_inputviolation"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L16",
+      "weight": 0.8,
+      "source": "tests_test_input_policy_stubhandle",
+      "target": "simaticml_decoder_input_policy_inputviolation",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -9031,6 +9435,17 @@
       "source_location": "L233",
       "weight": 1.0,
       "source": "simaticml_decoder_windows_handles_raise_native_failure",
+      "target": "simaticml_decoder_input_policy_inputviolation"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L326",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_reject_if_reparse_point",
       "target": "simaticml_decoder_input_policy_inputviolation"
     },
     {
@@ -9258,6 +9673,17 @@
       "source_location": "L235",
       "weight": 1.0,
       "source": "simaticml_decoder_windows_handles_raise_native_failure",
+      "target": "simaticml_decoder_input_policy_safe_text"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L326",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_reject_if_reparse_point",
       "target": "simaticml_decoder_input_policy_safe_text"
     },
     {
@@ -9951,6 +10377,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L252",
+      "weight": 1.0,
+      "source": "simaticml_decoder_input_policy_rationale_252",
+      "target": "simaticml_decoder_input_policy_walk_windows_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L244",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -10012,6 +10448,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "simaticml_decoder_input_policy_rationale_298",
+      "target": "simaticml_decoder_input_policy_posixfilehandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L290",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -10055,6 +10501,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L321",
+      "weight": 1.0,
+      "source": "simaticml_decoder_input_policy_rationale_321",
+      "target": "simaticml_decoder_input_policy_posixfilehandle_read_limited",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/input_policy.py",
       "source_location": "L313",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -10071,6 +10527,16 @@
       "confidence_score": 1.0,
       "source": "simaticml_decoder_input_policy_discover_posix",
       "target": "simaticml_decoder_input_policy_dir_fd_available"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L332",
+      "weight": 1.0,
+      "source": "simaticml_decoder_input_policy_rationale_332",
+      "target": "simaticml_decoder_input_policy_dir_fd_available",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -10147,6 +10613,16 @@
       "confidence_score": 1.0,
       "source": "simaticml_decoder_input_policy_walk_posix_directory",
       "target": "simaticml_decoder_input_policy_open_file_child"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/input_policy.py",
+      "source_location": "L418",
+      "weight": 1.0,
+      "source": "simaticml_decoder_input_policy_rationale_418",
+      "target": "simaticml_decoder_input_policy_walk_posix_directory",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -14054,6 +14530,26 @@
       "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L112",
       "weight": 1.0,
+      "source": "src_simaticml_decoder_windows_handles_py",
+      "target": "simaticml_decoder_windows_handles_filetime",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_simaticml_decoder_windows_handles_py",
+      "target": "simaticml_decoder_windows_handles_by_handle_file_information",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L112",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_simaticml_decoder_windows_handles_py",
       "target": "simaticml_decoder_windows_handles_file_id_both_dir_information"
@@ -14127,6 +14623,16 @@
       "confidence_score": 1.0,
       "source": "src_simaticml_decoder_windows_handles_py",
       "target": "simaticml_decoder_windows_handles_close_handle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "src_simaticml_decoder_windows_handles_py",
+      "target": "simaticml_decoder_windows_handles_reject_if_reparse_point",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -14223,6 +14729,37 @@
       "target": "simaticml_decoder_windows_handles_io_status_block"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L322",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_reject_if_reparse_point",
+      "target": "simaticml_decoder_windows_handles_by_handle_file_information",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_120",
+      "target": "simaticml_decoder_windows_handles_by_handle_file_information",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_139",
+      "target": "simaticml_decoder_windows_handles_file_id_both_dir_information",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/windows_handles.py",
@@ -14247,6 +14784,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_230",
+      "target": "simaticml_decoder_windows_handles_nativeentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L197",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -14263,6 +14810,16 @@
       "confidence_score": 1.0,
       "source": "simaticml_decoder_windows_handles_open_root",
       "target": "simaticml_decoder_windows_handles_to_nt_path"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_240",
+      "target": "simaticml_decoder_windows_handles_to_nt_path",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -14374,6 +14931,27 @@
       "target": "simaticml_decoder_windows_handles_close_handle"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L425",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_nativedirectory_open_child",
+      "target": "simaticml_decoder_windows_handles_reject_if_reparse_point",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L308",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_308",
+      "target": "simaticml_decoder_windows_handles_reject_if_reparse_point",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/windows_handles.py",
@@ -14448,6 +15026,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L335",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_335",
+      "target": "simaticml_decoder_windows_handles_nativehandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L278",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -14475,6 +15063,16 @@
       "confidence_score": 1.0,
       "source": "simaticml_decoder_windows_handles_nativehandle_del",
       "target": "simaticml_decoder_windows_handles_nativedirectory_close"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L354",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_354",
+      "target": "simaticml_decoder_windows_handles_nativehandle_read_limited",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -14561,6 +15159,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L369",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_369",
+      "target": "simaticml_decoder_windows_handles_nativedirectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L312",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -14593,11 +15201,31 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L405",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_405",
+      "target": "simaticml_decoder_windows_handles_nativedirectory_open_child",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
       "source_location": "L348",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "simaticml_decoder_windows_handles_rationale_348",
       "target": "simaticml_decoder_windows_handles_nativedirectory_open_child"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/simaticml_decoder/windows_handles.py",
+      "source_location": "L444",
+      "weight": 1.0,
+      "source": "simaticml_decoder_windows_handles_rationale_444",
+      "target": "simaticml_decoder_windows_handles_nativedirectory_entries",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -14796,6 +15424,28 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_conftest_rationale_41",
+      "target": "tests_conftest_load_fixture"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_test_fixtures_regression_test_inputs_fb_preserves_digital_input_assignments",
+      "target": "tests_conftest_load_fixture"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tests_test_fixtures_regression_test_analog_input_keeps_its_scl_network",
       "target": "tests_conftest_load_fixture"
     },
     {
@@ -15373,6 +16023,36 @@
       "source_file": "tests/test_fixtures_regression.py",
       "source_location": "L8",
       "weight": 1.0,
+      "source": "tests_test_fixtures_regression_py",
+      "target": "tests_test_fixtures_regression_test_inputs_fb_preserves_digital_input_assignments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "tests_test_fixtures_regression_py",
+      "target": "tests_test_fixtures_regression_test_analog_input_keeps_its_scl_network",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_fixtures_regression_rationale_1",
+      "target": "tests_test_fixtures_regression_py"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixtures_regression.py",
+      "source_location": "L8",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_fixtures_regression_py",
       "target": "tests_test_fixtures_regression_test_fc_cargador_is_three_combinational_assignments"
@@ -15386,16 +16066,6 @@
       "confidence_score": 1.0,
       "source": "tests_test_fixtures_regression_py",
       "target": "tests_test_fixtures_regression_test_mhj_function_keeps_its_scl_network"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_fixtures_regression.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_fixtures_regression_rationale_1",
-      "target": "tests_test_fixtures_regression_py"
     },
     {
       "relation": "contains",
@@ -15471,6 +16141,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "tests_test_fixture_corpus_py",
+      "target": "tests_test_fixture_corpus_sha256",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L42",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -15501,11 +16181,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L85",
+      "source_location": "L104",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "tests_test_fixture_corpus_py",
-      "target": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens"
+      "target": "tests_test_fixture_corpus_test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -15533,9 +16213,9 @@
       "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_fixture_corpus_py",
-      "target": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration",
-      "confidence_score": 1.0
+      "target": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration"
     },
     {
       "relation": "rationale_for",
@@ -15546,6 +16226,16 @@
       "confidence_score": 1.0,
       "source": "tests_test_fixture_corpus_rationale_1",
       "target": "tests_test_fixture_corpus_py"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_fixture_corpus_py",
+      "target": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens"
     },
     {
       "relation": "calls",
@@ -15585,11 +16275,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L86",
+      "source_location": "L105",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens",
-      "target": "tests_test_fixture_corpus_manifest"
+      "source": "tests_test_fixture_corpus_test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums",
+      "target": "tests_test_fixture_corpus_manifest",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -15620,9 +16310,20 @@
       "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration",
-      "target": "tests_test_fixture_corpus_manifest",
-      "confidence_score": 1.0
+      "target": "tests_test_fixture_corpus_manifest"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens",
+      "target": "tests_test_fixture_corpus_manifest"
     },
     {
       "relation": "calls",
@@ -15651,11 +16352,11 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_fixture_corpus.py",
-      "source_location": "L87",
+      "source_location": "L106",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens",
-      "target": "tests_test_fixture_corpus_path"
+      "source": "tests_test_fixture_corpus_test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums",
+      "target": "tests_test_fixture_corpus_path",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -15686,8 +16387,30 @@
       "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L130",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration",
-      "target": "tests_test_fixture_corpus_path",
+      "target": "tests_test_fixture_corpus_path"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_fixture_corpus_test_preserved_simaticml_fbd_matches_ir_scl_and_json_goldens",
+      "target": "tests_test_fixture_corpus_path"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "tests_test_fixture_corpus_test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums",
+      "target": "tests_test_fixture_corpus_semantic_summary",
       "confidence_score": 1.0
     },
     {
@@ -15702,14 +16425,35 @@
       "target": "tests_test_fixture_corpus_semantic_summary"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "tests_test_fixture_corpus_test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums",
+      "target": "tests_test_fixture_corpus_sha256",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fixture_corpus.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "tests_test_fixture_corpus_rationale_142",
+      "target": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_fixture_corpus.py",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_fixture_corpus_rationale_123",
-      "target": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration",
-      "confidence_score": 1.0
+      "target": "tests_test_fixture_corpus_test_unpaired_resources_have_no_same_root_declaration"
     },
     {
       "relation": "contains",
@@ -16341,6 +17085,36 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_input_policy.py",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_py",
+      "target": "tests_test_input_policy_stubhandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_py",
+      "target": "tests_test_input_policy_test_handle_reader_closes_the_handle_immediately_after_a_successful_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_py",
+      "target": "tests_test_input_policy_test_handle_reader_closes_the_handle_even_when_validation_raises",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
       "source_location": "L268",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -16600,6 +17374,78 @@
       "target": "tests_test_input_policy_fakeposixfs_stat"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_stubhandle",
+      "target": "tests_test_input_policy_stubhandle_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L289",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_stubhandle",
+      "target": "tests_test_input_policy_stubhandle_read_limited",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L292",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_stubhandle",
+      "target": "tests_test_input_policy_stubhandle_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_test_handle_reader_closes_the_handle_immediately_after_a_successful_read",
+      "target": "tests_test_input_policy_stubhandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L305",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_test_handle_reader_closes_the_handle_even_when_validation_raises",
+      "target": "tests_test_input_policy_stubhandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L279",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_rationale_279",
+      "target": "tests_test_input_policy_stubhandle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L315",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_rationale_315",
+      "target": "tests_test_input_policy_test_directory_discovery_fails_closed_without_dir_fd_support",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_input_policy.py",
@@ -16673,6 +17519,16 @@
       "confidence_score": 1.0,
       "source": "tests_test_input_policy_fake_racy_dir",
       "target": "tests_test_input_policy_fakeposixnode"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L401",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_rationale_401",
+      "target": "tests_test_input_policy_fakeposixnode",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -17054,6 +17910,16 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_input_policy.py",
+      "source_location": "L447",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_rationale_447",
+      "target": "tests_test_input_policy_fakeposixfs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
       "source_location": "L401",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17191,6 +18057,16 @@
       "confidence_score": 1.0,
       "source": "tests_test_input_policy_test_posix_walk_rejects_unavailable_root_open_as_input_violation",
       "target": "tests_test_input_policy_patch_posix_dir_fd"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_input_policy.py",
+      "source_location": "L540",
+      "weight": 1.0,
+      "source": "tests_test_input_policy_rationale_540",
+      "target": "tests_test_input_policy_test_posix_walk_treats_a_toctou_rename_race_on_a_file_as_symlink_rejection",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -17566,6 +18442,26 @@
       "target": "tests_test_windows_handles_test_open_root_missing_path_raises_input_violation"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "tests_test_windows_handles_py",
+      "target": "tests_test_windows_handles_test_open_child_succeeds_for_plain_file_and_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "tests_test_windows_handles_py",
+      "target": "tests_test_windows_handles_test_open_child_rejects_a_junction_opened_directly_without_prior_enumeration",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_windows_handles.py",
@@ -17574,6 +18470,26 @@
       "confidence_score": 1.0,
       "source": "tests_test_windows_handles_rationale_1",
       "target": "tests_test_windows_handles_py"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "tests_test_windows_handles_rationale_86",
+      "target": "tests_test_windows_handles_test_open_child_succeeds_for_plain_file_and_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_windows_handles.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "tests_test_windows_handles_rationale_105",
+      "target": "tests_test_windows_handles_test_open_child_rejects_a_junction_opened_directly_without_prior_enumeration",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17654,5 +18570,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a74792b98156a1100bdaada255e68c7f2f84b4ba"
+  "built_at_commit": "c585f492b951debfbbc596a34868be22df9369b5"
 }

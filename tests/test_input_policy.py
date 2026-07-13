@@ -195,12 +195,14 @@ def test_cli_directory_reports_each_unpaired_sd_resource(capsys):
 
     stderr = capsys.readouterr().err
     for name in (
-        "FB_Sensores.s7res",
-        "FC_Cargador.s7res",
-        "FC_Conveyor_entry.s7res",
-        "FC_Conveyor_sides.s7res",
-        "FC_Seguridad.s7res",
-        "Main.s7res",
+        "Inputs_FB.s7res",
+        "AlarmsContainer.s7res",
+        "MotorSoftstart.s7res",
+        "TIME_COUNTER_FB.s7res",
+        "AnalogInput.s7res",
+        "deviceState.s7res",
+        "AnalogInputSettings.s7res",
+        "UDT_Device.s7res",
     ):
         assert f"SD_RESOURCE_WITHOUT_DCL: {name}" in stderr
 
@@ -216,11 +218,19 @@ def test_cli_isolates_directory_discovery_rejection(monkeypatch, tmp_path, capsy
 
 
 def test_cli_isolates_fold_and_output_failures(monkeypatch, tmp_path):
-    source = Path(__file__).parent / "fixtures" / "SimaticML" / "PLC_1" / "Program blocks" / "FC_Cargador.xml"
+    source = (
+        Path(__file__).parent
+        / "fixtures"
+        / "SimaticML"
+        / "PLC_1"
+        / "Program blocks"
+        / "100_Inputs"
+        / "Inputs_FB.xml"
+    )
 
     monkeypatch.setattr(cli.fold, "fold_block", lambda _doc: (_ for _ in ()).throw(RuntimeError()))
     assert cli.decode_file(source, tmp_path / "fold", "scl").error == (
-        "DECODE_FAILED: FC_Cargador.xml: unable to fold input"
+        "DECODE_FAILED: Inputs_FB.xml: unable to fold input"
     )
 
     monkeypatch.undo()
@@ -230,7 +240,7 @@ def test_cli_isolates_fold_and_output_failures(monkeypatch, tmp_path):
 
     monkeypatch.setattr(cli, "_write", lambda *_args: (_ for _ in ()).throw(OSError("denied")))
     assert cli.decode_file(source, tmp_path / "write", "scl").error == (
-        "OUTPUT_FAILED: FC_Cargador.xml: denied"
+        "OUTPUT_FAILED: Inputs_FB.xml: denied"
     )
 
 

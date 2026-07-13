@@ -5,23 +5,21 @@ from __future__ import annotations
 from simaticml_decoder import emit, fold, ir
 
 
-def test_fc_cargador_is_three_combinational_assignments(load_fixture):
-    decoded = fold.fold_block(load_fixture("FC_Cargador"))
+def test_inputs_fb_preserves_digital_input_assignments(load_fixture):
+    decoded = fold.fold_block(load_fixture("Inputs_FB"))
 
-    assert len(decoded.networks) == 4
+    assert len(decoded.networks) == 21
     statements = [statement for network in decoded.networks for statement in network.statements]
-    assert [statement.target.name for statement in statements] == [
-        "#Load",
-        "#Transfer left",
-        "#Transfer right",
-    ]
-    assert all(isinstance(statement, ir.Assign) and not statement.is_latch for statement in statements)
-    assert "#Load := NOT #Emergencia" in emit.emit_scl(decoded)
+    assignments = [statement for statement in statements if isinstance(statement, ir.Assign)]
+    assert len(assignments) == 14
+    assert assignments[0].target.name == '"InputValues_DB".InputsDigital.EmergencyStop'
+    assert all(not statement.is_latch for statement in assignments)
+    assert '"InputValues_DB".InputsDigital.EmergencyStop :=' in emit.emit_scl(decoded)
 
 
-def test_mhj_function_keeps_its_scl_network(load_fixture):
-    decoded = fold.fold_block(load_fixture("MHJ-PLC-Lab-Function-S71200"))
+def test_analog_input_keeps_its_scl_network(load_fixture):
+    decoded = fold.fold_block(load_fixture("AnalogInput"))
 
     assert len(decoded.networks) == 1
     assert decoded.networks[0].scl_text is not None
-    assert "For#forVal" in emit.emit_scl(decoded)
+    assert "REGIONChoose input" in emit.emit_scl(decoded)
