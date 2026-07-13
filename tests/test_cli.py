@@ -1,5 +1,4 @@
-"""Unit tests for the CLI. Error/no-op paths are self-contained; happy paths and
-directory (bulk) paths use the fixture corpus (skipped when absent)."""
+"""Unit tests for the CLI with committed native SimaticML fixtures."""
 
 from __future__ import annotations
 
@@ -22,27 +21,27 @@ def test_malformed_xml_returns_1(tmp_path, capsys):
     bad.write_text("<not><closed>", encoding="utf-8")
     code = cli.main([str(bad)])
     assert code == 1
-    assert "well-formed" in capsys.readouterr().err
+    assert "MALFORMED_XML" in capsys.readouterr().err
 
 
 def test_happy_path_writes_both(tmp_path, fixture_file):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     code = cli.main([str(src), "-o", str(tmp_path), "--format", "both", "-q"])
     assert code == 0
-    assert (tmp_path / "Motor.scl").is_file()
-    data = json.loads((tmp_path / "Motor.json").read_text(encoding="utf-8"))
-    assert data["block"]["name"] == "Motor"
+    assert (tmp_path / "FC_Cargador.scl").is_file()
+    data = json.loads((tmp_path / "FC_Cargador.json").read_text(encoding="utf-8"))
+    assert data["block"]["name"] == "FC_Cargador"
 
 
 def test_format_scl_only(tmp_path, fixture_file):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     assert cli.main([str(src), "-o", str(tmp_path), "--format", "scl", "-q"]) == 0
-    assert (tmp_path / "Motor.scl").is_file()
-    assert not (tmp_path / "Motor.json").exists()
+    assert (tmp_path / "FC_Cargador.scl").is_file()
+    assert not (tmp_path / "FC_Cargador.json").exists()
 
 
 def test_quiet_suppresses_stderr(tmp_path, fixture_file, capsys):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     cli.main([str(src), "-o", str(tmp_path), "-q"])
     assert capsys.readouterr().err == ""
 
@@ -64,7 +63,7 @@ def test_directory_with_no_xml_is_soft_noop(tmp_path, capsys):
 
 
 def test_directory_mirrors_subtree(tmp_path, fixture_file):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     nested = tmp_path / "in" / "motion" / "safety"
     nested.mkdir(parents=True)
     shutil.copy(src, nested / "Motor.xml")
@@ -73,11 +72,11 @@ def test_directory_mirrors_subtree(tmp_path, fixture_file):
     assert code == 0
     assert (out / "motion" / "safety" / "Motor.scl").is_file()
     data = json.loads((out / "motion" / "safety" / "Motor.json").read_text(encoding="utf-8"))
-    assert data["block"]["name"] == "Motor"
+    assert data["block"]["name"] == "FC_Cargador"
 
 
 def test_directory_in_place_no_output(tmp_path, fixture_file):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     sub = tmp_path / "in" / "a"
     sub.mkdir(parents=True)
     shutil.copy(src, sub / "Motor.xml")
@@ -88,7 +87,7 @@ def test_directory_in_place_no_output(tmp_path, fixture_file):
 
 
 def test_one_bad_file_does_not_abort_batch(tmp_path, fixture_file, capsys):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     root = tmp_path / "in"
     root.mkdir()
     shutil.copy(src, root / "Motor.xml")
@@ -103,7 +102,7 @@ def test_one_bad_file_does_not_abort_batch(tmp_path, fixture_file, capsys):
 
 
 def test_no_recursive_skips_subdirs(tmp_path, fixture_file):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     root = tmp_path / "in"
     (root / "sub").mkdir(parents=True)
     shutil.copy(src, root / "Top.xml")
@@ -116,7 +115,7 @@ def test_no_recursive_skips_subdirs(tmp_path, fixture_file):
 
 
 def test_format_applies_to_whole_batch(tmp_path, fixture_file):
-    src = fixture_file("Motor")
+    src = fixture_file("FC_Cargador")
     root = tmp_path / "in"
     root.mkdir()
     shutil.copy(src, root / "One.xml")

@@ -65,6 +65,32 @@ working input. SIMATIC SD `.s7dcl`/`.s7res`, UDT/type XML, and PLC tag-table XML
 are unsupported; GRAPH/SFC/STL remain deferred as described above. Output is
 diagnostic/readability-first, not recompilable.
 
+### Untrusted-input policy
+
+Treat every export as untrusted. The CLI accepts regular UTF-8 SimaticML `.xml`
+files only; it rejects direct and discovered symlinks, `.s7dcl`, `.s7res`, and
+other file types. A resource-only `.s7res` receives the explicit
+`SD_RESOURCE_WITHOUT_DCL` diagnostic when its declaration is absent from the
+same export root—files are never paired across separate exports.
+
+Directory scans include SIMATIC SD files solely to report those diagnostics;
+they do not decode SD. XML reads are bound to a verified file descriptor and
+rejected if the path changes before it is opened. Directory entries that are
+symlinks or Windows reparse points are rejected, and a directory that changes
+while it is being scanned aborts before any discovered file is decoded.
+
+The current XML boundary rejects files over 10 MiB, input trees over 10,000 XML
+files or 32 levels, DTD/entity declarations, XML documents over 100,000 elements
+or 256 nesting levels, elements with over 100 attributes or 1 MiB of text, and
+documents with over 1,000 `FlgNet` networks. Inputs are rejected, never
+truncated. The future SIMATIC SD adapter must apply equivalent 10 MiB, 100,000
+line/node, and 256 nesting-depth limits before parsing.
+
+Malformed input is isolated per file. Default diagnostics use stable codes,
+basenames only, and single-line bounded detail; they do not expose absolute
+paths, raw parser output, or control characters. Folding/emission failures are
+also isolated so another file in the same batch can continue.
+
 ## Install
 
 ```bash

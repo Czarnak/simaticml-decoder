@@ -1,0 +1,10 @@
+{
+  "kind": "FC",
+  "name": "FC_Cargador",
+  "networks": [
+    {"index": 1, "statements": [{"condition": "NOT #Emergencia AND #Sistema en marcha AND NOT #Loaded", "kind": "normal", "target": "#Load", "type": "Assign"}]},
+    {"index": 2, "statements": [{"condition": "#Sistema en marcha AND #Clasificando AND #Caja alta", "kind": "normal", "target": "#Transfer left", "type": "Assign"}]},
+    {"index": 3, "statements": [{"condition": "#Sistema en marcha AND #Clasificando AND #Caja baja", "kind": "normal", "target": "#Transfer right", "type": "Assign"}]},
+    {"index": 4, "statements": []}
+  ]
+}

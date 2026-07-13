@@ -1,0 +1,13 @@
+// Block: FC_Cargador (FC)
+
+// Network 1: Activar/Desactivar cinta para acercamiento de pallets a sensor  [LAD]
+#Load := NOT #Emergencia AND #Sistema en marcha AND NOT #Loaded;
+
+// Network 2: Activa/Descativar transferidor de Cajas Altas  [LAD]
+#Transfer left := #Sistema en marcha AND #Clasificando AND #Caja alta;
+
+// Network 3: Activa/Descativar transferidor de Cajas Bajas  [LAD]
+#Transfer right := #Sistema en marcha AND #Clasificando AND #Caja baja;
+
+// Network 4  [LAD]
+// (empty network)

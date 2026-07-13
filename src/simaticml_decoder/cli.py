@@ -32,6 +32,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from . import __version__, emit, fold, ir, parse
+from .input_policy import InputViolation, discover_input_files, read_xml, safe_text
 
 _EPILOG = """\
 examples:
@@ -92,7 +93,11 @@ def main(argv: list[str] | None = None) -> int:
 
     if input_path.is_dir():
         out_root = Path(args.output) if args.output else input_path
-        sources = discover(input_path, recursive=args.recursive)
+        try:
+            sources = discover(input_path, recursive=args.recursive)
+        except InputViolation as exc:
+            print(f"error: {_input_error(input_path, exc)}", file=sys.stderr)
+            return 1
         if not sources:
             print(f"no .xml blocks found under {input_path}", file=sys.stderr)
             return 0
@@ -110,19 +115,23 @@ def decode_file(source: Path, out_dir: Path, fmt: str) -> FileOutcome:
     """Decode one block. Catches its own expected errors and reports them through the
     return value rather than aborting — so a batch can continue past a bad file."""
     try:
-        doc = parse.parse_file(str(source))
+        doc = parse.parse_document(read_xml(source))
+    except InputViolation as exc:
+        return FileOutcome(source, "error", error=_input_error(source, exc))
     except ET.ParseError as exc:
-        return FileOutcome(source, "error", error=f"{source} is not well-formed XML: {exc}")
+        return FileOutcome(source, "error", error=_error(source, "MALFORMED_XML", safe_text(exc)))
     except (OSError, ValueError) as exc:
-        return FileOutcome(source, "error", error=f"failed to read {source}: {exc}")
+        return FileOutcome(source, "error", error=_error(source, "INPUT_REJECTED", safe_text(exc)))
 
-    decoded = fold.fold_block(doc)
+    try:
+        decoded = fold.fold_block(doc)
+    except Exception:
+        return FileOutcome(source, "error", error=_error(source, "DECODE_FAILED", "unable to fold input"))
 
     try:
         out_dir.mkdir(parents=True, exist_ok=True)
     except OSError as exc:
-        return FileOutcome(source, "error",
-                           error=f"cannot create output directory {out_dir}: {exc}")
+        return FileOutcome(source, "error", error=_error(source, "OUTPUT_FAILED", safe_text(exc)))
 
     stem = source.stem
     written: list[Path] = []
@@ -132,18 +141,15 @@ def decode_file(source: Path, out_dir: Path, fmt: str) -> FileOutcome:
         if fmt in ("json", "both"):
             sidecar = json.dumps(emit.emit_sidecar(decoded), indent=2, ensure_ascii=False)
             written.append(_write(out_dir / f"{stem}.json", sidecar + "\n"))
-    except OSError as exc:
-        return FileOutcome(source, "error",
-                           error=f"failed to write artifact for {source}: {exc}")
+    except (OSError, ValueError) as exc:
+        return FileOutcome(source, "error", error=_error(source, "OUTPUT_FAILED", safe_text(exc)))
 
     return FileOutcome(source, "ok", decoded=decoded, written=tuple(written))
 
 
 def discover(root: Path, recursive: bool) -> list[Path]:
-    """Every ``.xml`` file under ``root`` (case-insensitive), sorted for determinism."""
-    walker = root.rglob("*") if recursive else root.glob("*")
-    found = [p for p in walker if p.is_file() and p.suffix.lower() == ".xml"]
-    return sorted(found)
+    """Every supported input under ``root``, sorted for deterministic processing."""
+    return discover_input_files(root, recursive)
 
 
 def _dest_dir(input_root: Path, source: Path, out_root: Path) -> Path:
@@ -181,15 +187,24 @@ def _report_ok(outcome: FileOutcome, input_root: Path | None) -> None:
     decoded = outcome.decoded
     prefix = ""
     if input_root is not None:
-        prefix = f"{outcome.source.relative_to(input_root)}: "
-    label = f"{decoded.name} ({decoded.kind})"
-    files = ", ".join(p.name for p in outcome.written)
+        prefix = f"{safe_text(outcome.source.relative_to(input_root))}: "
+    label = f"{safe_text(decoded.name)} ({decoded.kind})"
+    files = ", ".join(safe_text(p.name) for p in outcome.written)
     print(f"{prefix}decoded {label}: {len(decoded.networks)} network(s) -> {files}",
           file=sys.stderr)
     if decoded.warnings:
         print(f"  {len(decoded.warnings)} warning(s):", file=sys.stderr)
         for warning in decoded.warnings:
-            print(f"    - {warning}", file=sys.stderr)
+            print(f"    - {safe_text(warning)}", file=sys.stderr)
+
+
+def _input_error(source: Path, exc: InputViolation) -> str:
+    code = exc.code if exc.code == "SD_RESOURCE_WITHOUT_DCL" else "INPUT_REJECTED"
+    return _error(source, code, exc.message)
+
+
+def _error(source: Path, code: str, detail: str) -> str:
+    return f"{code}: {safe_text(source.name)}: {safe_text(detail)}"
 
 
 if __name__ == "__main__":

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "tia_version": "V21",
+    "export_method": "project exported separately as SimaticML and SIMATIC SD",
+    "source_repository": "https://github.com/felipebojorquem/sorting-cell-s7-1200",
+    "redistributable": false,
+    "redaction_reviewed": false,
+    "status": "local-evaluation-only"
+  },
+  "cross_format_mapping": [
+    {"id": "udt-caja", "paths": {"simaticml": "SimaticML/PLC_1/PLC data types/UDT_ Caja.xml", "simatic_sd_code": "SimaticSD/PLC_1/PLC data types/UDT_ Caja.s7dcl"}},
+    {"id": "udt-contador", "paths": {"simaticml": "SimaticML/PLC_1/PLC data types/UDT_Contador.xml", "simatic_sd_code": "SimaticSD/PLC_1/PLC data types/UDT_Contador.s7dcl"}},
+    {"id": "db-celda", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/DB_Celda.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/DB_Celda.s7dcl"}},
+    {"id": "fb-sensores", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/FB_Sensores.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/FB_Sensores.s7dcl", "simatic_sd_resource": "SimaticSD/PLC_1/Program blocks/FB_Sensores.s7res"}},
+    {"id": "fb-sensores-db", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/FB_Sensores_DB.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/FB_Sensores_DB.s7dcl"}},
+    {"id": "fc-cargador", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/FC_Cargador.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/FC_Cargador.s7dcl", "simatic_sd_resource": "SimaticSD/PLC_1/Program blocks/FC_Cargador.s7res"}},
+    {"id": "fc-conveyor-entry", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/FC_Conveyor_entry.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/FC_Conveyor_entry.s7dcl", "simatic_sd_resource": "SimaticSD/PLC_1/Program blocks/FC_Conveyor_entry.s7res"}},
+    {"id": "fc-conveyor-sides", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/FC_Conveyor_sides.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/FC_Conveyor_sides.s7dcl", "simatic_sd_resource": "SimaticSD/PLC_1/Program blocks/FC_Conveyor_sides.s7res"}},
+    {"id": "fc-seguridad", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/FC_Seguridad.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/FC_Seguridad.s7dcl", "simatic_sd_resource": "SimaticSD/PLC_1/Program blocks/FC_Seguridad.s7res"}},
+    {"id": "main", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/Main.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/Main.s7dcl", "simatic_sd_resource": "SimaticSD/PLC_1/Program blocks/Main.s7res"}},
+    {"id": "mhj-function", "paths": {"simaticml": "SimaticML/PLC_1/Program blocks/MHJ-PLC-Lab-Function-S71200.xml", "simatic_sd_code": "SimaticSD/PLC_1/Program blocks/MHJ-PLC-Lab-Function-S71200.s7dcl"}}
+  ],
+  "cases": [
+    {"id": "simaticml-fbd-fc", "input": "SimaticML/PLC_1/Program blocks/FC_Cargador.xml", "source_format": "simaticml-xml", "expected_fidelity": "readability-first", "capability": "preserved-only", "goldens": {"semantic_ir": "golden/simaticml/fc_cargador.ir.json", "scl": "golden/simaticml/fc_cargador.scl", "json": "golden/simaticml/fc_cargador.sidecar.json"}},
+    {"id": "simaticml-udt", "input": "SimaticML/PLC_1/PLC data types/UDT_ Caja.xml", "source_format": "simaticml-xml", "expected_fidelity": "diagnostic", "capability": "unsupported", "goldens": {"diagnostic": "golden/diagnostics/simaticml-udt.json"}},
+    {"id": "sd-code-only", "input": "SimaticSD_s7dcl/PLC_1/Program blocks/DB_Celda.s7dcl", "source_format": "simatic-sd", "expected_fidelity": "diagnostic", "capability": "unsupported", "goldens": {"diagnostic": "golden/diagnostics/sd-code-only.json"}},
+    {"id": "sd-resource-backed", "input": "SimaticSD/PLC_1/Program blocks/FB_Sensores.s7res", "source_format": "simatic-sd", "expected_fidelity": "diagnostic", "capability": "unsupported", "goldens": {"diagnostic": "golden/diagnostics/sd-resource-backed.json"}},
+    {"id": "sd-unpaired-resource", "input": "SimaticSD_s7res/PLC_1/Program blocks/FB_Sensores.s7res", "source_format": "simatic-sd", "expected_fidelity": "diagnostic", "capability": "unsupported", "goldens": {"diagnostic": "golden/diagnostics/sd-unpaired-resource.json"}}
+  ],
+  "unpaired_resources": [
+    "SimaticSD_s7res/PLC_1/Program blocks/FB_Sensores.s7res",
+    "SimaticSD_s7res/PLC_1/Program blocks/FC_Cargador.s7res",
+    "SimaticSD_s7res/PLC_1/Program blocks/FC_Conveyor_entry.s7res",
+    "SimaticSD_s7res/PLC_1/Program blocks/FC_Conveyor_sides.s7res",
+    "SimaticSD_s7res/PLC_1/Program blocks/FC_Seguridad.s7res",
+    "SimaticSD_s7res/PLC_1/Program blocks/Main.s7res"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "block": {"kind": "FC", "name": "FC_Cargador"},
+  "instruction_inventory": {"Coil": 3, "Contact": 9},
+  "interface": [
+    {"name": "Input", "members": [
+      {"datatype": "Bool", "name": "Loaded"},
+      {"datatype": "Bool", "name": "Sistema en marcha"},
+      {"datatype": "Bool", "name": "Emergencia"},
+      {"datatype": "Bool", "name": "Caja alta"},
+      {"datatype": "Bool", "name": "Caja baja"},
+      {"datatype": "Bool", "name": "Clasificando"}
+    ]},
+    {"name": "Output", "members": [
+      {"datatype": "Bool", "name": "Load"},
+      {"datatype": "Bool", "name": "Transfer left"},
+      {"datatype": "Bool", "name": "Transfer right"}
+    ]},
+    {"name": "InOut", "members": []},
+    {"name": "Temp", "members": []},
+    {"name": "Constant", "members": []},
+    {"name": "Return", "members": [{"datatype": "Void", "name": "Ret_Val"}]}
+  ],
+  "networks": [
+    {"index": 1, "language": "LAD", "title": "Activar/Desactivar cinta para acercamiento de pallets a sensor", "warnings": []},
+    {"index": 2, "language": "LAD", "title": "Activa/Descativar transferidor de Cajas Altas", "warnings": []},
+    {"index": 3, "language": "LAD", "title": "Activa/Descativar transferidor de Cajas Bajas", "warnings": []},
+    {"index": 4, "language": "LAD", "title": null, "warnings": []}
+  ],
+  "trace": {"28": "Network 3: normal assign #Transfer right"},
+  "warnings": [],
+  "xref": {
+    "Caja alta": [{"network": 2, "role": "read", "uid": "23"}],
+    "Caja baja": [{"network": 3, "role": "read", "uid": "23"}],
+    "Clasificando": [
+      {"network": 2, "role": "read", "uid": "22"},
+      {"network": 3, "role": "read", "uid": "22"}
+    ],
+    "Emergencia": [{"network": 1, "role": "read", "uid": "21"}],
+    "Load": [{"network": 1, "role": "write", "uid": "24"}],
+    "Loaded": [{"network": 1, "role": "read", "uid": "23"}],
+    "Sistema en marcha": [
+      {"network": 1, "role": "read", "uid": "22"},
+      {"network": 2, "role": "read", "uid": "21"},
+      {"network": 3, "role": "read", "uid": "21"}
+    ],
+    "Transfer left": [{"network": 2, "role": "write", "uid": "24"}],
+    "Transfer right": [{"network": 3, "role": "write", "uid": "24"}]
+  }
+}

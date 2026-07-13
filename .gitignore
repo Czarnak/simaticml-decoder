@@ -318,6 +318,7 @@ data/
 .tmp_pytest/
 graphify-out/manifest.json
 graphify-out/cost.json
+graphify-out/graph.html
 graphify-out/.graphify_python
 graphify-out/.graphify_root
 graphify-out/cache/

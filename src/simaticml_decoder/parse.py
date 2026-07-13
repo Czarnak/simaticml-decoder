@@ -19,9 +19,11 @@ This is the first module implemented, validated against the six V21 samples.
 
 from __future__ import annotations
 
+from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from . import model
+from .input_policy import read_xml
 
 # --------------------------------------------------------------------------- #
 # Namespace-agnostic element helpers (match by local name only)               #
@@ -110,9 +112,8 @@ def parse_document(xml_text: str) -> model.Document:
 
 
 def parse_file(path: str) -> model.Document:
-    """Convenience wrapper: read a file and parse it."""
-    with open(path, encoding="utf-8-sig") as fh:  # -sig strips the UTF-8 BOM TIA emits
-        return parse_document(fh.read())
+    """Read a boundary-validated SimaticML file and parse it."""
+    return parse_document(read_xml(Path(path)))
 
 
 # --------------------------------------------------------------------------- #
