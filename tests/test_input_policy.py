@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
+from pathlib import Path, PurePath
 from types import SimpleNamespace
 
 import pytest
@@ -13,6 +13,8 @@ from simaticml_decoder import input_policy
 from simaticml_decoder.input_policy import (
     InputLimits,
     InputViolation,
+    direct_input_artifact,
+    discover_input_files,
     discover_xml,
     read_xml,
     safe_text,
@@ -241,3 +243,20 @@ def test_cli_sanitizes_warning_output(capsys, tmp_path):
     stderr = capsys.readouterr().err
     assert "block name" in stderr
     assert "bad warning" in stderr
+
+
+def test_discovered_artifact_is_relative(tmp_path):
+    root = tmp_path / "root"
+    source = root / "nested" / "block.xml"
+    source.parent.mkdir(parents=True)
+    source.write_text("<Document/>", encoding="utf-8")
+    artifact = discover_input_files(root, recursive=True)[0]
+    assert artifact.relative_path == PurePath("nested") / "block.xml"
+    assert not artifact.relative_path.is_absolute()
+
+
+def test_artifact_read_is_limited(tmp_path):
+    source = tmp_path / "block.xml"
+    source.write_bytes(b"x" * 11)
+    with pytest.raises(InputViolation, match="file_too_large"):
+        direct_input_artifact(source).read_bytes(InputLimits(max_file_bytes=10))

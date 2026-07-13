@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import os
 import stat
-from dataclasses import dataclass
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from io import StringIO
-from pathlib import Path
+from pathlib import Path, PurePath
 from xml.etree import ElementTree as ET
 
 
@@ -24,6 +25,19 @@ class InputLimits:
     max_flgnet_networks: int = 1_000
 
 
+@dataclass(frozen=True)
+class InputArtifact:
+    """Immutable artifact representing a discovered or direct input file."""
+
+    relative_path: PurePath
+    suffix: str
+    _reader: Callable[[InputLimits], bytes] = field(repr=False, compare=False)
+
+    def read_bytes(self, limits: InputLimits) -> bytes:
+        """Read and validate the file content as bytes."""
+        return self._reader(limits)
+
+
 class InputViolation(ValueError):
     """A stable, safe-to-display input boundary rejection."""
 
@@ -34,6 +48,30 @@ class InputViolation(ValueError):
 
 
 DEFAULT_LIMITS = InputLimits()
+
+
+def direct_input_artifact(path: Path) -> InputArtifact:
+    """Build an InputArtifact for a direct CLI input file."""
+    def reader(limits: InputLimits) -> bytes:
+        """Reader closure that validates and reads the file."""
+        text = read_xml(path, limits)
+        return text.encode("utf-8")
+
+    return InputArtifact(
+        relative_path=PurePath(path.name),
+        suffix=path.suffix.lower(),
+        _reader=reader,
+    )
+
+
+def _make_artifact_reader(path: Path) -> Callable[[InputLimits], bytes]:
+    """Create a reader closure for a discovered file."""
+    def reader(limits: InputLimits) -> bytes:
+        """Reader closure that validates and reads the file."""
+        text = read_xml(path, limits)
+        return text.encode("utf-8")
+
+    return reader
 
 
 def safe_text(value: object, *, limit: int = 160) -> str:
@@ -89,6 +127,19 @@ def read_xml(source: Path, limits: InputLimits = DEFAULT_LIMITS) -> str:
     return text
 
 
+def validate_artifact_format(artifact: InputArtifact) -> None:
+    """Validate file format from an InputArtifact (for discovered or direct files)."""
+    suffix = artifact.suffix
+    if suffix == ".s7res":
+        # For discovered artifacts with only relative path, can't check for sibling .s7dcl
+        # The .s7res check for sibling .s7dcl happens at decode time in cli.decode_file
+        raise InputViolation("unsupported_format", "SIMATIC SD decoding is not implemented")
+    if suffix == ".s7dcl":
+        raise InputViolation("unsupported_format", "SIMATIC SD decoding is not implemented")
+    if suffix != ".xml":
+        raise InputViolation("unsupported_format", "only exported SimaticML .xml files are accepted")
+
+
 def _validate_format(source: Path) -> None:
     suffix = source.suffix.lower()
     if suffix == ".s7res":
@@ -110,9 +161,18 @@ def discover_xml(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMI
     return _discover(root, recursive, limits, {".xml"})
 
 
-def discover_input_files(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMITS) -> list[Path]:
+def discover_input_files(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMITS) -> tuple[InputArtifact, ...]:
     """Discover XML and SIMATIC SD inputs so unsupported files remain visible."""
-    return _discover(root, recursive, limits, {".xml", ".s7dcl", ".s7res"})
+    paths = _discover(root, recursive, limits, {".xml", ".s7dcl", ".s7res"})
+    artifacts = tuple(
+        InputArtifact(
+            relative_path=path.relative_to(root),
+            suffix=path.suffix.lower(),
+            _reader=_make_artifact_reader(path),
+        )
+        for path in paths
+    )
+    return artifacts
 
 
 def _discover(root: Path, recursive: bool, limits: InputLimits, suffixes: set[str]) -> list[Path]:
