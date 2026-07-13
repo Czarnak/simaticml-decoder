@@ -1,0 +1,8 @@
+﻿{
+    S7_BlockNumber := "703";
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "TRUE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK HMI_Settings_DB : UDT_Settings
+END_DATA_BLOCK

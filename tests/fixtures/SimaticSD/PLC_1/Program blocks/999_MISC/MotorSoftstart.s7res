@@ -1,0 +1,31 @@
+﻿MultiLingualTexts:
+  - id: MLC_584
+    en-US: General conditions
+  - id: MLC_3Sr
+    en-US: Contactor control
+  - id: MLC_3bK
+    en-US: Control authorisation
+  - id: MLC_3uv
+    en-US: Softstart control
+  - id: MLC_yW
+    en-US: Alarm - circuit protection
+  - id: MLC_58K
+    en-US: Alarms - contactor
+  - id: MLC_3Vt
+    en-US: Alarm - softstart not ON
+  - id: MLC_3N2
+    en-US: Alarm - softstart not bypassed
+  - id: MLC_3Gr
+    en-US: Alarm - softstart stuck bypassed
+  - id: MLC_3sk
+    en-US: Alarm - softstart not OFF
+  - id: MLC_4Ad
+    en-US: Alarm - softstart fault
+  - id: MLC_4m9
+    en-US: Any alarm
+  - id: MLC_wr
+    en-US: Work time counter
+  - id: MLC_Wk
+    en-US: Device state
+  - id: MLC_4uR
+    en-US: Control outputs

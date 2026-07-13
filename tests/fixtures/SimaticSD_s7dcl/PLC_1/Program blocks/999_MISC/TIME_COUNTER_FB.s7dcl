@@ -1,0 +1,95 @@
+﻿{
+    S7_BlockComment := "MLC_Qr";
+    S7_BlockNumber := "9000";
+    S7_Optimized := "TRUE";
+    S7_PreferredLanguage := "LAD";
+    S7_Version := "0.1"
+}
+FUNCTION_BLOCK "TIME_COUNTER_FB"
+    VAR_INPUT
+        FI_START_COUNTING : Bool;
+    END_VAR
+    VAR_IN_OUT
+        FIQ_TIMER : _.UDT_WORK_CNT;
+    END_VAR
+    VAR
+        E1 : Bool;
+        E2 : Bool;
+        RESET_CTU : Bool;
+    END_VAR
+
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_h6"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_START_COUNTING )
+            P_Contact(
+                operand := "Clock_1Hz",
+                bit := #E1
+            )
+            wire#w1
+            { S7_Templates := "DestType := USInt" }
+            Inc( #FIQ_TIMER.S )
+        END_RUNG
+        RUNG wire#w1
+            { S7_Templates := "SrcType := USInt" }
+            EQ_Contact(
+                in1 := #FIQ_TIMER.S,
+                in2 := 60
+            )
+            wire#w2
+            { S7_Templates := "DestType := USInt" }
+            Inc( #FIQ_TIMER."M" )
+        END_RUNG
+        RUNG wire#w2
+            Move(
+                in := 0,
+                out1 => #FIQ_TIMER.S
+            )
+        END_RUNG
+        RUNG wire#w1
+            { S7_Templates := "SrcType := USInt" }
+            EQ_Contact(
+                in1 := #FIQ_TIMER."M",
+                in2 := 60
+            )
+            wire#w3
+            { S7_Templates := "DestType := UDInt" }
+            Inc( #FIQ_TIMER.H )
+        END_RUNG
+        RUNG wire#w3
+            Move(
+                in := 0,
+                out1 => #FIQ_TIMER."M"
+            )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_SX"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "HMI_Counters_DB".ResetCounters )
+            wire#w1
+            Move(
+                in := 0,
+                out1 => #FIQ_TIMER.S
+            )
+        END_RUNG
+        RUNG wire#w1
+            Move(
+                in := 0,
+                out1 => #FIQ_TIMER."M"
+            )
+        END_RUNG
+        RUNG wire#w1
+            Move(
+                in := 0,
+                out1 => #FIQ_TIMER.H
+            )
+        END_RUNG
+    END_NETWORK
+END_FUNCTION_BLOCK

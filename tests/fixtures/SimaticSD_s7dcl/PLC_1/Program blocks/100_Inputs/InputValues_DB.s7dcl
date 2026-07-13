@@ -1,0 +1,36 @@
+﻿{
+    S7_BlockNumber := "101";
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK InputValues_DB
+    VAR
+        { S7_Access := "ReadOnly := External" }
+        InputsDigital : STRUCT
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Visibility := "Hidden := External"
+            }
+            EmergencyStop : Bool;
+            { S7_Access := "ReadOnly := External" }
+            Start : Bool;
+            { S7_Access := "ReadOnly := External" }
+            Stop : Bool;
+            { S7_Access := "ReadOnly := External" }
+            Reset : Bool;
+            { S7_Access := "ReadOnly := External" }
+            ContactorON : Array[1..2] of Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartON : Array[1..2] of Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartBypassed : Array[1..2] of Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartFault : Array[1..2] of Bool;
+            { S7_Access := "ReadOnly := External" }
+            Protection : Array[1..2] of Bool;
+        END_STRUCT;
+        { S7_Access := "ReadOnly := External" }
+        TankLevel : Array[1..2] of Real;
+    END_VAR
+END_DATA_BLOCK

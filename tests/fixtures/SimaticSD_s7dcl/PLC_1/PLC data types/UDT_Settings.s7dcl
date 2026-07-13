@@ -1,0 +1,25 @@
+﻿TYPE
+    UDT_Settings : STRUCT
+        AlarmDelays : STRUCT
+            Protection : Time;
+            Communication : Time;
+            DriveFault : Time;
+            LowCurrent : Time;
+            WorkConfirmation : Time;
+            Tank : Time := T#5m;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Visibility := "Hidden := External"
+            }
+            Sensor : Time;
+        END_STRUCT;
+        Sensors : STRUCT
+            LiquidLevel : STRUCT
+                { S7_Setpoint := "False" }
+                Tank_1 : _.AnalogInputSettings;
+                { S7_Setpoint := "False" }
+                Tank_2 : _.AnalogInputSettings;
+            END_STRUCT;
+        END_STRUCT;
+    END_STRUCT;
+END_TYPE

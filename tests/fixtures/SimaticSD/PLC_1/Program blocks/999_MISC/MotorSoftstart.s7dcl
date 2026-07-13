@@ -1,0 +1,563 @@
+﻿{
+    S7_BlockNumber := "8889";
+    S7_Optimized := "TRUE";
+    S7_PreferredLanguage := "LAD";
+    S7_Version := "0.1"
+}
+FUNCTION_BLOCK "MotorSoftstart"
+    VAR_INPUT
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_AutoConditions : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_AutoForward : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_ProfinetOK : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_CircuitProtectionOK : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_SoftstartAlarm : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_ContactorON : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_SoftstartON : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_SoftstartBypassed : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_ManualMode : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_EmergencyStop : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FI_Reset : Bool;
+    END_VAR
+    VAR_OUTPUT
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_ContactorON : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_MotorStart : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmCircuitProtection : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmContactorNotON : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmContactorNotOFF : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmSoftstartNotON : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmSoftstartNotBypassed : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmSoftstartStuckBypassed : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmSoftstartNotOFF : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        FQ_AlarmSoftstartFault : Bool;
+    END_VAR
+    VAR_IN_OUT
+        FIQ_WorkTime : _.UDT_WORK_CNT;
+        FIQ_DeviceState : _.UDT_Device;
+    END_VAR
+    VAR
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        generalConditions : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Authorisation : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Alarm : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        contactorON : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        motorStart : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        motorConfirmed : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Timers : STRUCT
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            CircuitProtection : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            ContNotON : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            ContNotOFF : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            SoftstartNotON : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            SoftstartNotOFF : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            SoftstartNotBypassed : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            SoftstartBypassed : TON_TIME;
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            SoftstartFailure : TON_TIME;
+        END_STRUCT;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Setpoint := "False";
+            S7_Visibility := "Hidden := External"
+        }
+        C_WORK_TIME : _.TIME_COUNTER_FB;
+    END_VAR
+
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_584"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_ProfinetOK )
+            I_Contact( #FI_EmergencyStop )
+            I_Contact( #Alarm )
+            Coil( #generalConditions )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3Sr"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_ProfinetOK )
+            Contact( #FI_CircuitProtectionOK )
+            I_Contact( #FI_EmergencyStop )
+            Coil( #contactorON )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3bK"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #generalConditions )
+            Contact( #FI_ContactorON )
+            wire#w1
+            Contact( #FI_AutoConditions )
+            wire#w2
+            Coil( #Authorisation )
+        END_RUNG
+        RUNG wire#w1
+            Contact( #FI_ManualMode )
+        END_RUNG wire#w2
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3uv"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #Authorisation )
+            wire#w1
+            Contact( #FI_AutoConditions )
+            Contact( #FI_AutoForward )
+            wire#w2
+            Coil( #motorStart )
+        END_RUNG
+        RUNG wire#w1
+            Contact( #FI_ManualMode )
+            Contact( #FIQ_DeviceState.Start )
+            I_Contact( #FIQ_DeviceState.Stop )
+        END_RUNG wire#w2
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_yW"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            Contact( #FI_CircuitProtectionOK )
+            wire#w1
+            S_RS(
+                operand := #FQ_AlarmCircuitProtection,
+                s1 := wire#w2
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            I_Contact( #FI_ProfinetOK )
+        END_RUNG wire#w1
+        RUNG wire#powerrail
+            I_Contact( #FI_CircuitProtectionOK )
+            Contact( #FI_ProfinetOK )
+            { S7_Templates := "time_type := Time" }
+            #Timers.CircuitProtection.TON(
+                pt := "HMI_Settings_DB".AlarmDelays.Protection,
+                et =>  
+            )
+        END_RUNG wire#w2
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_58K"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            wire#w1
+            Contact( #contactorON )
+            Contact( #FI_ContactorON )
+            wire#w2
+            S_RS(
+                operand := #FQ_AlarmContactorNotON,
+                s1 := wire#w3
+            )
+        END_RUNG
+        RUNG wire#w1
+            I_Contact( #contactorON )
+        END_RUNG wire#w2
+        RUNG wire#powerrail
+            I_Contact( #FI_ProfinetOK )
+        END_RUNG wire#w2
+        RUNG wire#powerrail
+            Contact( #contactorON )
+            I_Contact( #FI_ContactorON )
+            Contact( #FI_ProfinetOK )
+            { S7_Templates := "time_type := Time" }
+            #Timers.ContNotON.TON(
+                pt := "HMI_Settings_DB".AlarmDelays.Protection,
+                et =>  
+            )
+        END_RUNG wire#w3
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            wire#w4
+            I_Contact( #contactorON )
+            I_Contact( #FI_ContactorON )
+            wire#w5
+            S_RS(
+                operand := #FQ_AlarmContactorNotOFF,
+                s1 := wire#w6
+            )
+        END_RUNG
+        RUNG wire#w4
+            Contact( #contactorON )
+        END_RUNG wire#w5
+        RUNG wire#powerrail
+            I_Contact( #FI_ProfinetOK )
+        END_RUNG wire#w5
+        RUNG wire#powerrail
+            I_Contact( #contactorON )
+            Contact( #FI_ContactorON )
+            Contact( #FI_ProfinetOK )
+            { S7_Templates := "time_type := Time" }
+            #Timers.ContNotOFF.TON(
+                pt := "HMI_Settings_DB".AlarmDelays.Protection,
+                et =>  
+            )
+        END_RUNG wire#w6
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3Vt"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            wire#w1
+            Contact( #FI_SoftstartON )
+            wire#w2
+            S_RS(
+                operand := #FQ_AlarmSoftstartNotON,
+                s1 := wire#w3
+            )
+        END_RUNG
+        RUNG wire#w1
+            I_Contact( #motorStart )
+        END_RUNG wire#w2
+        RUNG wire#powerrail
+            I_Contact( #FI_SoftstartON )
+            Contact( #motorStart )
+            { S7_Templates := "time_type := Time" }
+            #Timers.SoftstartNotON.TON(
+                pt := "HMI_Settings_DB".AlarmDelays.Protection,
+                et =>  
+            )
+        END_RUNG wire#w3
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3N2"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            I_Contact( #motorStart )
+            S_RS(
+                operand := #FQ_AlarmSoftstartNotBypassed,
+                s1 := wire#w1
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #FI_SoftstartON )
+            Contact( #motorStart )
+            I_Contact( #FI_SoftstartBypassed )
+            { S7_Templates := "time_type := Time" }
+            #Timers.SoftstartNotBypassed.TON(
+                pt := T#20s,
+                et =>  
+            )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3Gr"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            I_Contact( #FI_SoftstartBypassed )
+            S_RS(
+                operand := #FQ_AlarmSoftstartStuckBypassed,
+                s1 := wire#w1
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            I_Contact( #motorStart )
+            Contact( #FI_SoftstartBypassed )
+            { S7_Templates := "time_type := Time" }
+            #Timers.SoftstartBypassed.TON(
+                pt := "HMI_Settings_DB".AlarmDelays.Protection,
+                et =>  
+            )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3sk"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            I_Contact( #FI_SoftstartON )
+            S_RS(
+                operand := #FQ_AlarmSoftstartNotOFF,
+                s1 := wire#w1
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            I_Contact( #motorStart )
+            Contact( #FI_SoftstartON )
+            I_Contact( #FQ_AlarmSoftstartStuckBypassed )
+            { S7_Templates := "time_type := Time" }
+            #Timers.SoftstartNotON.TON(
+                pt := T#20s,
+                et =>  
+            )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4Ad"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #FI_Reset )
+            I_Contact( #FI_SoftstartAlarm )
+            S_RS(
+                operand := #FQ_AlarmSoftstartFault,
+                s1 := wire#w1
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #FI_SoftstartAlarm )
+            { S7_Templates := "time_type := Time" }
+            #Timers.SoftstartFailure.TON(
+                pt := "HMI_Settings_DB".AlarmDelays.Protection,
+                et =>  
+            )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4m9"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "AlwaysTRUE" )
+            wire#w1
+            Contact( #FQ_AlarmCircuitProtection )
+            wire#w2
+            Coil( #Alarm )
+        END_RUNG
+        RUNG wire#w1
+            Contact( #FQ_AlarmContactorNotOFF )
+        END_RUNG wire#w2
+        RUNG wire#w1
+            Contact( #FQ_AlarmContactorNotON )
+        END_RUNG wire#w2
+        RUNG wire#w1
+            Contact( #FQ_AlarmSoftstartFault )
+        END_RUNG wire#w2
+        RUNG wire#w1
+            Contact( #FQ_AlarmSoftstartNotBypassed )
+        END_RUNG wire#w2
+        RUNG wire#w1
+            Contact( #FQ_AlarmSoftstartNotOFF )
+        END_RUNG wire#w2
+        RUNG wire#w1
+            Contact( #FQ_AlarmSoftstartNotON )
+        END_RUNG wire#w2
+        RUNG wire#w1
+            Contact( #FQ_AlarmSoftstartStuckBypassed )
+        END_RUNG wire#w2
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_wr"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            #C_WORK_TIME(
+                FI_START_COUNTING := #motorConfirmed,
+                FIQ_TIMER := #FIQ_WorkTime
+            )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_Wk"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            "deviceState"(
+                Alarm := #Alarm,
+                Warning := false,
+                Running := #motorConfirmed,
+                Reverse := false,
+                Service := #FI_ManualMode,
+                deviceIcon := #FIQ_DeviceState.State
+            )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4uR"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #contactorON )
+            Coil( #FQ_ContactorON )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #motorStart )
+            Coil( #FQ_MotorStart )
+        END_RUNG
+    END_NETWORK
+    { S7_Language := "LAD" }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+END_FUNCTION_BLOCK

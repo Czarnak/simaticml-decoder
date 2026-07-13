@@ -1,0 +1,11 @@
+﻿DocumentHash:
+  - FileName: AnalogInput.s7dcl
+    Hash: jVZROvowdaq0KDhIrQvrm5T2PKlOEEGUgX91vVheMdg=
+  - FileName: AnalogInput.s7res
+    Hash: bQxVEZKucSB9z7glBzVlLjZw0g6CsBcdI8YXA1IpRJM=
+LibraryMetaFileHash: tOzEluAMDY5geYjR4UdEetzERc3FdC7d2zhT/nPRHqE=
+LibraryVersion:
+  Guid: b3631b0b-aaa1-405b-bb57-ec696be041f2
+  DependsOn:
+    - TypeName: AnalogInputSettings
+      VersionNumber: 0.0.1

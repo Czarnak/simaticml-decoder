@@ -1,0 +1,76 @@
+﻿{
+    S7_BlockNumber := "201";
+    S7_Optimized := "FALSE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK Alarms_DB
+    VAR
+        { S7_Access := "ReadOnly := External" }
+        General : STRUCT
+            { S7_Access := "ReadOnly := External" }
+            EmergencyStop : Bool;
+        END_STRUCT;
+        { S7_Access := "ReadOnly := External" }
+        PLC : STRUCT
+            { S7_Access := "ReadOnly := External" }
+            SupplyModule2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SupplyModule3 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SupplyModule4 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SupplyModule5 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            FeedbackModule2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            FeedbackModule3 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            FeedbackModule4 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            FeedbackModule5 : Bool;
+        END_STRUCT;
+        { S7_Access := "ReadOnly := External" }
+        Sensors : STRUCT
+            { S7_Access := "ReadOnly := External" }
+            TankLevel1_Wiring : Bool;
+            { S7_Access := "ReadOnly := External" }
+            TankLevel2_Wiring : Bool;
+        END_STRUCT;
+        { S7_Access := "ReadOnly := External" }
+        Pumps : STRUCT
+            { S7_Access := "ReadOnly := External" }
+            CircuitProtection_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            ContactorNotON_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            ContactorNotOFF_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartNotON_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartNotBypassed_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartStuckBypassed_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartNotOFF_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartFault_1 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            CircuitProtection_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            ContactorNotON_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            ContactorNotOFF_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartNotON_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartNotBypassed_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartStuckBypassed_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartNotOFF_2 : Bool;
+            { S7_Access := "ReadOnly := External" }
+            SoftstartFault_2 : Bool;
+        END_STRUCT;
+    END_VAR
+END_DATA_BLOCK

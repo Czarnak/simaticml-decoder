@@ -1,0 +1,11 @@
+﻿TYPE
+    UDT_Device : STRUCT
+        { S7_MLC := "MLC_3tL" }
+        Mode : USInt;
+        Start : Bool;
+        Stop : Bool;
+        Reverse : Bool;
+        Setpoint : Real;
+        State : Int;
+    END_STRUCT;
+END_TYPE

@@ -1,0 +1,93 @@
+﻿{
+    S7_BlockNumber := "200";
+    S7_Optimized := "TRUE";
+    S7_PreferredLanguage := "LAD";
+    S7_Version := "0.1"
+}
+FUNCTION_BLOCK "AlarmsContainer"
+    VAR
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        WeeklyReset : Bool;
+        MaintenanceReset : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Edge : Array[0..10] of Bool;
+    END_VAR
+    VAR_TEMP
+        tempBool : Bool;
+        "i" : USInt;
+        j : USInt;
+        n : DInt;
+        Addr : DInt;
+    END_VAR
+
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3xu"
+    }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3Pq"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "InputValues_DB".InputsDigital.Reset )
+            Contact( "InputValues_DB".InputsDigital.EmergencyStop )
+            S_RS(
+                operand := "Alarms_DB".General.EmergencyStop,
+                s1 := wire#w1
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            N_Contact(
+                operand := "InputValues_DB".InputsDigital.EmergencyStop,
+                bit := #Edge[0]
+            )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "SCL";
+        S7_NetworkComment := "MLC_3Le";
+        S7_NetworkTitle := "MLC_3pq"
+    }
+    NETWORK
+        FOR #i := 2 TO 5 DO
+            IF #i = 2 THEN
+                #Addr := 200;
+                #n := 0;
+            ELSIF #i = 4 THEN
+                #Addr := 204;
+                #n := 0;
+            END_IF;
+            FOR #j := 0 TO 7 DO
+                #tempBool := PEEK_BOOL(area := 16#81, dbNumber := 0, byteOffset := #Addr + #n, bitOffset := #j);
+                IF NOT #tempBool THEN
+                    POKE_BOOL(area := 16#84,
+                              dbNumber := 201,
+                              byteOffset := #i,
+                              bitOffset := #j,
+                              value := TRUE);
+                ELSIF "InputValues_DB".InputsDigital.Reset THEN
+                    POKE_BOOL(area := 16#84,
+                              dbNumber := 201,
+                              byteOffset := #i,
+                              bitOffset := #j,
+                              value := FALSE);
+                END_IF;
+            END_FOR;
+            #n += 1;
+        END_FOR;
+                    
+                    
+                
+    END_NETWORK
+END_FUNCTION_BLOCK

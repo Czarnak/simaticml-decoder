@@ -1,0 +1,211 @@
+{
+  "block": {
+    "name": "StateMachine",
+    "kind": "FB"
+  },
+  "interface": [
+    {
+      "name": "Base",
+      "members": []
+    },
+    {
+      "name": "Input",
+      "members": [
+        {
+          "name": "OFF_SQ",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Turn sequence off"
+        },
+        {
+          "name": "INIT_SQ",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Set sequence to initial state"
+        },
+        {
+          "name": "ACK_EF",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Acknowledge all errors and faults"
+        },
+        {
+          "name": "S_PREV",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Output previous step in parameter S_NO"
+        },
+        {
+          "name": "S_NEXT",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Indicate next step in parameter S_NO"
+        },
+        {
+          "name": "SW_AUTO",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Automatic mode"
+        },
+        {
+          "name": "SW_TAP",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Semiautomatic/switch with transition"
+        },
+        {
+          "name": "SW_TOP",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Semiautomatic/ignore transition"
+        },
+        {
+          "name": "SW_MAN",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Manual mode"
+        },
+        {
+          "name": "S_SEL",
+          "datatype": "Int",
+          "start_value": "0",
+          "comment": "Select step to be output to S_NO"
+        },
+        {
+          "name": "S_ON",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Activate step indicated in S_NO"
+        },
+        {
+          "name": "S_OFF",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Disable step indicated in S_NO"
+        },
+        {
+          "name": "T_PUSH",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Enable transition to switch in semi automatic mode"
+        }
+      ]
+    },
+    {
+      "name": "Output",
+      "members": [
+        {
+          "name": "S_NO",
+          "datatype": "Int",
+          "start_value": "0",
+          "comment": "Step number"
+        },
+        {
+          "name": "S_MORE",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "More steps are available and can be shown in S_NO"
+        },
+        {
+          "name": "S_ACTIVE",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Step indicated in S_NO is active"
+        },
+        {
+          "name": "ERR_FLT",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Interlock or supervision group error"
+        },
+        {
+          "name": "AUTO_ON",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Automatic mode is active"
+        },
+        {
+          "name": "TAP_ON",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Semiautomatic mode/step with transition enabled"
+        },
+        {
+          "name": "TOP_ON",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Semiautomatic mode/ignore transition enabled"
+        },
+        {
+          "name": "MAN_ON",
+          "datatype": "Bool",
+          "start_value": "false",
+          "comment": "Manual mode is active"
+        }
+      ]
+    },
+    {
+      "name": "InOut",
+      "members": []
+    },
+    {
+      "name": "Static",
+      "members": [
+        {
+          "name": "RT_DATA",
+          "datatype": "G7_RTDataPlus_V6",
+          "version": "1.0",
+          "comment": "Internal data area"
+        },
+        {
+          "name": "Trans1",
+          "datatype": "G7_TransitionPlus_V6",
+          "version": "1.0",
+          "comment": "Transition structure"
+        },
+        {
+          "name": "Trans2",
+          "datatype": "G7_TransitionPlus_V6",
+          "version": "1.0",
+          "comment": "Transition structure"
+        },
+        {
+          "name": "Step1",
+          "datatype": "G7_StepPlus_V6",
+          "version": "1.0",
+          "comment": "Step structure"
+        },
+        {
+          "name": "Step2",
+          "datatype": "G7_StepPlus_V6",
+          "version": "1.0",
+          "comment": "Step structure"
+        }
+      ]
+    },
+    {
+      "name": "Temp",
+      "members": []
+    },
+    {
+      "name": "Constant",
+      "members": []
+    }
+  ],
+  "networks": [
+    {
+      "index": 1,
+      "title": null,
+      "language": "GRAPH",
+      "warnings": [
+        "Network 1: GRAPH network parsed but rendering is deferred in v0"
+      ]
+    }
+  ],
+  "xref": {},
+  "instruction_inventory": {},
+  "warnings": [
+    "Network 1: GRAPH network parsed but rendering is deferred in v0"
+  ],
+  "trace": {}
+}

@@ -1,32 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Document>
   <Engineering version="V21" />
-  <SW.Blocks.OB ID="0">
+  <SW.Blocks.FB ID="0">
     <AttributeList>
       <Interface>
         <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
-          <Section Name="Input">
-            <Member Name="Initial_Call" Datatype="Bool" Informative="true">
-              <Comment>
-                <MultiLanguageText Lang="en-US">Initial call of this OB</MultiLanguageText>
-              </Comment>
-            </Member>
-            <Member Name="Remanence" Datatype="Bool" Informative="true">
-              <Comment>
-                <MultiLanguageText Lang="en-US">=True, if remanent data are available</MultiLanguageText>
-              </Comment>
-            </Member>
-          </Section>
+          <Section Name="Input" />
+          <Section Name="Output" />
+          <Section Name="InOut" />
+          <Section Name="Static" />
           <Section Name="Temp" />
           <Section Name="Constant" />
         </Sections>
       </Interface>
       <MemoryLayout>Optimized</MemoryLayout>
-      <Name>Main</Name>
+      <MemoryReserve>100</MemoryReserve>
+      <Name>SimulationManagement</Name>
       <Namespace />
       <Number>1</Number>
       <ProgrammingLanguage>LAD</ProgrammingLanguage>
-      <SecondaryType>ProgramCycle</SecondaryType>
       <SetENOAutomatically>false</SetENOAutomatically>
     </AttributeList>
     <ObjectList>
@@ -73,11 +65,11 @@
           <MultilingualTextItem ID="9" CompositionName="Items">
             <AttributeList>
               <Culture>en-US</Culture>
-              <Text>"Main Program Sweep (Cycle)"</Text>
+              <Text />
             </AttributeList>
           </MultilingualTextItem>
         </ObjectList>
       </MultilingualText>
     </ObjectList>
-  </SW.Blocks.OB>
+  </SW.Blocks.FB>
 </Document>

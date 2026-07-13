@@ -1,0 +1,116 @@
+﻿{
+    S7_BlockNumber := "903";
+    S7_EditorMode := "SCL";
+    S7_Optimized := "TRUE";
+    S7_Version := "0.1"
+}
+FUNCTION_BLOCK "AnalogInput"
+    VAR_INPUT
+        {
+            S7_Access := "ReadOnly := External";
+            S7_MLC := "MLC_pD";
+            S7_Visibility := "Hidden := External"
+        }
+        simulation : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Reset : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_MLC := "MLC_4M4";
+            S7_Visibility := "Hidden := External"
+        }
+        analogValue : Int;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_MLC := "MLC_47S";
+            S7_Visibility := "Hidden := External"
+        }
+        simulatedAnalogValue : Int;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Settings : _.AnalogInputSettings;
+    END_VAR
+    VAR_OUTPUT
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        processValue : Real;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        wiringAlarm : Bool;
+    END_VAR
+    VAR
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        statAlarm : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        TON_notOK : TON_TIME;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        TON_OK : TON_TIME;
+    END_VAR
+    VAR_TEMP
+        tempRegValue : Int;
+    END_VAR
+
+    { S7_Language := "SCL" }
+    NETWORK
+        REGION Choose input
+            
+            #tempRegValue := #analogValue;
+            IF #simulation THEN
+                #tempRegValue := #simulatedAnalogValue;
+            END_IF;
+            
+        END_REGION
+        
+        REGION Alarm
+            #TON_notOK(IN := #Settings.Limits.regMin > #tempRegValue OR #tempRegValue > #Settings.Limits.regMax,
+                       PT := #Settings.Limits.regAlarmDelay);
+            
+            #TON_OK(IN := #Settings.Limits.regMin < #tempRegValue AND #tempRegValue < #Settings.Limits.regMax AND NOT #TON_notOK.Q,
+                    PT := #Settings.Limits.regAlarmDelay);
+            
+            IF #TON_notOK.Q THEN
+                #statAlarm := TRUE;
+            ELSIF #TON_OK.Q AND #Reset AND #statAlarm THEN
+                #statAlarm := FALSE;
+            END_IF;
+            
+            #wiringAlarm := #statAlarm;
+            
+        END_REGION
+        
+        REGION Processing
+            
+            IF NOT #Settings.Scaling.Type THEN
+                #processValue := #Settings.Scaling.Multiplier * INT_TO_REAL(IN := #tempRegValue);
+            ELSE
+                #processValue := SCALE_X_REAL(MIN := #Settings.Scaling.valueMin, MAX := #Settings.Scaling.valueMax, VALUE := NORM_X(MIN := #Settings.Scaling.regMin, VALUE := #tempRegValue, MAX := #Settings.Scaling.regMax));
+                
+                IF NOT #wiringAlarm THEN
+                    #processValue := LIMIT_REAL(MN := #Settings.Scaling.valueMin, IN := #processValue, MX := #Settings.Scaling.valueMax);
+                END_IF;
+            END_IF;
+            
+        END_REGION
+        
+        
+        
+    END_NETWORK
+END_FUNCTION_BLOCK

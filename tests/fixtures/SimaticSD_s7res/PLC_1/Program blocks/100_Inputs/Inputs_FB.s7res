@@ -1,0 +1,41 @@
+﻿MultiLingualTexts:
+  - id: MLC_4En
+    en-US: === General
+  - id: MLC_35C
+    en-US: Emergency stop
+  - id: MLC_3Xh
+    en-US: Start
+  - id: MLC_3kC
+    en-US: Stop
+  - id: MLC_3Ni
+    en-US: Reset
+  - id: MLC_4su
+    en-US: === Pump 1
+  - id: MLC_Qt
+    en-US: Contactor feedback
+  - id: MLC_4Kc
+    en-US: Softstart ON
+  - id: MLC_4XE
+    en-US: Softstart bypassed
+  - id: MLC_xX
+    en-US: Softstart fault
+  - id: MLC_43g
+    en-US: Protection
+  - id: MLC_3F3
+    en-US: === Pump 2
+  - id: MLC_49j
+    en-US: Contactor feedback
+  - id: MLC_4wA
+    en-US: Softstart ON
+  - id: MLC_38t
+    en-US: Softstart bypassed
+  - id: MLC_4K2
+    en-US: Softstart fault
+  - id: MLC_35Z
+    en-US: Protection
+  - id: MLC_3cL
+    en-US: === Analog inputs
+  - id: MLC_422
+    en-US: Liquid level - tank 1
+  - id: MLC_33Z
+    en-US: Liquid level - tank 2

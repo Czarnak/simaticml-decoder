@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.InstanceDB ID="0">
+    <AttributeList>
+      <AutoNumber>false</AutoNumber>
+      <DBAccessibleFromOPCUA>false</DBAccessibleFromOPCUA>
+      <DBAccessibleFromWebserver>false</DBAccessibleFromWebserver>
+      <InstanceOfName>UDT_Settings</InstanceOfName>
+      <InstanceOfType>UDT</InstanceOfType>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Static">
+            <Member Name="AlarmDelays" Datatype="Struct" Remanence="Retain">
+              <Member Name="Protection" Datatype="Time" />
+              <Member Name="Communication" Datatype="Time" />
+              <Member Name="DriveFault" Datatype="Time" />
+              <Member Name="LowCurrent" Datatype="Time" />
+              <Member Name="WorkConfirmation" Datatype="Time" />
+              <Member Name="Tank" Datatype="Time" />
+              <Member Name="Sensor" Datatype="Time">
+                <AttributeList>
+                  <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                  <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                  <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+                </AttributeList>
+              </Member>
+            </Member>
+            <Member Name="Sensors" Datatype="Struct" Remanence="Retain">
+              <Member Name="LiquidLevel" Datatype="Struct">
+                <Member Name="Tank_1" Datatype="&quot;AnalogInputSettings&quot;" />
+                <Member Name="Tank_2" Datatype="&quot;AnalogInputSettings&quot;" />
+              </Member>
+            </Member>
+          </Section>
+        </Sections>
+      </Interface>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <Name>HMI_Settings_DB</Name>
+      <Namespace />
+      <Number>703</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="3" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="4" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.InstanceDB>
+</Document>

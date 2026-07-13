@@ -1,0 +1,7 @@
+﻿MultiLingualTexts:
+  - id: MLC_pD
+    en-US: Enable simulation input (analog value)
+  - id: MLC_4M4
+    en-US: Input value from sensor (analog signal)
+  - id: MLC_47S
+    en-US: Simulated analog input value

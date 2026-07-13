@@ -1,0 +1,28 @@
+﻿{
+    S7_BlockNumber := "2";
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK Simulation_DB
+    VAR
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Simulation : Bool;
+        DigitalInputs : STRUCT
+            EmergencyStop : Bool;
+            Start : Bool;
+            Stop : Bool;
+            Reset : Bool;
+            ContactorON : Array[1..2] of Bool;
+            SoftstartON : Array[1..2] of Bool;
+            SoftstartBypassed : Array[1..2] of Bool;
+            SoftstartFault : Array[1..2] of Bool;
+            Protection : Array[1..2] of Bool;
+        END_STRUCT;
+        { S7_Access := "ReadOnly := External" }
+        TankLevel : Array[1..2] of Int;
+    END_VAR
+END_DATA_BLOCK

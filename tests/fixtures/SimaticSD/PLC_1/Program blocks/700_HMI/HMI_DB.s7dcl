@@ -1,0 +1,29 @@
+﻿{
+    S7_BlockNumber := "700";
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK HMI_DB
+    VAR
+        { S7_Access := "ReadOnly := External" }
+        MachineState : USInt;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        Device : STRUCT
+            {
+                S7_Access := "ReadOnly := External";
+                S7_Setpoint := "False";
+                S7_Visibility := "Hidden := External"
+            }
+            Pump : Array[1..2] of _.UDT_Device;
+        END_STRUCT;
+        { S7_Access := "ReadOnly := External" }
+        Devices_Status : STRUCT
+            { S7_Access := "ReadOnly := External" }
+            Pump : Array[1..2] of Int;
+        END_STRUCT;
+    END_VAR
+END_DATA_BLOCK

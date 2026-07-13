@@ -1,0 +1,318 @@
+﻿{
+    S7_BlockNumber := "100";
+    S7_Optimized := "TRUE";
+    S7_PreferredLanguage := "LAD";
+    S7_Version := "0.1"
+}
+FUNCTION_BLOCK "Inputs_FB"
+    VAR
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        ResetEdge : Bool;
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Setpoint := "False";
+            S7_Visibility := "Hidden := External"
+        }
+        TankLevel : Array[1..2] of _.AnalogInput;
+    END_VAR
+
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4En"
+    }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_35C"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_EmergencyStop" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.EmergencyStop )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.EmergencyStop )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3Xh"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_Start" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.Start )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.Start )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3kC"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            I_Contact( "DI_Stop" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.Stop )
+        END_RUNG
+        RUNG wire#powerrail
+            I_Contact( "Simulation_DB".DigitalInputs.Stop )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3Ni"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_Reset" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            P_Trig( #ResetEdge )
+            Coil( "InputValues_DB".InputsDigital.Reset )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.Reset )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4su"
+    }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_Qt"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_ContactorON_Pump1" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.ContactorON[1] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.ContactorON[1] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4Kc"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_SoftstartON_Pump1" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.SoftstartON[1] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.SoftstartON[1] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4XE"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_SoftstartBypassed_Pump1" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.SoftstartBypassed[1] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.SoftstartBypassed[1] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_xX"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_SoftstartFault_Pump1" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.SoftstartFault[1] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.SoftstartFault[1] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_43g"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_Protection_Pump1" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.Protection[1] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.Protection[1] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3F3"
+    }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_49j"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_ContactorON_Pump2" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.ContactorON[2] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.ContactorON[2] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4wA"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_SoftstartON_Pump2" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.SoftstartON[2] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.SoftstartON[2] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_38t"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_SoftstartBypassed_Pump2" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.SoftstartBypassed[2] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.SoftstartBypassed[2] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4K2"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_SoftstartFault_Pump2" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.SoftstartFault[2] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.SoftstartFault[2] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_35Z"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( "DI_Protection_Pump2" )
+            I_Contact( "Simulation_DB".Simulation )
+            wire#w1
+            Coil( "InputValues_DB".InputsDigital.Protection[2] )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( "Simulation_DB".DigitalInputs.Protection[2] )
+            Contact( "Simulation_DB".Simulation )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_3cL"
+    }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_422"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            #TankLevel[1](
+                simulation := "Simulation_DB".Simulation,
+                Reset := "InputValues_DB".InputsDigital.Reset,
+                analogValue := "AI_TankLevel1",
+                simulatedAnalogValue := "Simulation_DB".TankLevel[1],
+                Settings := "HMI_Settings_DB".Sensors.LiquidLevel.Tank_1,
+                processValue => "InputValues_DB".TankLevel[1],
+                wiringAlarm => "Alarms_DB".Sensors.TankLevel1_Wiring
+            )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_33Z"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            #TankLevel[2](
+                simulation := "Simulation_DB".Simulation,
+                Reset := "InputValues_DB".InputsDigital.Reset,
+                analogValue := "AI_TankLevel2",
+                simulatedAnalogValue := "Simulation_DB".TankLevel[2],
+                Settings := "HMI_Settings_DB".Sensors.LiquidLevel.Tank_2,
+                processValue => "InputValues_DB".TankLevel[2],
+                wiringAlarm => "Alarms_DB".Sensors.TankLevel2_Wiring
+            )
+        END_RUNG
+    END_NETWORK
+    { S7_Language := "LAD" }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+END_FUNCTION_BLOCK

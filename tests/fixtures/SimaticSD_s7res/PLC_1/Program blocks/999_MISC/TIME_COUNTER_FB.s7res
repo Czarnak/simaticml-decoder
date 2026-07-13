@@ -1,0 +1,7 @@
+﻿MultiLingualTexts:
+  - id: MLC_Qr
+    en-US: TIME COUNTER [S, M, H]
+  - id: MLC_h6
+    en-US: COUNTERS INCREMENT
+  - id: MLC_SX
+    en-US: RESET TIME COUNTER

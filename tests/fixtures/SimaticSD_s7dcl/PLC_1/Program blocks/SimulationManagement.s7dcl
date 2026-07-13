@@ -3,10 +3,10 @@
     S7_PreferredLanguage := "LAD";
     S7_Version := "0.1"
 }
-ORGANIZATION_BLOCK "Main"
+FUNCTION_BLOCK "SimulationManagement"
     { S7_Language := "LAD" }
     NETWORK
         RUNG wire#powerrail
         END_RUNG
     END_NETWORK
-END_ORGANIZATION_BLOCK
+END_FUNCTION_BLOCK

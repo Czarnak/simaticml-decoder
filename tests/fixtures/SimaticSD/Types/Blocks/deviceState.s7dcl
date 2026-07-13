@@ -1,0 +1,67 @@
+﻿{
+    S7_BlockNumber := "904";
+    S7_Optimized := "TRUE";
+    S7_PreferredLanguage := "LAD";
+    S7_Version := "0.1"
+}
+FUNCTION "deviceState" : Void
+    VAR_INPUT
+        Alarm : Bool;
+        Warning : Bool;
+        Running : Bool;
+        Reverse : Bool;
+        Service : Bool;
+    END_VAR
+    VAR_IN_OUT
+        deviceIcon : Int;
+    END_VAR
+
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4HH"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Move(
+                in := 0,
+                out1 => #deviceIcon
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #Warning )
+            Move(
+                in := 1,
+                out1 => #deviceIcon
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #Alarm )
+            Move(
+                in := 3,
+                out1 => #deviceIcon
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #Running )
+            Add(
+                in1 := #deviceIcon,
+                in2 := 10,
+                out => #deviceIcon
+            )
+            Contact( #Reverse )
+            Add(
+                in1 := #deviceIcon,
+                in2 := 10,
+                out => #deviceIcon
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #Service )
+            Add(
+                in1 := #deviceIcon,
+                in2 := 200,
+                out => #deviceIcon
+            )
+        END_RUNG
+    END_NETWORK
+END_FUNCTION

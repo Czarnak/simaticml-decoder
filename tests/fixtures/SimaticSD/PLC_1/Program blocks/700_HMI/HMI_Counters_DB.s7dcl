@@ -1,0 +1,22 @@
+﻿{
+    S7_BlockNumber := "701";
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK HMI_Counters_DB
+    VAR
+        {
+            S7_Access := "ReadOnly := External";
+            S7_Visibility := "Hidden := External"
+        }
+        ResetCounters : Bool;
+    END_VAR
+
+    VAR RETAIN
+        { S7_Setpoint := "False" }
+        Machine : _.UDT_WORK_CNT;
+        { S7_Setpoint := "False" }
+        Pump : Array[1..2] of _.UDT_WORK_CNT;
+    END_VAR
+END_DATA_BLOCK

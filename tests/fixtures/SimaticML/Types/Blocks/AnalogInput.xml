@@ -1,0 +1,743 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.FB ID="0">
+    <AttributeList>
+      <AutoNumber>false</AutoNumber>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input">
+            <Member Name="simulation" Datatype="Bool">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+                <StringAttribute Name="S7_HiddenAssignment" SystemDefined="true">HideIfNoParamAssigned</StringAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Enable simulation input (analog value)</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Reset" Datatype="Bool">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+            <Member Name="analogValue" Datatype="Int">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Input value from sensor (analog signal)</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="simulatedAnalogValue" Datatype="Int">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+                <StringAttribute Name="S7_HiddenAssignment" SystemDefined="true">HideIfNoParamAssigned</StringAttribute>
+              </AttributeList>
+              <Comment>
+                <MultiLanguageText Lang="en-US">Simulated analog input value</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Settings" Datatype="&quot;AnalogInputSettings&quot;">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+          </Section>
+          <Section Name="Output">
+            <Member Name="processValue" Datatype="Real">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+            <Member Name="wiringAlarm" Datatype="Bool">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+          </Section>
+          <Section Name="InOut" />
+          <Section Name="Static">
+            <Member Name="statAlarm" Datatype="Bool">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+            <Member Name="TON_notOK" Datatype="TON_TIME" Version="1.0">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+            <Member Name="TON_OK" Datatype="TON_TIME" Version="1.0">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+            </Member>
+          </Section>
+          <Section Name="Temp">
+            <Member Name="tempRegValue" Datatype="Int" />
+          </Section>
+          <Section Name="Constant" />
+        </Sections>
+      </Interface>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <MemoryReserve>100</MemoryReserve>
+      <Name>AnalogInput</Name>
+      <Namespace />
+      <Number>903</Number>
+      <ProgrammingLanguage>SCL</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <StructuredText xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/StructuredText/v4">
+              <Token Text="REGION" UId="21" />
+              <Blank UId="22" />
+              <Text UId="23">Choose input</Text>
+              <NewLine UId="24" />
+              <Blank Num="4" UId="25" />
+              <NewLine UId="26" />
+              <Blank Num="4" UId="27" />
+              <Access Scope="LocalVariable" UId="28">
+                <Symbol UId="29">
+                  <Component Name="tempRegValue" UId="30" />
+                </Symbol>
+              </Access>
+              <Blank UId="31" />
+              <Token Text=":=" UId="32" />
+              <Blank UId="33" />
+              <Access Scope="LocalVariable" UId="34">
+                <Symbol UId="35">
+                  <Component Name="analogValue" UId="36" />
+                </Symbol>
+              </Access>
+              <Token Text=";" UId="37" />
+              <NewLine UId="38" />
+              <Blank Num="4" UId="39" />
+              <Token Text="IF" UId="40" />
+              <Blank UId="41" />
+              <Access Scope="LocalVariable" UId="42">
+                <Symbol UId="43">
+                  <Component Name="simulation" UId="44" />
+                </Symbol>
+              </Access>
+              <Blank UId="45" />
+              <Token Text="THEN" UId="46" />
+              <NewLine UId="47" />
+              <Blank Num="8" UId="48" />
+              <Access Scope="LocalVariable" UId="49">
+                <Symbol UId="50">
+                  <Component Name="tempRegValue" UId="51" />
+                </Symbol>
+              </Access>
+              <Blank UId="52" />
+              <Token Text=":=" UId="53" />
+              <Blank UId="54" />
+              <Access Scope="LocalVariable" UId="55">
+                <Symbol UId="56">
+                  <Component Name="simulatedAnalogValue" UId="57" />
+                </Symbol>
+              </Access>
+              <Token Text=";" UId="58" />
+              <NewLine UId="59" />
+              <Blank Num="4" UId="60" />
+              <Token Text="END_IF" UId="61" />
+              <Token Text=";" UId="62" />
+              <NewLine UId="63" />
+              <Blank Num="4" UId="64" />
+              <NewLine UId="65" />
+              <Token Text="END_REGION" UId="66" />
+              <NewLine Num="2" UId="67" />
+              <Token Text="REGION" UId="68" />
+              <Blank UId="69" />
+              <Text UId="70">Alarm</Text>
+              <NewLine UId="71" />
+              <Blank Num="4" UId="72" />
+              <Access Scope="LocalVariable" UId="73">
+                <Symbol UId="74">
+                  <Component Name="TON_notOK" UId="75" />
+                </Symbol>
+              </Access>
+              <Access Scope="Call" UId="76">
+                <Instruction UId="77">
+                  <Token Text="(" UId="78" />
+                  <Parameter Name="IN" UId="79">
+                    <Blank UId="80" />
+                    <Token Text=":=" UId="81" />
+                    <Blank UId="82" />
+                    <Access Scope="LocalVariable" UId="83">
+                      <Symbol UId="84">
+                        <Component Name="Settings" UId="85" />
+                        <Token Text="." UId="86" />
+                        <Component Name="Limits" UId="87" />
+                        <Token Text="." UId="88" />
+                        <Component Name="regMin" UId="89" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="90" />
+                    <Token Text="&gt;" UId="91" />
+                    <Blank UId="92" />
+                    <Access Scope="LocalVariable" UId="93">
+                      <Symbol UId="94">
+                        <Component Name="tempRegValue" UId="95" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="96" />
+                    <Token Text="OR" UId="97" />
+                    <Blank UId="98" />
+                    <Access Scope="LocalVariable" UId="99">
+                      <Symbol UId="100">
+                        <Component Name="tempRegValue" UId="101" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="102" />
+                    <Token Text="&gt;" UId="103" />
+                    <Blank UId="104" />
+                    <Access Scope="LocalVariable" UId="105">
+                      <Symbol UId="106">
+                        <Component Name="Settings" UId="107" />
+                        <Token Text="." UId="108" />
+                        <Component Name="Limits" UId="109" />
+                        <Token Text="." UId="110" />
+                        <Component Name="regMax" UId="111" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text="," UId="112" />
+                  <NewLine UId="113" />
+                  <Blank Num="15" UId="114" />
+                  <Parameter Name="PT" UId="115">
+                    <Blank UId="116" />
+                    <Token Text=":=" UId="117" />
+                    <Blank UId="118" />
+                    <Access Scope="LocalVariable" UId="119">
+                      <Symbol UId="120">
+                        <Component Name="Settings" UId="121" />
+                        <Token Text="." UId="122" />
+                        <Component Name="Limits" UId="123" />
+                        <Token Text="." UId="124" />
+                        <Component Name="regAlarmDelay" UId="125" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text=")" UId="126" />
+                </Instruction>
+              </Access>
+              <Token Text=";" UId="127" />
+              <NewLine UId="128" />
+              <Blank Num="4" UId="129" />
+              <NewLine UId="130" />
+              <Blank Num="4" UId="131" />
+              <Access Scope="LocalVariable" UId="132">
+                <Symbol UId="133">
+                  <Component Name="TON_OK" UId="134" />
+                </Symbol>
+              </Access>
+              <Access Scope="Call" UId="135">
+                <Instruction UId="136">
+                  <Token Text="(" UId="137" />
+                  <Parameter Name="IN" UId="138">
+                    <Blank UId="139" />
+                    <Token Text=":=" UId="140" />
+                    <Blank UId="141" />
+                    <Access Scope="LocalVariable" UId="142">
+                      <Symbol UId="143">
+                        <Component Name="Settings" UId="144" />
+                        <Token Text="." UId="145" />
+                        <Component Name="Limits" UId="146" />
+                        <Token Text="." UId="147" />
+                        <Component Name="regMin" UId="148" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="149" />
+                    <Token Text="&lt;" UId="150" />
+                    <Blank UId="151" />
+                    <Access Scope="LocalVariable" UId="152">
+                      <Symbol UId="153">
+                        <Component Name="tempRegValue" UId="154" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="155" />
+                    <Token Text="AND" UId="156" />
+                    <Blank UId="157" />
+                    <Access Scope="LocalVariable" UId="158">
+                      <Symbol UId="159">
+                        <Component Name="tempRegValue" UId="160" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="161" />
+                    <Token Text="&lt;" UId="162" />
+                    <Blank UId="163" />
+                    <Access Scope="LocalVariable" UId="164">
+                      <Symbol UId="165">
+                        <Component Name="Settings" UId="166" />
+                        <Token Text="." UId="167" />
+                        <Component Name="Limits" UId="168" />
+                        <Token Text="." UId="169" />
+                        <Component Name="regMax" UId="170" />
+                      </Symbol>
+                    </Access>
+                    <Blank UId="171" />
+                    <Token Text="AND" UId="172" />
+                    <Blank UId="173" />
+                    <Token Text="NOT" UId="174" />
+                    <Blank UId="175" />
+                    <Access Scope="LocalVariable" UId="176">
+                      <Symbol UId="177">
+                        <Component Name="TON_notOK" UId="178" />
+                        <Token Text="." UId="179" />
+                        <Component Name="Q" UId="180" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text="," UId="181" />
+                  <NewLine UId="182" />
+                  <Blank Num="12" UId="183" />
+                  <Parameter Name="PT" UId="184">
+                    <Blank UId="185" />
+                    <Token Text=":=" UId="186" />
+                    <Blank UId="187" />
+                    <Access Scope="LocalVariable" UId="188">
+                      <Symbol UId="189">
+                        <Component Name="Settings" UId="190" />
+                        <Token Text="." UId="191" />
+                        <Component Name="Limits" UId="192" />
+                        <Token Text="." UId="193" />
+                        <Component Name="regAlarmDelay" UId="194" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text=")" UId="195" />
+                </Instruction>
+              </Access>
+              <Token Text=";" UId="196" />
+              <NewLine UId="197" />
+              <Blank Num="4" UId="198" />
+              <NewLine UId="199" />
+              <Blank Num="4" UId="200" />
+              <Token Text="IF" UId="201" />
+              <Blank UId="202" />
+              <Access Scope="LocalVariable" UId="203">
+                <Symbol UId="204">
+                  <Component Name="TON_notOK" UId="205" />
+                  <Token Text="." UId="206" />
+                  <Component Name="Q" UId="207" />
+                </Symbol>
+              </Access>
+              <Blank UId="208" />
+              <Token Text="THEN" UId="209" />
+              <NewLine UId="210" />
+              <Blank Num="8" UId="211" />
+              <Access Scope="LocalVariable" UId="212">
+                <Symbol UId="213">
+                  <Component Name="statAlarm" UId="214" />
+                </Symbol>
+              </Access>
+              <Blank UId="215" />
+              <Token Text=":=" UId="216" />
+              <Blank UId="217" />
+              <Access Scope="LiteralConstant" UId="218">
+                <Constant UId="219">
+                  <ConstantValue UId="221">TRUE</ConstantValue>
+                </Constant>
+              </Access>
+              <Token Text=";" UId="222" />
+              <NewLine UId="223" />
+              <Blank Num="4" UId="224" />
+              <Token Text="ELSIF" UId="225" />
+              <Blank UId="226" />
+              <Access Scope="LocalVariable" UId="227">
+                <Symbol UId="228">
+                  <Component Name="TON_OK" UId="229" />
+                  <Token Text="." UId="230" />
+                  <Component Name="Q" UId="231" />
+                </Symbol>
+              </Access>
+              <Blank UId="232" />
+              <Token Text="AND" UId="233" />
+              <Blank UId="234" />
+              <Access Scope="LocalVariable" UId="235">
+                <Symbol UId="236">
+                  <Component Name="Reset" UId="237" />
+                </Symbol>
+              </Access>
+              <Blank UId="238" />
+              <Token Text="AND" UId="239" />
+              <Blank UId="240" />
+              <Access Scope="LocalVariable" UId="241">
+                <Symbol UId="242">
+                  <Component Name="statAlarm" UId="243" />
+                </Symbol>
+              </Access>
+              <Blank UId="244" />
+              <Token Text="THEN" UId="245" />
+              <NewLine UId="246" />
+              <Blank Num="8" UId="247" />
+              <Access Scope="LocalVariable" UId="248">
+                <Symbol UId="249">
+                  <Component Name="statAlarm" UId="250" />
+                </Symbol>
+              </Access>
+              <Blank UId="251" />
+              <Token Text=":=" UId="252" />
+              <Blank UId="253" />
+              <Access Scope="LiteralConstant" UId="254">
+                <Constant UId="255">
+                  <ConstantValue UId="257">FALSE</ConstantValue>
+                </Constant>
+              </Access>
+              <Token Text=";" UId="258" />
+              <NewLine UId="259" />
+              <Blank Num="4" UId="260" />
+              <Token Text="END_IF" UId="261" />
+              <Token Text=";" UId="262" />
+              <NewLine UId="263" />
+              <Blank Num="4" UId="264" />
+              <NewLine UId="265" />
+              <Blank Num="4" UId="266" />
+              <Access Scope="LocalVariable" UId="267">
+                <Symbol UId="268">
+                  <Component Name="wiringAlarm" UId="269" />
+                </Symbol>
+              </Access>
+              <Blank UId="270" />
+              <Token Text=":=" UId="271" />
+              <Blank UId="272" />
+              <Access Scope="LocalVariable" UId="273">
+                <Symbol UId="274">
+                  <Component Name="statAlarm" UId="275" />
+                </Symbol>
+              </Access>
+              <Token Text=";" UId="276" />
+              <NewLine UId="277" />
+              <Blank Num="4" UId="278" />
+              <NewLine UId="279" />
+              <Token Text="END_REGION" UId="280" />
+              <NewLine Num="2" UId="281" />
+              <Token Text="REGION" UId="282" />
+              <Blank UId="283" />
+              <Text UId="284">Processing</Text>
+              <NewLine UId="285" />
+              <Blank Num="4" UId="286" />
+              <NewLine UId="287" />
+              <Blank Num="4" UId="288" />
+              <Token Text="IF" UId="289" />
+              <Blank UId="290" />
+              <Token Text="NOT" UId="291" />
+              <Blank UId="292" />
+              <Access Scope="LocalVariable" UId="293">
+                <Symbol UId="294">
+                  <Component Name="Settings" UId="295" />
+                  <Token Text="." UId="296" />
+                  <Component Name="Scaling" UId="297" />
+                  <Token Text="." UId="298" />
+                  <Component Name="Type" UId="299" />
+                </Symbol>
+              </Access>
+              <Blank UId="300" />
+              <Token Text="THEN" UId="301" />
+              <NewLine UId="302" />
+              <Blank Num="8" UId="303" />
+              <Access Scope="LocalVariable" UId="304">
+                <Symbol UId="305">
+                  <Component Name="processValue" UId="306" />
+                </Symbol>
+              </Access>
+              <Blank UId="307" />
+              <Token Text=":=" UId="308" />
+              <Blank UId="309" />
+              <Access Scope="LocalVariable" UId="310">
+                <Symbol UId="311">
+                  <Component Name="Settings" UId="312" />
+                  <Token Text="." UId="313" />
+                  <Component Name="Scaling" UId="314" />
+                  <Token Text="." UId="315" />
+                  <Component Name="Multiplier" UId="316" />
+                </Symbol>
+              </Access>
+              <Blank UId="317" />
+              <Token Text="*" UId="318" />
+              <Blank UId="319" />
+              <Access Scope="Call" UId="320">
+                <Instruction Name="INT_TO_REAL" UId="321">
+                  <Token Text="(" UId="322" />
+                  <Parameter Name="IN" UId="323">
+                    <Blank UId="324" />
+                    <Token Text=":=" UId="325" />
+                    <Blank UId="326" />
+                    <Access Scope="LocalVariable" UId="327">
+                      <Symbol UId="328">
+                        <Component Name="tempRegValue" UId="329" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text=")" UId="331" />
+                </Instruction>
+              </Access>
+              <Token Text=";" UId="332" />
+              <NewLine UId="333" />
+              <Blank Num="4" UId="334" />
+              <Token Text="ELSE" UId="335" />
+              <NewLine UId="336" />
+              <Blank Num="8" UId="337" />
+              <Access Scope="LocalVariable" UId="338">
+                <Symbol UId="339">
+                  <Component Name="processValue" UId="340" />
+                </Symbol>
+              </Access>
+              <Blank UId="341" />
+              <Token Text=":=" UId="342" />
+              <Blank UId="343" />
+              <Access Scope="Call" UId="344">
+                <Instruction Name="SCALE_X" UId="345">
+                  <TemplateValue Name="dest_type" Type="Type" UId="346">Real</TemplateValue>
+                  <Token Text="(" UId="347" />
+                  <Parameter Name="MIN" UId="348">
+                    <Blank UId="349" />
+                    <Token Text=":=" UId="350" />
+                    <Blank UId="351" />
+                    <Access Scope="LocalVariable" UId="352">
+                      <Symbol UId="353">
+                        <Component Name="Settings" UId="354" />
+                        <Token Text="." UId="355" />
+                        <Component Name="Scaling" UId="356" />
+                        <Token Text="." UId="357" />
+                        <Component Name="valueMin" UId="358" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text="," UId="359" />
+                  <Blank UId="360" />
+                  <Parameter Name="MAX" UId="361">
+                    <Blank UId="362" />
+                    <Token Text=":=" UId="363" />
+                    <Blank UId="364" />
+                    <Access Scope="LocalVariable" UId="365">
+                      <Symbol UId="366">
+                        <Component Name="Settings" UId="367" />
+                        <Token Text="." UId="368" />
+                        <Component Name="Scaling" UId="369" />
+                        <Token Text="." UId="370" />
+                        <Component Name="valueMax" UId="371" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text="," UId="372" />
+                  <Blank UId="373" />
+                  <Parameter Name="VALUE" UId="374">
+                    <Blank UId="375" />
+                    <Token Text=":=" UId="376" />
+                    <Blank UId="377" />
+                    <Access Scope="Call" UId="378">
+                      <Instruction Name="NORM_X" UId="379">
+                        <Token Text="(" UId="380" />
+                        <Parameter Name="MIN" UId="381">
+                          <Blank UId="382" />
+                          <Token Text=":=" UId="383" />
+                          <Blank UId="384" />
+                          <Access Scope="LocalVariable" UId="385">
+                            <Symbol UId="386">
+                              <Component Name="Settings" UId="387" />
+                              <Token Text="." UId="388" />
+                              <Component Name="Scaling" UId="389" />
+                              <Token Text="." UId="390" />
+                              <Component Name="regMin" UId="391" />
+                            </Symbol>
+                          </Access>
+                        </Parameter>
+                        <Token Text="," UId="392" />
+                        <Blank UId="393" />
+                        <Parameter Name="VALUE" UId="394">
+                          <Blank UId="395" />
+                          <Token Text=":=" UId="396" />
+                          <Blank UId="397" />
+                          <Access Scope="LocalVariable" UId="398">
+                            <Symbol UId="399">
+                              <Component Name="tempRegValue" UId="400" />
+                            </Symbol>
+                          </Access>
+                        </Parameter>
+                        <Token Text="," UId="401" />
+                        <Blank UId="402" />
+                        <Parameter Name="MAX" UId="403">
+                          <Blank UId="404" />
+                          <Token Text=":=" UId="405" />
+                          <Blank UId="406" />
+                          <Access Scope="LocalVariable" UId="407">
+                            <Symbol UId="408">
+                              <Component Name="Settings" UId="409" />
+                              <Token Text="." UId="410" />
+                              <Component Name="Scaling" UId="411" />
+                              <Token Text="." UId="412" />
+                              <Component Name="regMax" UId="413" />
+                            </Symbol>
+                          </Access>
+                        </Parameter>
+                        <Token Text=")" UId="415" />
+                      </Instruction>
+                    </Access>
+                  </Parameter>
+                  <Token Text=")" UId="417" />
+                </Instruction>
+              </Access>
+              <Token Text=";" UId="418" />
+              <NewLine UId="419" />
+              <Blank Num="8" UId="420" />
+              <NewLine UId="421" />
+              <Blank Num="8" UId="422" />
+              <Token Text="IF" UId="423" />
+              <Blank UId="424" />
+              <Token Text="NOT" UId="425" />
+              <Blank UId="426" />
+              <Access Scope="LocalVariable" UId="427">
+                <Symbol UId="428">
+                  <Component Name="wiringAlarm" UId="429" />
+                </Symbol>
+              </Access>
+              <Blank UId="430" />
+              <Token Text="THEN" UId="431" />
+              <NewLine UId="432" />
+              <Blank Num="12" UId="433" />
+              <Access Scope="LocalVariable" UId="434">
+                <Symbol UId="435">
+                  <Component Name="processValue" UId="436" />
+                </Symbol>
+              </Access>
+              <Blank UId="437" />
+              <Token Text=":=" UId="438" />
+              <Blank UId="439" />
+              <Access Scope="Call" UId="440">
+                <Instruction Name="LIMIT" UId="441">
+                  <TemplateValue Name="value_type" Type="Type" UId="442">Real</TemplateValue>
+                  <Token Text="(" UId="443" />
+                  <Parameter Name="MN" UId="444">
+                    <Blank UId="445" />
+                    <Token Text=":=" UId="446" />
+                    <Blank UId="447" />
+                    <Access Scope="LocalVariable" UId="448">
+                      <Symbol UId="449">
+                        <Component Name="Settings" UId="450" />
+                        <Token Text="." UId="451" />
+                        <Component Name="Scaling" UId="452" />
+                        <Token Text="." UId="453" />
+                        <Component Name="valueMin" UId="454" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text="," UId="455" />
+                  <Blank UId="456" />
+                  <Parameter Name="IN" UId="457">
+                    <Blank UId="458" />
+                    <Token Text=":=" UId="459" />
+                    <Blank UId="460" />
+                    <Access Scope="LocalVariable" UId="461">
+                      <Symbol UId="462">
+                        <Component Name="processValue" UId="463" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text="," UId="464" />
+                  <Blank UId="465" />
+                  <Parameter Name="MX" UId="466">
+                    <Blank UId="467" />
+                    <Token Text=":=" UId="468" />
+                    <Blank UId="469" />
+                    <Access Scope="LocalVariable" UId="470">
+                      <Symbol UId="471">
+                        <Component Name="Settings" UId="472" />
+                        <Token Text="." UId="473" />
+                        <Component Name="Scaling" UId="474" />
+                        <Token Text="." UId="475" />
+                        <Component Name="valueMax" UId="476" />
+                      </Symbol>
+                    </Access>
+                  </Parameter>
+                  <Token Text=")" UId="478" />
+                </Instruction>
+              </Access>
+              <Token Text=";" UId="479" />
+              <NewLine UId="480" />
+              <Blank Num="8" UId="481" />
+              <Token Text="END_IF" UId="482" />
+              <Token Text=";" UId="483" />
+              <NewLine UId="484" />
+              <Blank Num="4" UId="485" />
+              <Token Text="END_IF" UId="486" />
+              <Token Text=";" UId="487" />
+              <NewLine UId="488" />
+              <Blank Num="4" UId="489" />
+              <NewLine UId="490" />
+              <Token Text="END_REGION" UId="491" />
+              <NewLine Num="3" UId="492" />
+            </StructuredText>
+          </NetworkSource>
+          <ProgrammingLanguage>SCL</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="4" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="5" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="6" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="7" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <MultilingualText ID="8" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="9" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.FB>
+</Document>

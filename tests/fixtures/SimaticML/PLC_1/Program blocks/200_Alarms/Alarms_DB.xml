@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.GlobalDB ID="0">
+    <AttributeList>
+      <AutoNumber>false</AutoNumber>
+      <DBAccessibleFromOPCUA>false</DBAccessibleFromOPCUA>
+      <DBAccessibleFromWebserver>false</DBAccessibleFromWebserver>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Static">
+            <Member Name="General" Datatype="Struct">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Member Name="EmergencyStop" Datatype="Bool" />
+            </Member>
+            <Member Name="PLC" Datatype="Struct">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Member Name="SupplyModule2" Datatype="Bool" />
+              <Member Name="SupplyModule3" Datatype="Bool" />
+              <Member Name="SupplyModule4" Datatype="Bool" />
+              <Member Name="SupplyModule5" Datatype="Bool" />
+              <Member Name="FeedbackModule2" Datatype="Bool" />
+              <Member Name="FeedbackModule3" Datatype="Bool" />
+              <Member Name="FeedbackModule4" Datatype="Bool" />
+              <Member Name="FeedbackModule5" Datatype="Bool" />
+            </Member>
+            <Member Name="Sensors" Datatype="Struct">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Member Name="TankLevel1_Wiring" Datatype="Bool" />
+              <Member Name="TankLevel2_Wiring" Datatype="Bool" />
+            </Member>
+            <Member Name="Pumps" Datatype="Struct">
+              <AttributeList>
+                <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+              </AttributeList>
+              <Member Name="CircuitProtection_1" Datatype="Bool" />
+              <Member Name="ContactorNotON_1" Datatype="Bool" />
+              <Member Name="ContactorNotOFF_1" Datatype="Bool" />
+              <Member Name="SoftstartNotON_1" Datatype="Bool" />
+              <Member Name="SoftstartNotBypassed_1" Datatype="Bool" />
+              <Member Name="SoftstartStuckBypassed_1" Datatype="Bool" />
+              <Member Name="SoftstartNotOFF_1" Datatype="Bool" />
+              <Member Name="SoftstartFault_1" Datatype="Bool" />
+              <Member Name="CircuitProtection_2" Datatype="Bool" />
+              <Member Name="ContactorNotON_2" Datatype="Bool" />
+              <Member Name="ContactorNotOFF_2" Datatype="Bool" />
+              <Member Name="SoftstartNotON_2" Datatype="Bool" />
+              <Member Name="SoftstartNotBypassed_2" Datatype="Bool" />
+              <Member Name="SoftstartStuckBypassed_2" Datatype="Bool" />
+              <Member Name="SoftstartNotOFF_2" Datatype="Bool" />
+              <Member Name="SoftstartFault_2" Datatype="Bool" />
+            </Member>
+          </Section>
+        </Sections>
+      </Interface>
+      <MemoryLayout>Standard</MemoryLayout>
+      <Name>Alarms_DB</Name>
+      <Namespace />
+      <Number>201</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="3" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="4" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.GlobalDB>
+</Document>

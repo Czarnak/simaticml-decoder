@@ -1,0 +1,7 @@
+﻿TYPE
+    UDT_WORK_CNT : STRUCT
+        S : USInt;
+        "M" : USInt;
+        H : UDInt;
+    END_STRUCT;
+END_TYPE
