@@ -26,7 +26,7 @@
 
 **Interfaces:** `InputArtifact(relative_path: PurePath, suffix: str, _reader: Callable[[InputLimits], bytes])`, `direct_input_artifact(path: Path)`, and `discover_input_files(...) -> tuple[InputArtifact, ...]`.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```python
 def test_discovered_artifact_is_relative(tmp_path):
@@ -46,13 +46,13 @@ def test_artifact_read_is_limited(tmp_path):
         direct_input_artifact(source).read_bytes(InputLimits(max_file_bytes=10))
 ```
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_input_policy.py -k artifact -q -p no:cacheprovider`
 
 Expected: FAIL during collection because the artifact API does not exist.
 
-- [ ] **Step 3: Implement the contract**
+- [x] **Step 3: Implement the contract**
 
 ```python
 @dataclass(frozen=True)
@@ -67,7 +67,7 @@ class InputArtifact:
 
 Keep direct-file reads descriptor-pinned. Move format handling to `validate_artifact_format(artifact)` so `.xml`, `.s7dcl`, and `.s7res` get identical direct and directory diagnostics.
 
-- [ ] **Step 4: Verify green and commit**
+- [x] **Step 4: Verify green and commit**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_input_policy.py -k artifact -q -p no:cacheprovider`
 
@@ -83,7 +83,7 @@ Commit: `git add src/simaticml_decoder/input_policy.py src/simaticml_decoder/win
 
 **Interfaces:** `NativeDirectory.open_root(path)`, `NativeDirectory.entries() -> tuple[NativeEntry, ...]`, `NativeDirectory.open_child(name, directory)`, and `NativeHandle.read_limited(limit)`.
 
-- [ ] **Step 1: Write failing Windows integration tests**
+- [x] **Step 1: Write failing Windows integration tests**
 
 ```python
 pytestmark = pytest.mark.skipif(sys.platform != "win32", reason="Windows native handles")
@@ -105,17 +105,17 @@ def test_opened_child_survives_name_swap(tmp_path):
         assert child.read_limited(1024) == b"<Document/>"
 ```
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_windows_handles.py -q -p no:cacheprovider`
 
 Expected on Windows: FAIL during collection because `NativeDirectory` is absent. Expected elsewhere: tests skip with `Windows native handles`.
 
-- [ ] **Step 3: Implement FFI**
+- [x] **Step 3: Implement FFI**
 
 Define `UNICODE_STRING`, `OBJECT_ATTRIBUTES`, `IO_STATUS_BLOCK`, and `FILE_ID_BOTH_DIR_INFORMATION` using exact `ctypes` field widths. `NtCreateFile` opens root and children relative to `RootDirectory`; reject child names containing separators, `.` or `..`. Use `FILE_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT` for directories and `FILE_NON_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT` for files. Request `SYNCHRONIZE | FILE_READ_ATTRIBUTES` plus `FILE_LIST_DIRECTORY` or `FILE_READ_DATA`; use read/write/delete sharing and `FILE_OPEN`. Enumerate only with `NtQueryDirectoryFile(FileIdBothDirectoryInformation)`, reject every `FILE_ATTRIBUTE_REPARSE_POINT`, sort names, and return a tuple. Read at most `limit + 1` bytes with `ReadFile`; map native failures to redacted `InputViolation` codes.
 
-- [ ] **Step 4: Verify green and commit**
+- [x] **Step 4: Verify green and commit**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_windows_handles.py -q -p no:cacheprovider`
 
@@ -133,7 +133,7 @@ Commit: `git add src/simaticml_decoder/windows_handles.py tests/test_windows_han
 
 **Interfaces:** Add `decode_artifact(artifact, out_dir, fmt)`. Keep `decode_file(path, out_dir, fmt)` as a direct-artifact wrapper. Build output paths from `artifact.relative_path.parent`.
 
-- [ ] **Step 1: Write failing end-to-end tests**
+- [x] **Step 1: Write failing end-to-end tests**
 
 ```python
 def test_directory_reports_all_unpaired_resources(capsys):
@@ -150,13 +150,13 @@ def test_directory_output_uses_artifact_relative_path(tmp_path):
     assert (tmp_path / "out" / "a" / "b" / "block.scl").is_file()
 ```
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_cli.py tests/test_input_policy.py -k "artifact or unpaired" -q -p no:cacheprovider`
 
 Expected: FAIL because directory mode still calls `decode_file` with re-resolved `Path` values.
 
-- [ ] **Step 3: Implement artifact dispatch**
+- [x] **Step 3: Implement artifact dispatch**
 
 ```python
 def decode_artifact(source: InputArtifact, out_dir: Path, fmt: str) -> FileOutcome:
@@ -169,7 +169,7 @@ def decode_artifact(source: InputArtifact, out_dir: Path, fmt: str) -> FileOutco
 
 Retain the current fold/emit isolation. Hold the root native handle open through the full discovery/decode batch. Non-Windows uses `dir_fd` plus `O_NOFOLLOW`; if either is unavailable, return `INPUT_REJECTED` before decoding a directory.
 
-- [ ] **Step 4: Verify green and commit**
+- [x] **Step 4: Verify green and commit**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_cli.py tests/test_input_policy.py -k "artifact or unpaired" -q -p no:cacheprovider`
 
@@ -185,7 +185,7 @@ Commit: `git add src/simaticml_decoder/input_policy.py src/simaticml_decoder/cli
 - Modify: `.github/workflows/ci.yml`
 - Modify: `.github/workflows/release.yml`
 
-- [ ] **Step 1: Add failing same-root and Windows-CI checks**
+- [x] **Step 1: Add failing same-root and Windows-CI checks**
 
 ```python
 def test_unpaired_resources_have_no_same_root_declaration():
@@ -197,17 +197,17 @@ def test_unpaired_resources_have_no_same_root_declaration():
 
 Add `windows-lint-and-test` on `windows-latest`, Python 3.11, editable dev install, `ruff check .`, and `pytest -q --cov=simaticml_decoder --cov-fail-under=80`.
 
-- [ ] **Step 2: Verify red**
+- [x] **Step 2: Verify red**
 
 Run: `.venv\\Scripts\\python.exe -m pytest tests/test_fixture_corpus.py -k same_root -q -p no:cacheprovider`
 
 Expected: FAIL until the assertion and Windows CI job exist.
 
-- [ ] **Step 3: Update public policy**
+- [x] **Step 3: Update public policy**
 
 State that Windows directory discovery is handle-anchored and rejects all reparse points without re-resolving a discovered artifact. State that unsupported platforms reject directory input. Retain all byte, traversal, XML, SD, and redaction limits.
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 Run: `.venv\\Scripts\\python.exe -m ruff check src tests`
 
@@ -232,3 +232,18 @@ Commit: `git add README.md .github/workflows/ci.yml .github/workflows/release.ym
 - Native handles replace every unsafe directory-path boundary: root open, enumeration, child open, and file read.
 - Each task starts red, has a concrete green command, and ends with an independently reviewable commit.
 - The plan fails closed on platforms without secure descriptor-relative traversal and preserves Phase 0 corpus behavior.
+
+## Completion Notes
+
+All four tasks landed on `main`: `9bd14d3` (Task 1), `833deda` + `0824515` (Task 2, the latter fixing a cross-platform
+test-collection break caught before merge), `a74792b` (Task 3), `3356d51` (Task 4). An independent code review over
+`97fbf8d..3356d51` found no Critical issues and two Important ones (handles held open for the whole batch instead of
+per-read; Windows `open_child` not re-checking a freshly-opened handle for a reparse point), both fixed in `cf680ad`.
+Durable knowledge from this cycle is captured under `docs/superpowers/memory/` (module card, contract, decision, two
+lessons) — see `docs/superpowers/memory/reports/2026-07-13-native-windows-handle-traversal.md`.
+
+Two implementation details evolved beyond the plan's illustrative pseudocode: `parse_xml_bytes` was not introduced as a
+separate function (the artifact reader closures already return fully-validated UTF-8 bytes, so `decode_artifact` decodes
+and calls `parse.parse_document` directly); `InputArtifact` gained a fourth field, `has_declaration: bool`, so the
+`.s7res`/`.s7dcl` same-root check reuses the directory listing already obtained during discovery instead of touching the
+filesystem again.
