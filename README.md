@@ -47,6 +47,24 @@ absolute-addressing / array / `Operation`-template rendering. Output is
 readability-first, **not** recompilable. Live TIA Openness integration is out of
 scope — the tool operates on already-exported XML.
 
+## Fixture provenance and compatibility
+
+Support claims require a sanitized, redistributable fixture, golden output or
+diagnostic, and a non-skipping CI regression. Until those conditions are met, a
+format is not `validated`.
+
+Current temporary compatibility probes were exported from
+[felipebojorquem/sorting-cell-s7-1200](https://github.com/felipebojorquem/sorting-cell-s7-1200).
+That upstream repository has no declared licence, so these probes are used only
+for local decoder evaluation; they are not a distributable fixture corpus and do
+not validate feature support. A replacement corpus from a suitably licensed,
+redaction-reviewed project is pending.
+
+Current input boundary: exported SimaticML FC/FB block XML is the decoder's
+working input. SIMATIC SD `.s7dcl`/`.s7res`, UDT/type XML, and PLC tag-table XML
+are unsupported; GRAPH/SFC/STL remain deferred as described above. Output is
+diagnostic/readability-first, not recompilable.
+
 ## Install
 
 ```bash
