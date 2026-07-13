@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import shutil
+from pathlib import Path
 
 from simaticml_decoder import cli
 
@@ -126,3 +127,21 @@ def test_format_applies_to_whole_batch(tmp_path, fixture_file):
     assert (out / "Two.scl").is_file()
     assert not (out / "One.json").exists()
     assert not (out / "Two.json").exists()
+
+
+# --- artifact-backed directory dispatch (native handle-anchored traversal) --
+
+
+def test_directory_reports_all_unpaired_resources(capsys):
+    root = Path(__file__).parent / "fixtures" / "SimaticSD_s7res"
+    assert cli.main([str(root), "-q"]) == 1
+    assert capsys.readouterr().err.count("SD_RESOURCE_WITHOUT_DCL") == 6
+
+
+def test_directory_output_uses_artifact_relative_path(tmp_path, fixture_file):
+    root = tmp_path / "in"
+    nested = root / "a" / "b"
+    nested.mkdir(parents=True)
+    shutil.copy(fixture_file("FC_Cargador"), nested / "block.xml")
+    assert cli.main([str(root), "-o", str(tmp_path / "out"), "-q"]) == 0
+    assert (tmp_path / "out" / "a" / "b" / "block.scl").is_file()

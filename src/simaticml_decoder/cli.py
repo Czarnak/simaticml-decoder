@@ -28,11 +28,19 @@ import argparse
 import json
 import sys
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePath
 from xml.etree import ElementTree as ET
 
-from . import __version__, emit, fold, ir, parse
-from .input_policy import InputViolation, discover_input_files, read_xml, safe_text
+from . import __version__, emit, fold, ir, model, parse
+from .input_policy import (
+    DEFAULT_LIMITS,
+    InputArtifact,
+    InputViolation,
+    discover_input_files,
+    read_xml,
+    safe_text,
+    validate_artifact_format,
+)
 
 _EPILOG = """\
 examples:
@@ -48,7 +56,7 @@ examples:
 class FileOutcome:
     """Result of decoding one file. Carries enough to report without re-deriving."""
 
-    source: Path
+    source: PurePath
     status: str  # "ok" | "error"
     decoded: ir.DecodedBlock | None = None
     written: tuple[Path, ...] = ()
@@ -94,15 +102,15 @@ def main(argv: list[str] | None = None) -> int:
     if input_path.is_dir():
         out_root = Path(args.output) if args.output else input_path
         try:
-            sources = discover(input_path, recursive=args.recursive)
+            artifacts = discover(input_path, recursive=args.recursive)
         except InputViolation as exc:
             print(f"error: {_input_error(input_path, exc)}", file=sys.stderr)
             return 1
-        if not sources:
+        if not artifacts:
             print(f"no .xml blocks found under {input_path}", file=sys.stderr)
             return 0
-        outcomes = [decode_file(src, _dest_dir(input_path, src, out_root), fmt)
-                    for src in sources]
+        outcomes = [decode_artifact(artifact, _dest_dir(artifact.relative_path, out_root), fmt)
+                    for artifact in artifacts]
         _report(outcomes, input_root=input_path, quiet=args.quiet)
         return _exit_code(outcomes)
 
@@ -112,8 +120,11 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def decode_file(source: Path, out_dir: Path, fmt: str) -> FileOutcome:
-    """Decode one block. Catches its own expected errors and reports them through the
-    return value rather than aborting — so a batch can continue past a bad file."""
+    """Decode one direct-path block (single-file CLI mode). Kept path-based
+    and unchanged in behavior: format validation and reading go through
+    ``read_xml``'s live-filesystem checks, exactly as before. Catches its own
+    expected errors and reports them through the return value rather than
+    aborting — so a batch can continue past a bad file."""
     try:
         doc = parse.parse_document(read_xml(source))
     except InputViolation as exc:
@@ -123,6 +134,35 @@ def decode_file(source: Path, out_dir: Path, fmt: str) -> FileOutcome:
     except (OSError, ValueError) as exc:
         return FileOutcome(source, "error", error=_error(source, "INPUT_REJECTED", safe_text(exc)))
 
+    return _finish_decode(source, doc, out_dir, fmt)
+
+
+def decode_artifact(source: InputArtifact, out_dir: Path, fmt: str) -> FileOutcome:
+    """Decode one discovered artifact (directory-mode CLI). Reads bytes only
+    through the artifact's own reader closure, which is bound to an
+    already-open native handle/descriptor opened during discovery — this
+    never re-opens a path by name, so a rename or reparse-point swap that
+    happens after discovery cannot redirect the read."""
+    try:
+        validate_artifact_format(source)
+        text = source.read_bytes(DEFAULT_LIMITS).decode("utf-8")
+        doc = parse.parse_document(text)
+    except InputViolation as exc:
+        return FileOutcome(source.relative_path, "error", error=_input_error(source.relative_path, exc))
+    except ET.ParseError as exc:
+        return FileOutcome(
+            source.relative_path, "error", error=_error(source.relative_path, "MALFORMED_XML", safe_text(exc))
+        )
+    except (OSError, ValueError, UnicodeDecodeError) as exc:
+        return FileOutcome(
+            source.relative_path, "error", error=_error(source.relative_path, "INPUT_REJECTED", safe_text(exc))
+        )
+
+    return _finish_decode(source.relative_path, doc, out_dir, fmt)
+
+
+def _finish_decode(source: PurePath, doc: model.Document, out_dir: Path, fmt: str) -> FileOutcome:
+    """Shared fold/emit tail for both ``decode_file`` and ``decode_artifact``."""
     try:
         decoded = fold.fold_block(doc)
     except Exception:
@@ -147,15 +187,17 @@ def decode_file(source: Path, out_dir: Path, fmt: str) -> FileOutcome:
     return FileOutcome(source, "ok", decoded=decoded, written=tuple(written))
 
 
-def discover(root: Path, recursive: bool) -> list[Path]:
+def discover(root: Path, recursive: bool) -> tuple[InputArtifact, ...]:
     """Every supported input under ``root``, sorted for deterministic processing."""
     return discover_input_files(root, recursive)
 
 
-def _dest_dir(input_root: Path, source: Path, out_root: Path) -> Path:
-    """Rebuild ``source``'s parent directory, relative to ``input_root``, under
-    ``out_root`` — this is what mirrors the input's internal structure."""
-    return out_root / source.relative_to(input_root).parent
+def _dest_dir(relative_path: PurePath, out_root: Path) -> Path:
+    """Rebuild the artifact's parent directory under ``out_root`` — this is
+    what mirrors the input's internal structure. ``relative_path`` (an
+    ``InputArtifact.relative_path``) is already root-relative, so no further
+    resolution against the input root is needed."""
+    return out_root / relative_path.parent
 
 
 def _write(path: Path, text: str) -> Path:
@@ -184,10 +226,12 @@ def _report(outcomes: list[FileOutcome], input_root: Path | None, quiet: bool) -
 
 
 def _report_ok(outcome: FileOutcome, input_root: Path | None) -> None:
+    """``outcome.source`` is already root-relative in directory mode (it's an
+    ``InputArtifact.relative_path``), so the prefix needs no further
+    ``.relative_to()`` resolution against ``input_root`` — that parameter is
+    only used here as the "are we in directory mode" flag."""
     decoded = outcome.decoded
-    prefix = ""
-    if input_root is not None:
-        prefix = f"{safe_text(outcome.source.relative_to(input_root))}: "
+    prefix = f"{safe_text(outcome.source)}: " if input_root is not None else ""
     label = f"{safe_text(decoded.name)} ({decoded.kind})"
     files = ", ".join(safe_text(p.name) for p in outcome.written)
     print(f"{prefix}decoded {label}: {len(decoded.networks)} network(s) -> {files}",
@@ -198,12 +242,12 @@ def _report_ok(outcome: FileOutcome, input_root: Path | None) -> None:
             print(f"    - {safe_text(warning)}", file=sys.stderr)
 
 
-def _input_error(source: Path, exc: InputViolation) -> str:
+def _input_error(source: PurePath, exc: InputViolation) -> str:
     code = exc.code if exc.code == "SD_RESOURCE_WITHOUT_DCL" else "INPUT_REJECTED"
     return _error(source, code, exc.message)
 
 
-def _error(source: Path, code: str, detail: str) -> str:
+def _error(source: PurePath, code: str, detail: str) -> str:
     return f"{code}: {safe_text(source.name)}: {safe_text(detail)}"
 
 

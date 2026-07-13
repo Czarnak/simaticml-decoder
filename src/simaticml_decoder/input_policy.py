@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import errno
 import os
 import stat
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from io import StringIO
@@ -27,11 +29,19 @@ class InputLimits:
 
 @dataclass(frozen=True)
 class InputArtifact:
-    """Immutable artifact representing a discovered or direct input file."""
+    """Immutable artifact representing a discovered or direct input file.
+
+    ``has_declaration`` is only meaningful for ``.s7res`` artifacts: it
+    records whether a same-root ``.s7dcl`` sibling was observed during the
+    same directory listing that discovered this file, so
+    ``validate_artifact_format`` never has to re-touch the filesystem to
+    answer that question.
+    """
 
     relative_path: PurePath
     suffix: str
     _reader: Callable[[InputLimits], bytes] = field(repr=False, compare=False)
+    has_declaration: bool = False
 
     def read_bytes(self, limits: InputLimits) -> bytes:
         """Read and validate the file content as bytes."""
@@ -62,16 +72,6 @@ def direct_input_artifact(path: Path) -> InputArtifact:
         suffix=path.suffix.lower(),
         _reader=reader,
     )
-
-
-def _make_artifact_reader(path: Path) -> Callable[[InputLimits], bytes]:
-    """Create a reader closure for a discovered file."""
-    def reader(limits: InputLimits) -> bytes:
-        """Reader closure that validates and reads the file."""
-        text = read_xml(path, limits)
-        return text.encode("utf-8")
-
-    return reader
 
 
 def safe_text(value: object, *, limit: int = 160) -> str:
@@ -114,6 +114,15 @@ def read_xml(source: Path, limits: InputLimits = DEFAULT_LIMITS) -> str:
         raise InputViolation("unreadable_input", safe_text(exc)) from exc
     finally:
         os.close(descriptor)
+    return _decode_and_validate_xml_text(raw, limits)
+
+
+def _decode_and_validate_xml_text(raw: bytes, limits: InputLimits) -> str:
+    """Shared tail of ``read_xml``: bytes already read from a trusted, already
+    pinned/opened source -> validated XML text. No filesystem access here, so
+    this is safe to reuse from handle-backed reader closures that never touch
+    a path at all.
+    """
     if len(raw) > limits.max_file_bytes:
         raise InputViolation("file_too_large", "input exceeds the configured byte limit")
     try:
@@ -128,11 +137,16 @@ def read_xml(source: Path, limits: InputLimits = DEFAULT_LIMITS) -> str:
 
 
 def validate_artifact_format(artifact: InputArtifact) -> None:
-    """Validate file format from an InputArtifact (for discovered or direct files)."""
+    """Validate an InputArtifact's format using only data captured at
+    discovery time (``artifact.has_declaration``) -- never the filesystem.
+    """
     suffix = artifact.suffix
     if suffix == ".s7res":
-        # For discovered artifacts with only relative path, can't check for sibling .s7dcl
-        # The .s7res check for sibling .s7dcl happens at decode time in cli.decode_file
+        if not artifact.has_declaration:
+            raise InputViolation(
+                "SD_RESOURCE_WITHOUT_DCL",
+                "SIMATIC SD resource has no same-root .s7dcl declaration",
+            )
         raise InputViolation("unsupported_format", "SIMATIC SD decoding is not implemented")
     if suffix == ".s7dcl":
         raise InputViolation("unsupported_format", "SIMATIC SD decoding is not implemented")
@@ -161,18 +175,290 @@ def discover_xml(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMI
     return _discover(root, recursive, limits, {".xml"})
 
 
+_ARTIFACT_SUFFIXES = {".xml", ".s7dcl", ".s7res"}
+
+
 def discover_input_files(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMITS) -> tuple[InputArtifact, ...]:
-    """Discover XML and SIMATIC SD inputs so unsupported files remain visible."""
-    paths = _discover(root, recursive, limits, {".xml", ".s7dcl", ".s7res"})
-    artifacts = tuple(
-        InputArtifact(
-            relative_path=path.relative_to(root),
-            suffix=path.suffix.lower(),
-            _reader=_make_artifact_reader(path),
+    """Discover XML and SIMATIC SD inputs so unsupported files remain visible.
+
+    Every returned artifact's reader consumes only a handle/descriptor opened
+    *during this same walk* -- `windows_handles.NativeDirectory`/`NativeHandle`
+    on Windows, or `dir_fd` + `O_NOFOLLOW` opens on POSIX -- never a path
+    re-opened by name. A rename or reparse-point swap performed after
+    discovery therefore cannot redirect a later ``artifact.read_bytes()``
+    call: the handle already points at the original file-system object.
+
+    Platforms that cannot provide descriptor-relative traversal fail closed
+    with ``InputViolation("unsupported_platform", ...)`` rather than falling
+    back to unsafe path-based re-resolution.
+    """
+    if _use_windows_native_discovery():
+        return _discover_windows(root, recursive, limits, _ARTIFACT_SUFFIXES)
+    return _discover_posix(root, recursive, limits, _ARTIFACT_SUFFIXES)
+
+
+def _use_windows_native_discovery() -> bool:
+    """Extracted so tests can force the POSIX branch via monkeypatching
+    without touching the real ``sys.platform``."""
+    return sys.platform == "win32"
+
+
+def _make_handle_reader(handle: object) -> Callable[[InputLimits], bytes]:
+    """Reader closure over an already-open handle/descriptor (never a path).
+
+    Works for both `windows_handles.NativeHandle` and the POSIX
+    `_PosixFileHandle` below -- both expose `read_limited(limit)`.
+    """
+    def reader(limits: InputLimits) -> bytes:
+        raw = handle.read_limited(limits.max_file_bytes)
+        return _decode_and_validate_xml_text(raw, limits).encode("utf-8")
+
+    return reader
+
+
+# --- Windows: native NT handle-anchored walk ---------------------------------
+
+
+def _discover_windows(
+    root: Path, recursive: bool, limits: InputLimits, suffixes: set[str]
+) -> tuple[InputArtifact, ...]:
+    from . import windows_handles  # Windows-only module; import lazily.
+
+    artifacts: list[InputArtifact] = []
+    counter = [0]
+    with windows_handles.NativeDirectory.open_root(root) as root_dir:
+        _walk_windows_directory(root_dir, PurePath(), 0, recursive, limits, suffixes, artifacts, counter)
+    return tuple(artifacts)
+
+
+def _walk_windows_directory(
+    directory: object,
+    relative_prefix: PurePath,
+    depth: int,
+    recursive: bool,
+    limits: InputLimits,
+    suffixes: set[str],
+    artifacts: list[InputArtifact],
+    counter: list[int],
+) -> None:
+    """Recurse one native directory handle at a time.
+
+    `directory.entries()` is already sorted and already rejects any reparse
+    point among its immediate children (Task 2's contract), so this walk only
+    has to handle depth/file-count bounds and child opens.
+    """
+    entries = directory.entries()
+    dcl_stems = {
+        PurePath(entry.name).stem
+        for entry in entries
+        if not entry.is_directory and PurePath(entry.name).suffix.lower() == ".s7dcl"
+    }
+    for entry in entries:
+        if entry.is_directory:
+            if not recursive:
+                continue
+            if depth + 1 > limits.max_depth:
+                raise InputViolation("traversal_too_deep", "input tree exceeds the depth limit")
+            with directory.open_child(entry.name, directory=True) as child_dir:
+                _walk_windows_directory(
+                    child_dir, relative_prefix / entry.name, depth + 1, recursive, limits, suffixes,
+                    artifacts, counter,
+                )
+            continue
+        suffix = PurePath(entry.name).suffix.lower()
+        if suffix not in suffixes:
+            continue
+        counter[0] += 1
+        if counter[0] > limits.max_files:
+            raise InputViolation("too_many_files", "input tree exceeds the file-count limit")
+        handle = directory.open_child(entry.name, directory=False)
+        has_declaration = suffix == ".s7res" and PurePath(entry.name).stem in dcl_stems
+        artifacts.append(
+            InputArtifact(
+                relative_path=relative_prefix / entry.name,
+                suffix=suffix,
+                _reader=_make_handle_reader(handle),
+                has_declaration=has_declaration,
+            )
         )
-        for path in paths
+
+
+# --- POSIX: dir_fd + O_NOFOLLOW walk ------------------------------------------
+
+
+class _PosixFileHandle:
+    """A POSIX file descriptor opened relative to its parent directory's own
+    descriptor (``dir_fd``) with ``O_NOFOLLOW``. Read exactly once by the
+    artifact's reader closure; never reopened by path. Mirrors
+    `windows_handles.NativeHandle`'s close/`__del__` safety net.
+    """
+
+    __slots__ = ("_fd",)
+
+    def __init__(self, fd: int) -> None:
+        self._fd: int | None = fd
+
+    def __del__(self) -> None:
+        self.close()
+
+    def close(self) -> None:
+        if self._fd is not None:
+            try:
+                os.close(self._fd)
+            except OSError:
+                pass
+            self._fd = None
+
+    def read_limited(self, limit: int) -> bytes:
+        """Read at most `limit + 1` bytes so callers can detect oversized
+        input without reading the full (potentially huge) file."""
+        if self._fd is None:
+            raise InputViolation("unreadable_input", "file descriptor is already closed")
+        try:
+            return os.read(self._fd, limit + 1)
+        except OSError as exc:
+            raise InputViolation("unreadable_input", safe_text(exc)) from exc
+
+
+def _dir_fd_available() -> bool:
+    """Whether this platform/Python build can do descriptor-relative,
+    symlink-rejecting directory traversal at all. If not, directory discovery
+    must fail closed rather than fall back to path-based re-resolution.
+    """
+    return (
+        os.open in os.supports_dir_fd
+        and os.stat in os.supports_dir_fd
+        and os.stat in os.supports_follow_symlinks
+        and hasattr(os, "O_NOFOLLOW")
     )
-    return artifacts
+
+
+def _discover_posix(
+    root: Path, recursive: bool, limits: InputLimits, suffixes: set[str]
+) -> tuple[InputArtifact, ...]:
+    if not _dir_fd_available():
+        raise InputViolation(
+            "unsupported_platform",
+            "directory discovery requires descriptor-relative filesystem support",
+        )
+    artifacts: list[InputArtifact] = []
+    counter = [0]
+    root_fd = _open_posix_root(root)
+    try:
+        _walk_posix_directory(root_fd, PurePath(), 0, recursive, limits, suffixes, artifacts, counter)
+    finally:
+        os.close(root_fd)
+    return tuple(artifacts)
+
+
+def _open_posix_root(root: Path) -> int:
+    flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_DIRECTORY", 0)
+    try:
+        return os.open(root, flags)
+    except OSError as exc:
+        if exc.errno == errno.ELOOP:
+            raise InputViolation("symlink_not_allowed", "symbolic links are not accepted") from exc
+        raise InputViolation("unreadable_input", safe_text(exc)) from exc
+
+
+def _scandir_names(dir_fd: int) -> list[str]:
+    try:
+        with os.scandir(dir_fd) as scan:
+            names = [entry.name for entry in scan]
+    except OSError as exc:
+        raise InputViolation("unreadable_input", safe_text(exc)) from exc
+    return sorted(names)
+
+
+def _lstat_child(dir_fd: int, name: str) -> os.stat_result:
+    try:
+        return os.stat(name, dir_fd=dir_fd, follow_symlinks=False)
+    except OSError as exc:
+        raise InputViolation("unreadable_input", safe_text(exc)) from exc
+
+
+def _open_dir_child(dir_fd: int, name: str) -> int:
+    flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_DIRECTORY", 0)
+    try:
+        return os.open(name, flags, dir_fd=dir_fd)
+    except OSError as exc:
+        if exc.errno == errno.ELOOP:
+            raise InputViolation("symlink_not_allowed", "symbolic links are not accepted") from exc
+        raise InputViolation("unreadable_input", safe_text(exc)) from exc
+
+
+def _open_file_child(dir_fd: int, name: str) -> int:
+    flags = os.O_RDONLY | os.O_NOFOLLOW
+    try:
+        return os.open(name, flags, dir_fd=dir_fd)
+    except OSError as exc:
+        if exc.errno == errno.ELOOP:
+            raise InputViolation("symlink_not_allowed", "symbolic links are not accepted") from exc
+        raise InputViolation("unreadable_input", safe_text(exc)) from exc
+
+
+def _walk_posix_directory(
+    dir_fd: int,
+    relative_prefix: PurePath,
+    depth: int,
+    recursive: bool,
+    limits: InputLimits,
+    suffixes: set[str],
+    artifacts: list[InputArtifact],
+    counter: list[int],
+) -> None:
+    """Recurse one dir_fd at a time, classifying children via an O_NOFOLLOW
+    lstat-equivalent (`os.stat(..., follow_symlinks=False)`) before ever
+    opening them, so entries we are going to skip are never opened at all
+    (no accidental blocking open on a FIFO/special file, no unnecessary
+    symlink-following opportunity). Only entries we keep -- a subdirectory to
+    recurse into, or a matching file to capture a handle for -- get an actual
+    `O_NOFOLLOW` open, which closes the narrow TOCTOU window between the
+    lstat and the open.
+    """
+    names = _scandir_names(dir_fd)
+    infos = {name: _lstat_child(dir_fd, name) for name in names}
+    dcl_stems = {
+        PurePath(name).stem
+        for name, info in infos.items()
+        if stat.S_ISREG(info.st_mode) and PurePath(name).suffix.lower() == ".s7dcl"
+    }
+    for name in names:
+        info = infos[name]
+        if stat.S_ISLNK(info.st_mode):
+            raise InputViolation("symlink_not_allowed", "symbolic links are not accepted")
+        if stat.S_ISDIR(info.st_mode):
+            if not recursive:
+                continue
+            if depth + 1 > limits.max_depth:
+                raise InputViolation("traversal_too_deep", "input tree exceeds the depth limit")
+            child_fd = _open_dir_child(dir_fd, name)
+            try:
+                _walk_posix_directory(
+                    child_fd, relative_prefix / name, depth + 1, recursive, limits, suffixes,
+                    artifacts, counter,
+                )
+            finally:
+                os.close(child_fd)
+            continue
+        if not stat.S_ISREG(info.st_mode):
+            continue
+        suffix = PurePath(name).suffix.lower()
+        if suffix not in suffixes:
+            continue
+        counter[0] += 1
+        if counter[0] > limits.max_files:
+            raise InputViolation("too_many_files", "input tree exceeds the file-count limit")
+        has_declaration = suffix == ".s7res" and PurePath(name).stem in dcl_stems
+        file_fd = _open_file_child(dir_fd, name)
+        artifacts.append(
+            InputArtifact(
+                relative_path=relative_prefix / name,
+                suffix=suffix,
+                _reader=_make_handle_reader(_PosixFileHandle(file_fd)),
+                has_declaration=has_declaration,
+            )
+        )
 
 
 def _discover(root: Path, recursive: bool, limits: InputLimits, suffixes: set[str]) -> list[Path]:
