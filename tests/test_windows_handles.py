@@ -80,3 +80,40 @@ def test_open_root_missing_path_raises_input_violation(tmp_path):
     missing = tmp_path / "does-not-exist"
     with pytest.raises(InputViolation):
         NativeDirectory.open_root(missing)
+
+
+def test_open_child_succeeds_for_plain_file_and_directory(tmp_path):
+    """Regression guard for the post-open reparse-point recheck added to
+    `open_child`: a plain (non-reparse) file and directory must still open
+    normally."""
+    (tmp_path / "block.xml").write_text("<Document/>", encoding="utf-8")
+    (tmp_path / "sub").mkdir()
+    with NativeDirectory.open_root(tmp_path) as root:
+        file_handle = root.open_child("block.xml", directory=False)
+        try:
+            assert file_handle.read_limited(1024) == b"<Document/>"
+        finally:
+            file_handle.close()
+        dir_handle = root.open_child("sub", directory=True)
+        try:
+            assert dir_handle.entries() == ()
+        finally:
+            dir_handle.close()
+
+
+def test_open_child_rejects_a_junction_opened_directly_without_prior_enumeration(tmp_path):
+    """Exercises the new post-open attribute recheck in `open_child` in
+    isolation from `entries()`'s enumeration-time rejection: a fresh
+    `NativeDirectory` is opened for `root` and `.entries()` is never called
+    on it, so `open_child("jump", ...)` is the only check that can catch the
+    junction. Proves `open_child` fails closed (deterministic
+    `symlink_not_allowed`) even when a reparse point is opened without ever
+    having been seen by `entries()` first."""
+    root, outside = tmp_path / "root", tmp_path / "outside"
+    root.mkdir()
+    outside.mkdir()
+    subprocess.run(["cmd", "/c", "mklink", "/J", str(root / "jump"), str(outside)], check=True)
+
+    with NativeDirectory.open_root(root) as fresh_root:
+        with pytest.raises(InputViolation, match="symlink_not_allowed"):
+            fresh_root.open_child("jump", directory=True)

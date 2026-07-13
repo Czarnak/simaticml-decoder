@@ -265,6 +265,42 @@ def test_artifact_read_is_limited(tmp_path):
         direct_input_artifact(source).read_bytes(InputLimits(max_file_bytes=10))
 
 
+class _StubHandle:
+    """Minimal stand-in for `windows_handles.NativeHandle` /
+    `_PosixFileHandle`: exposes only the `read_limited`/`close` surface
+    `_make_handle_reader` actually uses, so the reader closure's
+    close-after-one-read behavior (Finding 1) can be verified directly and
+    platform-independently."""
+
+    def __init__(self, raw: bytes) -> None:
+        self._raw = raw
+        self.closed = False
+
+    def read_limited(self, _limit: int) -> bytes:
+        return self._raw
+
+    def close(self) -> None:
+        self.closed = True
+
+
+def test_handle_reader_closes_the_handle_immediately_after_a_successful_read():
+    handle = _StubHandle(b"<Document/>")
+    reader = input_policy._make_handle_reader(handle)
+
+    assert reader(InputLimits()) == b"<Document/>"
+    assert handle.closed is True
+
+
+def test_handle_reader_closes_the_handle_even_when_validation_raises():
+    handle = _StubHandle(b"\xff\xfe")
+    reader = input_policy._make_handle_reader(handle)
+
+    with pytest.raises(InputViolation, match="invalid_encoding"):
+        reader(InputLimits())
+
+    assert handle.closed is True
+
+
 def test_directory_discovery_fails_closed_without_dir_fd_support(monkeypatch, tmp_path):
     """Forces the POSIX branch (regardless of the host platform) and then
     forces `os.supports_dir_fd` empty, to exercise the fail-closed path that
@@ -476,9 +512,10 @@ def test_posix_walk_discovers_nested_files_through_dir_fd_chaining(monkeypatch):
     assert sorted(str(a.relative_path) for a in artifacts) == ["a.xml", str(PurePath("nested") / "block.xml")]
     for artifact in artifacts:
         assert artifact.read_bytes(InputLimits()) == b"<Document/>"
-    # Root + the "nested" subdirectory get closed once fully walked; the two
-    # file descriptors captured for later reads must not be among them.
-    assert len(fake.closed) == 2
+    # Root + the "nested" subdirectory get closed once fully walked, and each
+    # file descriptor is released immediately after its own single read
+    # (Finding 1) rather than staying open for the rest of the batch.
+    assert len(fake.closed) == 4
 
 
 def test_posix_walk_rejects_symlink_entries(monkeypatch):

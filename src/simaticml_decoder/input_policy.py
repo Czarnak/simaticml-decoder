@@ -207,11 +207,19 @@ def _make_handle_reader(handle: object) -> Callable[[InputLimits], bytes]:
     """Reader closure over an already-open handle/descriptor (never a path).
 
     Works for both `windows_handles.NativeHandle` and the POSIX
-    `_PosixFileHandle` below -- both expose `read_limited(limit)`.
+    `_PosixFileHandle` below -- both expose `read_limited(limit)` and
+    `close()`. `read_bytes()` (and therefore this closure) is only ever
+    invoked once per artifact (see `cli.decode_artifact`), so the handle is
+    released immediately after that one read -- whether it succeeds or
+    raises -- instead of staying open for the rest of the batch. Both handle
+    types' `close()` is idempotent and safe to call again from `__del__`.
     """
     def reader(limits: InputLimits) -> bytes:
-        raw = handle.read_limited(limits.max_file_bytes)
-        return _decode_and_validate_xml_text(raw, limits).encode("utf-8")
+        try:
+            raw = handle.read_limited(limits.max_file_bytes)
+            return _decode_and_validate_xml_text(raw, limits).encode("utf-8")
+        finally:
+            handle.close()
 
     return reader
 

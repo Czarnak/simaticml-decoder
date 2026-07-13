@@ -109,6 +109,32 @@ class IO_STATUS_BLOCK(ctypes.Structure):
     )
 
 
+class FILETIME(ctypes.Structure):
+    _fields_ = (
+        ("dwLowDateTime", ctypes.c_ulong),
+        ("dwHighDateTime", ctypes.c_ulong),
+    )
+
+
+class BY_HANDLE_FILE_INFORMATION(ctypes.Structure):
+    """Exact `kernel32.h` layout. Only `dwFileAttributes` (the first field)
+    is used here, but `GetFileInformationByHandle` writes the whole
+    structure, so every field must be declared with its real width."""
+
+    _fields_ = (
+        ("dwFileAttributes", ctypes.c_ulong),
+        ("ftCreationTime", FILETIME),
+        ("ftLastAccessTime", FILETIME),
+        ("ftLastWriteTime", FILETIME),
+        ("dwVolumeSerialNumber", ctypes.c_ulong),
+        ("nFileSizeHigh", ctypes.c_ulong),
+        ("nFileSizeLow", ctypes.c_ulong),
+        ("nNumberOfLinks", ctypes.c_ulong),
+        ("nFileIndexHigh", ctypes.c_ulong),
+        ("nFileIndexLow", ctypes.c_ulong),
+    )
+
+
 class FILE_ID_BOTH_DIR_INFORMATION(ctypes.Structure):
     """Fixed-size prefix of `FILE_ID_BOTH_DIR_INFORMATION`.
 
@@ -186,6 +212,13 @@ _ReadFile.argtypes = (
     ctypes.c_ulong,  # DWORD nNumberOfBytesToRead
     ctypes.POINTER(ctypes.c_ulong),  # LPDWORD lpNumberOfBytesRead
     ctypes.c_void_p,  # LPOVERLAPPED lpOverlapped
+)
+
+_GetFileInformationByHandle = _kernel32.GetFileInformationByHandle
+_GetFileInformationByHandle.restype = ctypes.c_int
+_GetFileInformationByHandle.argtypes = (
+    ctypes.c_void_p,  # HANDLE hFile
+    ctypes.POINTER(BY_HANDLE_FILE_INFORMATION),  # LPBY_HANDLE_FILE_INFORMATION lpFileInformation
 )
 
 
@@ -271,6 +304,30 @@ def _close_handle(handle: int | None) -> None:
         _CloseHandle(ctypes.c_void_p(handle))
 
 
+def _reject_if_reparse_point(handle: int) -> None:
+    """Re-check a freshly-opened handle's own attributes for
+    `FILE_ATTRIBUTE_REPARSE_POINT`.
+
+    `entries()` already rejects any reparse point *seen during
+    enumeration*, but there is a narrow window between that `entries()` call
+    and a later `open_child(name, ...)` call in which the target could be
+    swapped for a reparse point. Every open already passes
+    `FILE_OPEN_REPARSE_POINT`, so the OS never transparently follows a
+    reparse point to its target even in that race -- the security invariant
+    holds regardless -- but without this check, a race like that would
+    surface as an assorted native I/O failure on a later read/enumerate
+    against the reparse point itself, instead of a clean, deterministic
+    rejection here, at the moment the reparse point was actually opened.
+    """
+    info = BY_HANDLE_FILE_INFORMATION()
+    ok = _GetFileInformationByHandle(ctypes.c_void_p(handle), ctypes.byref(info))
+    if not ok:
+        error = ctypes.get_last_error()
+        raise InputViolation("unreadable_input", safe_text(f"native attribute query failed (code {error})"))
+    if info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT:
+        raise InputViolation("symlink_not_allowed", "symbolic links are not accepted")
+
+
 # --- Public handle types -----------------------------------------------------
 
 
@@ -348,7 +405,11 @@ class NativeDirectory:
         """Open a child by name, relative to this directory's own handle.
 
         Rejects `.`/`..` and any name containing a path separator before
-        the name ever reaches `NtCreateFile`.
+        the name ever reaches `NtCreateFile`. After the open succeeds, the
+        freshly-opened handle is re-checked for `FILE_ATTRIBUTE_REPARSE_POINT`
+        (see `_reject_if_reparse_point`) to close the narrow enumerate-then-
+        open race with a clean `InputViolation("symlink_not_allowed", ...)`
+        instead of an assorted native failure surfacing later.
         """
         _validate_child_name(name)
         if self._handle is None:
@@ -361,6 +422,7 @@ class NativeDirectory:
                 FILE_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT,
             )
             try:
+                _reject_if_reparse_point(handle)
                 return NativeDirectory(handle)
             except Exception:
                 _close_handle(handle)
@@ -372,6 +434,7 @@ class NativeDirectory:
             FILE_NON_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT,
         )
         try:
+            _reject_if_reparse_point(handle)
             return NativeHandle(handle)
         except Exception:
             _close_handle(handle)
