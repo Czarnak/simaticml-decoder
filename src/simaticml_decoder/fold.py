@@ -200,8 +200,11 @@ class _NetFolder:
             return self._memo[key]
         if key in self._in_progress:
             # Defensive: a wire cycle (not expected in LAD). Break loudly.
-            return ir.Unhandled(self.net.parts.get(uid, model.Part(uid, "?")).name,
-                                uid, "cyclic power-flow reference")
+            return ir.Unhandled(
+                self.net.parts.get(uid, model.Part(uid, "?")).name,
+                uid,
+                "cyclic power-flow reference",
+            )
         self._in_progress.add(key)
         result = self._eval_part_out_uncached(uid, pin)
         self._in_progress.discard(key)
@@ -357,8 +360,9 @@ class _NetFolder:
         if is_latch:
             note = f"seal-in latch: {target.name} feeds back into its own rung"
 
-        return ir.Assign(target=target, value=value, kind=kind,
-                         is_latch=is_latch, note=note, uid=uid)
+        return ir.Assign(
+            target=target, value=value, kind=kind, is_latch=is_latch, note=note, uid=uid
+        )
 
     def _make_flipflop(self, uid: str, part: model.Part) -> ir.Statement:
         target = self._operand_varref(uid)
@@ -397,8 +401,7 @@ class _NetFolder:
                 if sink.kind == model.EndpointKind.IDENT_CON:
                     access = self.net.accesses.get(sink.uid or "")
                     if access is not None:
-                        outputs[pin] = ir.VarRef(name=operand.render(access),
-                                                 uid=access.uid)
+                        outputs[pin] = ir.VarRef(name=operand.render(access), uid=access.uid)
                         break
 
         instance = _render_instance(part.instance) if part.instance else None
@@ -426,8 +429,7 @@ class _NetFolder:
                 if sink.kind == model.EndpointKind.IDENT_CON:
                     access = self.net.accesses.get(sink.uid or "")
                     if access is not None:
-                        params[param.name] = ir.VarRef(name=operand.render(access),
-                                                        uid=access.uid)
+                        params[param.name] = ir.VarRef(name=operand.render(access), uid=access.uid)
                         break
 
         enable_endpoint = self.pin_driver.get((uid, "en"))
@@ -465,9 +467,7 @@ class _NetFolder:
     def _role_for_input(self, target_uid: str, pin: str) -> str:
         call = self.net.calls.get(target_uid)
         if call is not None:
-            section = next(
-                (p.section for p in call.parameters if p.name == pin), ""
-            )
+            section = next((p.section for p in call.parameters if p.name == pin), "")
             return {
                 "Input": "read",
                 "Output": "write",
@@ -542,9 +542,7 @@ def _factor_or(branches: list[ir.Expr]) -> ir.Expr:
     if len(operands) == 1:
         return operands[0]
 
-    term_lists = [
-        list(op.operands) if isinstance(op, ir.And) else [op] for op in operands
-    ]
+    term_lists = [list(op.operands) if isinstance(op, ir.And) else [op] for op in operands]
 
     prefix: list[ir.Expr] = []
     i = 0

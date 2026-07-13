@@ -72,18 +72,37 @@ def build_parser() -> argparse.ArgumentParser:
         epilog=_EPILOG,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    p.add_argument("input", metavar="PATH",
-                   help="a SimaticML .xml block, or a directory to decode in bulk "
-                        "(its subtree is mirrored into --output)")
-    p.add_argument("-o", "--output", metavar="DIR",
-                   help="output directory (default: alongside each input file). In "
-                        "directory mode the input's relative subtree is preserved here.")
-    p.add_argument("--format", choices=("scl", "json", "both"), default="both",
-                   help="which artifact(s) to write (default: both)")
-    p.add_argument("--no-recursive", dest="recursive", action="store_false",
-                   help="in directory mode, decode only the top level (no subdirectories)")
-    p.add_argument("-q", "--quiet", action="store_true",
-                   help="suppress the per-file progress/warning summary on stderr")
+    p.add_argument(
+        "input",
+        metavar="PATH",
+        help="a SimaticML .xml block, or a directory to decode in bulk "
+        "(its subtree is mirrored into --output)",
+    )
+    p.add_argument(
+        "-o",
+        "--output",
+        metavar="DIR",
+        help="output directory (default: alongside each input file). In "
+        "directory mode the input's relative subtree is preserved here.",
+    )
+    p.add_argument(
+        "--format",
+        choices=("scl", "json", "both"),
+        default="both",
+        help="which artifact(s) to write (default: both)",
+    )
+    p.add_argument(
+        "--no-recursive",
+        dest="recursive",
+        action="store_false",
+        help="in directory mode, decode only the top level (no subdirectories)",
+    )
+    p.add_argument(
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="suppress the per-file progress/warning summary on stderr",
+    )
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     return p
 
@@ -109,8 +128,10 @@ def main(argv: list[str] | None = None) -> int:
         if not artifacts:
             print(f"no .xml blocks found under {input_path}", file=sys.stderr)
             return 0
-        outcomes = [decode_artifact(artifact, _dest_dir(artifact.relative_path, out_root), fmt)
-                    for artifact in artifacts]
+        outcomes = [
+            decode_artifact(artifact, _dest_dir(artifact.relative_path, out_root), fmt)
+            for artifact in artifacts
+        ]
         _report(outcomes, input_root=input_path, quiet=args.quiet)
         return _exit_code(outcomes)
 
@@ -148,14 +169,20 @@ def decode_artifact(source: InputArtifact, out_dir: Path, fmt: str) -> FileOutco
         text = source.read_bytes(DEFAULT_LIMITS).decode("utf-8")
         doc = parse.parse_document(text)
     except InputViolation as exc:
-        return FileOutcome(source.relative_path, "error", error=_input_error(source.relative_path, exc))
+        return FileOutcome(
+            source.relative_path, "error", error=_input_error(source.relative_path, exc)
+        )
     except ET.ParseError as exc:
         return FileOutcome(
-            source.relative_path, "error", error=_error(source.relative_path, "MALFORMED_XML", safe_text(exc))
+            source.relative_path,
+            "error",
+            error=_error(source.relative_path, "MALFORMED_XML", safe_text(exc)),
         )
     except (OSError, ValueError, UnicodeDecodeError) as exc:
         return FileOutcome(
-            source.relative_path, "error", error=_error(source.relative_path, "INPUT_REJECTED", safe_text(exc))
+            source.relative_path,
+            "error",
+            error=_error(source.relative_path, "INPUT_REJECTED", safe_text(exc)),
         )
 
     return _finish_decode(source.relative_path, doc, out_dir, fmt)
@@ -166,7 +193,9 @@ def _finish_decode(source: PurePath, doc: model.Document, out_dir: Path, fmt: st
     try:
         decoded = fold.fold_block(doc)
     except Exception:
-        return FileOutcome(source, "error", error=_error(source, "DECODE_FAILED", "unable to fold input"))
+        return FileOutcome(
+            source, "error", error=_error(source, "DECODE_FAILED", "unable to fold input")
+        )
 
     try:
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -234,8 +263,9 @@ def _report_ok(outcome: FileOutcome, input_root: Path | None) -> None:
     prefix = f"{safe_text(outcome.source)}: " if input_root is not None else ""
     label = f"{safe_text(decoded.name)} ({decoded.kind})"
     files = ", ".join(safe_text(p.name) for p in outcome.written)
-    print(f"{prefix}decoded {label}: {len(decoded.networks)} network(s) -> {files}",
-          file=sys.stderr)
+    print(
+        f"{prefix}decoded {label}: {len(decoded.networks)} network(s) -> {files}", file=sys.stderr
+    )
     if decoded.warnings:
         print(f"  {len(decoded.warnings)} warning(s):", file=sys.stderr)
         for warning in decoded.warnings:

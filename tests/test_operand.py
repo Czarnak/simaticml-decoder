@@ -15,27 +15,34 @@ def test_local_variable_symbol():
 
 
 def test_dotted_local_path():
-    acc = _access("LocalVariable", model.Symbol(
-        [model.Component(name="System"), model.Component(name="CLK100ms")]))
+    acc = _access(
+        "LocalVariable",
+        model.Symbol([model.Component(name="System"), model.Component(name="CLK100ms")]),
+    )
     assert operand.render(acc) == "#System.CLK100ms"
 
 
 def test_global_variable_quotes_root_only():
-    acc = _access("GlobalVariable", model.Symbol(
-        [model.Component(name="DB_Data"), model.Component(name="field")]))
+    acc = _access(
+        "GlobalVariable",
+        model.Symbol([model.Component(name="DB_Data"), model.Component(name="field")]),
+    )
     assert operand.render(acc) == '"DB_Data".field'
 
 
 def test_bit_slice_renders_percent_x():
-    acc = _access("LocalVariable", model.Symbol(
-        [model.Component(name="Clock_Byte", slice_access="x0")]))
+    acc = _access(
+        "LocalVariable", model.Symbol([model.Component(name="Clock_Byte", slice_access="x0")])
+    )
     assert operand.render(acc) == "#Clock_Byte.%X0"
 
 
 def test_array_index():
     idx = _access("LiteralConstant", model.Constant(value="5"), uid="2")
-    acc = _access("LocalVariable", model.Symbol(
-        [model.Component(name="buf", access_modifier="Array", indices=[idx])]))
+    acc = _access(
+        "LocalVariable",
+        model.Symbol([model.Component(name="buf", access_modifier="Array", indices=[idx])]),
+    )
     assert operand.render(acc) == "#buf[5]"
 
 

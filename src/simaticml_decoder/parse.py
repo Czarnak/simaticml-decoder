@@ -245,7 +245,7 @@ def _parse_compile_unit(elem: ET.Element, index: int) -> model.Network:
     objlist = _child(elem, "ObjectList")
 
     language = _parse_language(_child_text(attrs, "ProgrammingLanguage"))
-    title, comment = (_titles_and_comments(objlist) if objlist is not None else (None, None))
+    title, comment = _titles_and_comments(objlist) if objlist is not None else (None, None)
     source = _parse_network_source(_child(attrs, "NetworkSource"), language)
 
     return model.Network(
@@ -380,10 +380,7 @@ def _parse_constant(elem: ET.Element) -> model.Constant:
         raw["type_informative"] = True
     if value_el is not None and _is_true(value_el.get("Informative")):
         raw["value_informative"] = True
-    fmt = {
-        sa.get("Name"): sa.text
-        for sa in _children(elem, "StringAttribute")
-    }
+    fmt = {sa.get("Name"): sa.text for sa in _children(elem, "StringAttribute")}
     if fmt:
         raw["format"] = fmt
     return model.Constant(
@@ -515,9 +512,7 @@ def _parse_wire(elem: ET.Element) -> model.Wire:
         kind = _ENDPOINT_KINDS.get(_ln(child.tag))
         if kind is None:
             continue
-        endpoints.append(
-            model.Endpoint(kind=kind, uid=child.get("UId"), pin=child.get("Name"))
-        )
+        endpoints.append(model.Endpoint(kind=kind, uid=child.get("UId"), pin=child.get("Name")))
     return model.Wire(uid=elem.get("UId", ""), endpoints=endpoints)
 
 

@@ -11,6 +11,7 @@ from simaticml_decoder import cli
 
 # --- single-file mode ------------------------------------------------------
 
+
 def test_missing_path_is_soft_noop(capsys):
     code = cli.main(["definitely_not_here.xml"])
     assert code == 0
@@ -48,6 +49,7 @@ def test_quiet_suppresses_stderr(tmp_path, fixture_file, capsys):
 
 
 # --- directory (bulk) mode -------------------------------------------------
+
 
 def test_empty_directory_is_soft_noop(tmp_path, capsys):
     code = cli.main([str(tmp_path)])
@@ -96,7 +98,7 @@ def test_one_bad_file_does_not_abort_batch(tmp_path, fixture_file, capsys):
     out = tmp_path / "out"
     code = cli.main([str(root), "-o", str(out)])
     assert code == 1
-    assert (out / "Motor.scl").is_file()      # the good file is still decoded
+    assert (out / "Motor.scl").is_file()  # the good file is still decoded
     err = capsys.readouterr().err
     assert "bad.xml" in err
     assert "1 failed" in err

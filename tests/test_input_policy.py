@@ -101,7 +101,11 @@ def test_discover_xml_is_deterministic_and_bounded(tmp_path):
     (nested / "c.xml").write_text("<x/>", encoding="utf-8")
 
     assert [path.name for path in discover_xml(tmp_path, recursive=False)] == ["a.xml", "b.xml"]
-    assert [path.name for path in discover_xml(tmp_path, recursive=True)] == ["a.xml", "b.xml", "c.xml"]
+    assert [path.name for path in discover_xml(tmp_path, recursive=True)] == [
+        "a.xml",
+        "b.xml",
+        "c.xml",
+    ]
     with pytest.raises(InputViolation, match="too_many_files"):
         discover_xml(tmp_path, recursive=True, limits=InputLimits(max_files=2))
     with pytest.raises(InputViolation, match="traversal_too_deep"):
@@ -248,7 +252,9 @@ def test_cli_sanitizes_warning_output(capsys, tmp_path):
     outcome = cli.FileOutcome(
         source=tmp_path / "source.xml",
         status="ok",
-        decoded=SimpleNamespace(name="block\nname", kind="FC", networks=[], warnings=["bad\nwarning"]),
+        decoded=SimpleNamespace(
+            name="block\nname", kind="FC", networks=[], warnings=["bad\nwarning"]
+        ),
     )
 
     cli._report([outcome], input_root=None, quiet=False)
@@ -408,7 +414,9 @@ class _FakePosixNode:
     module's O_NOFOLLOW-at-open-time design defends against.
     """
 
-    def __init__(self, kind: str, children: dict[str, "_FakePosixNode"] | None = None, content: bytes = b"") -> None:
+    def __init__(
+        self, kind: str, children: dict[str, "_FakePosixNode"] | None = None, content: bytes = b""
+    ) -> None:
         self.kind = kind
         self.children = children if children is not None else {}
         self.content = content
@@ -481,7 +489,9 @@ class _FakePosixFs:
             raise OSError(errno.ELOOP, "too many levels of symbolic links", name)
         return self._register(child)
 
-    def stat(self, name: str, *, dir_fd: int | None = None, follow_symlinks: bool = True) -> os.stat_result:
+    def stat(
+        self, name: str, *, dir_fd: int | None = None, follow_symlinks: bool = True
+    ) -> os.stat_result:
         child = self._child(dir_fd, name)
         mode = _FAKE_KIND_MODE[child.kind] | 0o644
         return os.stat_result((mode, 0, 0, 1, 0, 0, len(child.content), 0, 0, 0))
@@ -506,20 +516,31 @@ def _patch_posix_dir_fd(monkeypatch, fake: _FakePosixFs) -> None:
     monkeypatch.setattr(input_policy.os, "read", fake.read)
     monkeypatch.setattr(input_policy.os, "close", fake.close)
     monkeypatch.setattr(input_policy.os, "O_NOFOLLOW", 0x1000, raising=False)
-    monkeypatch.setattr(input_policy.os, "supports_dir_fd", frozenset({fake.open, fake.stat}), raising=False)
-    monkeypatch.setattr(input_policy.os, "supports_follow_symlinks", frozenset({fake.stat}), raising=False)
+    monkeypatch.setattr(
+        input_policy.os, "supports_dir_fd", frozenset({fake.open, fake.stat}), raising=False
+    )
+    monkeypatch.setattr(
+        input_policy.os, "supports_follow_symlinks", frozenset({fake.stat}), raising=False
+    )
 
 
 def test_posix_walk_discovers_nested_files_through_dir_fd_chaining(monkeypatch):
-    fake = _FakePosixFs(_fake_dir({
-        "a.xml": _fake_file(b"<Document/>"),
-        "nested": _fake_dir({"block.xml": _fake_file(b"<Document/>")}),
-    }))
+    fake = _FakePosixFs(
+        _fake_dir(
+            {
+                "a.xml": _fake_file(b"<Document/>"),
+                "nested": _fake_dir({"block.xml": _fake_file(b"<Document/>")}),
+            }
+        )
+    )
     _patch_posix_dir_fd(monkeypatch, fake)
 
     artifacts = discover_input_files(Path("root"), recursive=True)
 
-    assert sorted(str(a.relative_path) for a in artifacts) == ["a.xml", str(PurePath("nested") / "block.xml")]
+    assert sorted(str(a.relative_path) for a in artifacts) == [
+        "a.xml",
+        str(PurePath("nested") / "block.xml"),
+    ]
     for artifact in artifacts:
         assert artifact.read_bytes(InputLimits()) == b"<Document/>"
     # Root + the "nested" subdirectory get closed once fully walked, and each
@@ -573,10 +594,14 @@ def test_posix_walk_enforces_traversal_depth_limit(monkeypatch):
 
 
 def test_posix_walk_skips_subdirectories_when_not_recursive(monkeypatch):
-    fake = _FakePosixFs(_fake_dir({
-        "top.xml": _fake_file(),
-        "sub": _fake_dir({"nested.xml": _fake_file()}),
-    }))
+    fake = _FakePosixFs(
+        _fake_dir(
+            {
+                "top.xml": _fake_file(),
+                "sub": _fake_dir({"nested.xml": _fake_file()}),
+            }
+        )
+    )
     _patch_posix_dir_fd(monkeypatch, fake)
 
     artifacts = discover_input_files(Path("root"), recursive=False)
@@ -585,14 +610,20 @@ def test_posix_walk_skips_subdirectories_when_not_recursive(monkeypatch):
 
 
 def test_posix_walk_flags_same_root_sd_declaration_without_touching_filesystem(monkeypatch):
-    fake = _FakePosixFs(_fake_dir({
-        "paired.s7res": _fake_file(b"resource"),
-        "paired.s7dcl": _fake_file(b"declaration"),
-        "orphan.s7res": _fake_file(b"resource"),
-    }))
+    fake = _FakePosixFs(
+        _fake_dir(
+            {
+                "paired.s7res": _fake_file(b"resource"),
+                "paired.s7dcl": _fake_file(b"declaration"),
+                "orphan.s7res": _fake_file(b"resource"),
+            }
+        )
+    )
     _patch_posix_dir_fd(monkeypatch, fake)
 
-    artifacts = {str(a.relative_path): a for a in discover_input_files(Path("root"), recursive=True)}
+    artifacts = {
+        str(a.relative_path): a for a in discover_input_files(Path("root"), recursive=True)
+    }
 
     assert artifacts["paired.s7res"].has_declaration is True
     assert artifacts["orphan.s7res"].has_declaration is False

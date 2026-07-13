@@ -36,7 +36,8 @@ def _semantic_summary(decoded) -> dict:
                         "instance": str(statement.instance) if statement.instance else None,
                         "name": statement.name,
                         "params": {
-                            name: emit._expr(value) for name, value in sorted(statement.params.items())
+                            name: emit._expr(value)
+                            for name, value in sorted(statement.params.items())
                         },
                         "type": type(statement).__name__,
                     }
@@ -108,9 +109,13 @@ def test_preserved_simaticml_lad_matches_ir_scl_and_json_golden_checksums():
 
     expected = json.loads(_path(case["goldens"]["checksums"]).read_text(encoding="utf-8"))
     actual = {
-        "semantic_ir": _sha256(json.dumps(_semantic_summary(decoded), sort_keys=True, separators=(",", ":"))),
+        "semantic_ir": _sha256(
+            json.dumps(_semantic_summary(decoded), sort_keys=True, separators=(",", ":"))
+        ),
         "scl": _sha256(emit.emit_scl(decoded)),
-        "json": _sha256(json.dumps(emit.emit_sidecar(decoded), sort_keys=True, separators=(",", ":"))),
+        "json": _sha256(
+            json.dumps(emit.emit_sidecar(decoded), sort_keys=True, separators=(",", ":"))
+        ),
     }
     assert actual == expected
 

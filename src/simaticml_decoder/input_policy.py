@@ -62,6 +62,7 @@ DEFAULT_LIMITS = InputLimits()
 
 def direct_input_artifact(path: Path) -> InputArtifact:
     """Build an InputArtifact for a direct CLI input file."""
+
     def reader(limits: InputLimits) -> bytes:
         """Reader closure that validates and reads the file."""
         text = read_xml(path, limits)
@@ -131,7 +132,9 @@ def _decode_and_validate_xml_text(raw: bytes, limits: InputLimits) -> str:
         raise InputViolation("invalid_encoding", "input is not valid UTF-8") from exc
     declaration = text.casefold()
     if "<!doctype" in declaration or "<!entity" in declaration:
-        raise InputViolation("xml_forbidden_declaration", "DTD and entity declarations are not accepted")
+        raise InputViolation(
+            "xml_forbidden_declaration", "DTD and entity declarations are not accepted"
+        )
     _validate_xml_complexity(text, limits)
     return text
 
@@ -151,7 +154,9 @@ def validate_artifact_format(artifact: InputArtifact) -> None:
     if suffix == ".s7dcl":
         raise InputViolation("unsupported_format", "SIMATIC SD decoding is not implemented")
     if suffix != ".xml":
-        raise InputViolation("unsupported_format", "only exported SimaticML .xml files are accepted")
+        raise InputViolation(
+            "unsupported_format", "only exported SimaticML .xml files are accepted"
+        )
 
 
 def _validate_format(source: Path) -> None:
@@ -167,7 +172,9 @@ def _validate_format(source: Path) -> None:
     if suffix == ".s7dcl":
         raise InputViolation("unsupported_format", "SIMATIC SD decoding is not implemented")
     if suffix != ".xml":
-        raise InputViolation("unsupported_format", "only exported SimaticML .xml files are accepted")
+        raise InputViolation(
+            "unsupported_format", "only exported SimaticML .xml files are accepted"
+        )
 
 
 def discover_xml(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMITS) -> list[Path]:
@@ -178,7 +185,9 @@ def discover_xml(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMI
 _ARTIFACT_SUFFIXES = {".xml", ".s7dcl", ".s7res"}
 
 
-def discover_input_files(root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMITS) -> tuple[InputArtifact, ...]:
+def discover_input_files(
+    root: Path, recursive: bool, limits: InputLimits = DEFAULT_LIMITS
+) -> tuple[InputArtifact, ...]:
     """Discover XML and SIMATIC SD inputs so unsupported files remain visible.
 
     Every returned artifact's reader consumes only a handle/descriptor opened
@@ -214,6 +223,7 @@ def _make_handle_reader(handle: object) -> Callable[[InputLimits], bytes]:
     raises -- instead of staying open for the rest of the batch. Both handle
     types' `close()` is idempotent and safe to call again from `__del__`.
     """
+
     def reader(limits: InputLimits) -> bytes:
         try:
             raw = handle.read_limited(limits.max_file_bytes)
@@ -235,7 +245,9 @@ def _discover_windows(
     artifacts: list[InputArtifact] = []
     counter = [0]
     with windows_handles.NativeDirectory.open_root(root) as root_dir:
-        _walk_windows_directory(root_dir, PurePath(), 0, recursive, limits, suffixes, artifacts, counter)
+        _walk_windows_directory(
+            root_dir, PurePath(), 0, recursive, limits, suffixes, artifacts, counter
+        )
     return tuple(artifacts)
 
 
@@ -269,8 +281,14 @@ def _walk_windows_directory(
                 raise InputViolation("traversal_too_deep", "input tree exceeds the depth limit")
             with directory.open_child(entry.name, directory=True) as child_dir:
                 _walk_windows_directory(
-                    child_dir, relative_prefix / entry.name, depth + 1, recursive, limits, suffixes,
-                    artifacts, counter,
+                    child_dir,
+                    relative_prefix / entry.name,
+                    depth + 1,
+                    recursive,
+                    limits,
+                    suffixes,
+                    artifacts,
+                    counter,
                 )
             continue
         suffix = PurePath(entry.name).suffix.lower()
@@ -353,7 +371,9 @@ def _discover_posix(
     counter = [0]
     root_fd = _open_posix_root(root)
     try:
-        _walk_posix_directory(root_fd, PurePath(), 0, recursive, limits, suffixes, artifacts, counter)
+        _walk_posix_directory(
+            root_fd, PurePath(), 0, recursive, limits, suffixes, artifacts, counter
+        )
     finally:
         os.close(root_fd)
     return tuple(artifacts)
@@ -443,8 +463,14 @@ def _walk_posix_directory(
             child_fd = _open_dir_child(dir_fd, name)
             try:
                 _walk_posix_directory(
-                    child_fd, relative_prefix / name, depth + 1, recursive, limits, suffixes,
-                    artifacts, counter,
+                    child_fd,
+                    relative_prefix / name,
+                    depth + 1,
+                    recursive,
+                    limits,
+                    suffixes,
+                    artifacts,
+                    counter,
                 )
             finally:
                 os.close(child_fd)
@@ -493,7 +519,9 @@ def _discover(root: Path, recursive: bool, limits: InputLimits, suffixes: set[st
             elif stat.S_ISREG(info.st_mode) and entry.suffix.lower() in suffixes:
                 found.append(entry)
                 if len(found) > limits.max_files:
-                    raise InputViolation("too_many_files", "input tree exceeds the file-count limit")
+                    raise InputViolation(
+                        "too_many_files", "input tree exceeds the file-count limit"
+                    )
     return sorted(found)
 
 

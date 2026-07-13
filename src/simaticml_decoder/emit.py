@@ -164,16 +164,14 @@ def _box_body(stmt: ir.BoxCall, hint: str | None) -> list[str]:
 
 def _box_call_form(stmt: ir.BoxCall) -> list[str]:
     callee = stmt.instance or stmt.instruction
-    pairs = [f"{pin} := {_expr(e)}" for pin, e in stmt.inputs.items()
-             if pin != "__equation__"]
+    pairs = [f"{pin} := {_expr(e)}" for pin, e in stmt.inputs.items() if pin != "__equation__"]
     if stmt.instance is None:
         # System FC: outputs are call parameters (OUT => dest).
         pairs += [f"{pin} => {d.name}" for pin, d in stmt.outputs.items()]
     lines = _format_call(callee, pairs)
     if stmt.instance is not None:
         # Instance box (timer): outputs read back off the instance member.
-        lines += [f"{d.name} := {stmt.instance}.{pin};"
-                  for pin, d in stmt.outputs.items()]
+        lines += [f"{d.name} := {stmt.instance}.{pin};" for pin, d in stmt.outputs.items()]
     return lines
 
 
@@ -303,10 +301,7 @@ def emit_sidecar(decoded: ir.DecodedBlock) -> dict:
             for net in decoded.networks
         ],
         "xref": {
-            tag: [
-                {"network": ref.network_index, "role": ref.role, "uid": ref.uid}
-                for ref in refs
-            ]
+            tag: [{"network": ref.network_index, "role": ref.role, "uid": ref.uid} for ref in refs]
             for tag, refs in decoded.xref.items()
         },
         "instruction_inventory": dict(decoded.instruction_inventory),

@@ -18,8 +18,9 @@ def _net(parts, accesses, wires, index=1):
 
 
 def _sym(uid, name):
-    return model.Access(uid=uid, scope="LocalVariable",
-                        operand=model.Symbol([model.Component(name=name)]))
+    return model.Access(
+        uid=uid, scope="LocalVariable", operand=model.Symbol([model.Component(name=name)])
+    )
 
 
 def _pr():
@@ -35,8 +36,7 @@ def _nc(uid, pin):
 
 
 def test_contact_drives_coil():
-    parts = {"1": model.Part(uid="1", name="Contact"),
-             "2": model.Part(uid="2", name="Coil")}
+    parts = {"1": model.Part(uid="1", name="Contact"), "2": model.Part(uid="2", name="Coil")}
     accesses = {"10": _sym("10", "a"), "11": _sym("11", "y")}
     wires = [
         Wire(uid="w1", endpoints=[_pr(), _nc("1", "in")]),
@@ -54,8 +54,10 @@ def test_contact_drives_coil():
 
 
 def test_negated_contact_is_not():
-    parts = {"1": model.Part(uid="1", name="Contact", negated_pins=["operand"]),
-             "2": model.Part(uid="2", name="Coil")}
+    parts = {
+        "1": model.Part(uid="1", name="Contact", negated_pins=["operand"]),
+        "2": model.Part(uid="2", name="Coil"),
+    }
     accesses = {"10": _sym("10", "a"), "11": _sym("11", "y")}
     wires = [
         Wire(uid="w1", endpoints=[_pr(), _nc("1", "in")]),
@@ -69,10 +71,12 @@ def test_negated_contact_is_not():
 
 
 def test_or_junction_is_nary_or():
-    parts = {"1": model.Part(uid="1", name="Contact"),
-             "2": model.Part(uid="2", name="Contact"),
-             "3": model.Part(uid="3", name="O"),
-             "4": model.Part(uid="4", name="Coil")}
+    parts = {
+        "1": model.Part(uid="1", name="Contact"),
+        "2": model.Part(uid="2", name="Contact"),
+        "3": model.Part(uid="3", name="O"),
+        "4": model.Part(uid="4", name="Coil"),
+    }
     accesses = {"10": _sym("10", "a"), "11": _sym("11", "b"), "12": _sym("12", "y")}
     wires = [
         Wire(uid="w1", endpoints=[_pr(), _nc("1", "in")]),
@@ -92,10 +96,12 @@ def test_or_junction_is_nary_or():
 def test_latch_detected_when_coil_feeds_back():
     # Seal-in: (#start OR #y) -> coil #y. The coil's own operand reappears in its
     # rung, which is the *only* thing that should mark a latch (never block type).
-    parts = {"1": model.Part(uid="1", name="Contact"),
-             "2": model.Part(uid="2", name="Contact"),
-             "3": model.Part(uid="3", name="O"),
-             "4": model.Part(uid="4", name="Coil")}
+    parts = {
+        "1": model.Part(uid="1", name="Contact"),
+        "2": model.Part(uid="2", name="Contact"),
+        "3": model.Part(uid="3", name="O"),
+        "4": model.Part(uid="4", name="Coil"),
+    }
     accesses = {"10": _sym("10", "start"), "11": _sym("11", "y"), "12": _sym("12", "y")}
     wires = [
         Wire(uid="w1", endpoints=[_pr(), _nc("1", "in")]),
@@ -114,9 +120,11 @@ def test_latch_detected_when_coil_feeds_back():
 
 def test_daisy_chained_coils_share_upstream_flow():
     # Coil_A.out -> Coil_B.in: power leaving Coil_A carries A's operand value.
-    parts = {"1": model.Part(uid="1", name="Contact"),
-             "2": model.Part(uid="2", name="Coil"),
-             "3": model.Part(uid="3", name="Coil")}
+    parts = {
+        "1": model.Part(uid="1", name="Contact"),
+        "2": model.Part(uid="2", name="Coil"),
+        "3": model.Part(uid="3", name="Coil"),
+    }
     accesses = {"10": _sym("10", "cond"), "11": _sym("11", "a"), "12": _sym("12", "b")}
     wires = [
         Wire(uid="w1", endpoints=[_pr(), _nc("1", "in")]),
@@ -126,7 +134,9 @@ def test_daisy_chained_coils_share_upstream_flow():
         Wire(uid="w5", endpoints=[_nc("2", "out"), _nc("3", "in")]),
         Wire(uid="w6", endpoints=[_ic("12"), _nc("3", "operand")]),
     ]
-    by_target = {s.target.name: s for s in fold.fold_network(_net(parts, accesses, wires)).statements}
+    by_target = {
+        s.target.name: s for s in fold.fold_network(_net(parts, accesses, wires)).statements
+    }
     assert by_target["#a"].value.name == "#cond"
     assert by_target["#b"].value.name == "#a"
 

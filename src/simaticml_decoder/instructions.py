@@ -19,22 +19,22 @@ from enum import Enum
 
 
 class Category(str, Enum):
-    POWER_FLOW = "power_flow"      # in/out, contact-like: passes or blocks power
-    COIL = "coil"                 # in/out, writes its operand
-    OR_JUNCTION = "or_junction"   # merges parallel branches (Part Name="O")
-    COMPARISON = "comparison"     # pre/out, contact-like compare
-    EDGE = "edge"                 # pre/out or in/out, rising/falling detection
-    FLIPFLOP = "flipflop"         # named set/reset inputs -> q
-    BOX = "box"                   # en/eno operation box (Move/Add/Inc/timers/system FC)
+    POWER_FLOW = "power_flow"  # in/out, contact-like: passes or blocks power
+    COIL = "coil"  # in/out, writes its operand
+    OR_JUNCTION = "or_junction"  # merges parallel branches (Part Name="O")
+    COMPARISON = "comparison"  # pre/out, contact-like compare
+    EDGE = "edge"  # pre/out or in/out, rising/falling detection
+    FLIPFLOP = "flipflop"  # named set/reset inputs -> q
+    BOX = "box"  # en/eno operation box (Move/Add/Inc/timers/system FC)
 
 
 @dataclass
 class Spec:
     name: str
     category: Category
-    power_in: str | None = None         # name of the power-in pin, if any
-    power_out: str | None = None        # name of the power-out pin, if any
-    render: str | None = None           # operator/keyword hint for emit (":=", "<", ...)
+    power_in: str | None = None  # name of the power-in pin, if any
+    power_out: str | None = None  # name of the power-out pin, if any
+    render: str | None = None  # operator/keyword hint for emit (":=", "<", ...)
     pins: tuple[str, ...] = field(default_factory=tuple)  # informative pin list
     note: str = ""
 
@@ -60,8 +60,8 @@ CATALOG: dict[str, Spec] = {
     # --- power flow -------------------------------------------------------- #
     "Contact": _pf("Contact"),
     "Coil": _coil("Coil", ":="),
-    "SCoil": _coil("SCoil", "S"),       # set coil  ( S )
-    "RCoil": _coil("RCoil", "R"),       # reset coil ( R )
+    "SCoil": _coil("SCoil", "S"),  # set coil  ( S )
+    "RCoil": _coil("RCoil", "R"),  # reset coil ( R )
     "O": Spec("O", Category.OR_JUNCTION, None, "out", "OR", ("in1", "in2", "out")),
     # --- comparisons (pre/out, contact-like) ------------------------------ #
     "Lt": _cmp("Lt", "<"),
@@ -71,17 +71,17 @@ CATALOG: dict[str, Spec] = {
     "Ge": _cmp("Ge", ">="),
     "Gt": _cmp("Gt", ">"),
     # --- edge detection ---------------------------------------------------- #
-    "PContact": Spec("PContact", Category.EDGE, "pre", "out", "rising",
-                     ("pre", "operand", "bit", "out")),
-    "NContact": Spec("NContact", Category.EDGE, "pre", "out", "falling",
-                     ("pre", "operand", "bit", "out")),
+    "PContact": Spec(
+        "PContact", Category.EDGE, "pre", "out", "rising", ("pre", "operand", "bit", "out")
+    ),
+    "NContact": Spec(
+        "NContact", Category.EDGE, "pre", "out", "falling", ("pre", "operand", "bit", "out")
+    ),
     "PBox": Spec("PBox", Category.EDGE, "in", "out", "rising", ("in", "bit", "out")),
     "NBox": Spec("NBox", Category.EDGE, "in", "out", "falling", ("in", "bit", "out")),
     # --- flip-flops -------------------------------------------------------- #
-    "Rs": Spec("Rs", Category.FLIPFLOP, None, "q", "reset_priority",
-               ("s1", "r", "operand", "q")),
-    "Sr": Spec("Sr", Category.FLIPFLOP, None, "q", "set_priority",
-               ("s", "r1", "operand", "q")),
+    "Rs": Spec("Rs", Category.FLIPFLOP, None, "q", "reset_priority", ("s1", "r", "operand", "q")),
+    "Sr": Spec("Sr", Category.FLIPFLOP, None, "q", "set_priority", ("s", "r1", "operand", "q")),
     # --- boxes (en/eno) ---------------------------------------------------- #
     "Move": _box("Move", ("en", "in", "out1", "eno"), ":="),
     "Add": _box("Add", ("en", "in1", "in2", "out", "eno"), "+"),

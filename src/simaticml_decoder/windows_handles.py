@@ -269,7 +269,9 @@ def _raise_native_failure(operation: str, status: int) -> None:
     )
 
 
-def _nt_create_file(root_handle: int | None, name: str, desired_access: int, create_options: int) -> int:
+def _nt_create_file(
+    root_handle: int | None, name: str, desired_access: int, create_options: int
+) -> int:
     unicode_string, _buffer = _make_unicode_string(name)
     attributes = OBJECT_ATTRIBUTES(
         ctypes.sizeof(OBJECT_ATTRIBUTES),
@@ -323,7 +325,9 @@ def _reject_if_reparse_point(handle: int) -> None:
     ok = _GetFileInformationByHandle(ctypes.c_void_p(handle), ctypes.byref(info))
     if not ok:
         error = ctypes.get_last_error()
-        raise InputViolation("unreadable_input", safe_text(f"native attribute query failed (code {error})"))
+        raise InputViolation(
+            "unreadable_input", safe_text(f"native attribute query failed (code {error})")
+        )
     if info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT:
         raise InputViolation("symlink_not_allowed", "symbolic links are not accepted")
 
@@ -361,7 +365,9 @@ class NativeHandle:
         ok = _ReadFile(self._handle, buffer, to_read, ctypes.byref(bytes_read), None)
         if not ok:
             error = ctypes.get_last_error()
-            raise InputViolation("unreadable_input", safe_text(f"native read failed (code {error})"))
+            raise InputViolation(
+                "unreadable_input", safe_text(f"native read failed (code {error})")
+            )
         return buffer.raw[: bytes_read.value]
 
 
@@ -478,10 +484,14 @@ class NativeDirectory:
             offset = 0
             while True:
                 entry = FILE_ID_BOTH_DIR_INFORMATION.from_address(base + offset)
-                name = ctypes.wstring_at(base + offset + entry_header_size, entry.FileNameLength // 2)
+                name = ctypes.wstring_at(
+                    base + offset + entry_header_size, entry.FileNameLength // 2
+                )
                 if name not in (".", ".."):
                     if entry.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT:
-                        raise InputViolation("symlink_not_allowed", "symbolic links are not accepted")
+                        raise InputViolation(
+                            "symlink_not_allowed", "symbolic links are not accepted"
+                        )
                     is_directory = bool(entry.FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     found.append(NativeEntry(name=name, is_directory=is_directory))
                 if entry.NextEntryOffset == 0:

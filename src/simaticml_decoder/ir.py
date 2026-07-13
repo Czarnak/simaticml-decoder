@@ -15,6 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 
+
 # --------------------------------------------------------------------------- #
 # Boolean / value expressions (rung conditions, comparison operands)          #
 # --------------------------------------------------------------------------- #
@@ -22,13 +23,13 @@ from enum import Enum
 class VarRef:
     """A resolved operand, already rendered to its display form by operand.py."""
 
-    name: str                           # e.g. "#FI_Forward", '"DB".field', "%MW100"
+    name: str  # e.g. "#FI_Forward", '"DB".field', "%MW100"
     uid: str | None = None
 
 
 @dataclass
 class Literal:
-    value: str                          # rendered constant, e.g. "0", "TRUE", "T#3s"
+    value: str  # rendered constant, e.g. "0", "TRUE", "T#3s"
     uid: str | None = None
 
 
@@ -44,27 +45,27 @@ class And:
 
 @dataclass
 class Or:
-    operands: list[Expr] = field(default_factory=list)      # n-ary, matches O cardinality
+    operands: list[Expr] = field(default_factory=list)  # n-ary, matches O cardinality
 
 
 @dataclass
 class Compare:
-    op: str                             # "<" | "<=" | "=" | ">=" | ">" | "<>"
+    op: str  # "<" | "<=" | "=" | ">=" | ">" | "<>"
     left: Expr
     right: Expr
     uid: str | None = None
 
 
 class EdgeKind(str, Enum):
-    RISING = "rising"                   # P_TRIG / PContact / PBox
-    FALLING = "falling"                 # N_TRIG / NContact / NBox
+    RISING = "rising"  # P_TRIG / PContact / PBox
+    FALLING = "falling"  # N_TRIG / NContact / NBox
 
 
 @dataclass
 class Edge:
     kind: EdgeKind
-    signal: Expr                        # monitored signal / incoming power flow
-    mem_bit: VarRef | None = None       # edge-memory operand
+    signal: Expr  # monitored signal / incoming power flow
+    mem_bit: VarRef | None = None  # edge-memory operand
     uid: str | None = None
 
 
@@ -85,19 +86,17 @@ class Unhandled:
     note: str = ""
 
 
-Expr = (
-    VarRef | Literal | Not | And | Or | Compare | Edge | RawExpr | Unhandled
-)
+Expr = VarRef | Literal | Not | And | Or | Compare | Edge | RawExpr | Unhandled
 
 
 # --------------------------------------------------------------------------- #
 # Statements (one rung's effect)                                              #
 # --------------------------------------------------------------------------- #
 class AssignKind(str, Enum):
-    NORMAL = "normal"                   # Coil           ->  target := <cond>;
-    NEGATED = "negated"                 # negated Coil   ->  target := NOT <cond>;
-    SET = "set"                         # SCoil          ->  IF <cond> THEN target := TRUE;
-    RESET = "reset"                     # RCoil          ->  IF <cond> THEN target := FALSE;
+    NORMAL = "normal"  # Coil           ->  target := <cond>;
+    NEGATED = "negated"  # negated Coil   ->  target := NOT <cond>;
+    SET = "set"  # SCoil          ->  IF <cond> THEN target := TRUE;
+    RESET = "reset"  # RCoil          ->  IF <cond> THEN target := FALSE;
 
 
 @dataclass
@@ -105,8 +104,8 @@ class Assign:
     target: VarRef
     value: Expr
     kind: AssignKind = AssignKind.NORMAL
-    is_latch: bool = False              # set when a structural seal-in was detected
-    note: str | None = None             # surfaced by emit when load-bearing
+    is_latch: bool = False  # set when a structural seal-in was detected
+    note: str | None = None  # surfaced by emit when load-bearing
     uid: str | None = None
 
 
@@ -117,7 +116,7 @@ class FlipFlop:
     target: VarRef
     set_expr: Expr
     reset_expr: Expr
-    reset_priority: bool = True         # Rs == reset-dominant; Sr == set-dominant
+    reset_priority: bool = True  # Rs == reset-dominant; Sr == set-dominant
     uid: str | None = None
 
 
@@ -125,11 +124,11 @@ class FlipFlop:
 class BoxCall:
     """A system FB/FC box: TON/TOF/TP, Move/Add/Inc, RD_LOC_T, ..."""
 
-    instruction: str                    # "TON", "Move", ...
-    inputs: dict[str, Expr] = field(default_factory=dict)    # pin -> expression
-    outputs: dict[str, VarRef] = field(default_factory=dict) # pin -> destination
-    instance: str | None = None         # rendered instance name, for system FBs
-    enable: Expr | None = None          # the en / IN power-flow condition
+    instruction: str  # "TON", "Move", ...
+    inputs: dict[str, Expr] = field(default_factory=dict)  # pin -> expression
+    outputs: dict[str, VarRef] = field(default_factory=dict)  # pin -> destination
+    instance: str | None = None  # rendered instance name, for system FBs
+    enable: Expr | None = None  # the en / IN power-flow condition
     uid: str | None = None
 
 
@@ -138,7 +137,7 @@ class UserCall:
     """A Call/CallInfo to a user FC/FB — parameters self-documented in the XML."""
 
     name: str
-    block_type: str                     # FC | FB
+    block_type: str  # FC | FB
     instance: str | None = None
     params: dict[str, Expr | VarRef] = field(default_factory=dict)
     enable: Expr | None = None
@@ -158,7 +157,7 @@ class NetworkLogic:
     title: str | None = None
     comment: str | None = None
     statements: list[Statement] = field(default_factory=list)  # folded LAD/FBD
-    scl_text: str | None = None         # set for reconstructed SCL networks
+    scl_text: str | None = None  # set for reconstructed SCL networks
     warnings: list[str] = field(default_factory=list)
 
 
@@ -168,15 +167,15 @@ class TagRef:
 
     network_index: int
     uid: str | None = None
-    role: str = ""                      # "write" | "read" + context (pin/operand)
+    role: str = ""  # "write" | "read" + context (pin/operand)
 
 
 @dataclass
 class DecodedBlock:
     name: str
     kind: str
-    interface: object                   # model.Interface, carried through for the sidecar
+    interface: object  # model.Interface, carried through for the sidecar
     networks: list[NetworkLogic] = field(default_factory=list)
-    xref: dict[str, list[TagRef]] = field(default_factory=dict)   # tag -> uses
+    xref: dict[str, list[TagRef]] = field(default_factory=dict)  # tag -> uses
     instruction_inventory: dict[str, int] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
