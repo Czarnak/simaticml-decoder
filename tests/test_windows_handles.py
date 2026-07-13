@@ -2,16 +2,23 @@
 
 from __future__ import annotations
 
-import os
-import subprocess
 import sys
 
 import pytest
 
 from simaticml_decoder.input_policy import InputViolation
-from simaticml_decoder.windows_handles import NativeDirectory
 
 pytestmark = pytest.mark.skipif(sys.platform != "win32", reason="Windows native handles")
+
+# `windows_handles` raises at import time on non-Windows platforms (by design,
+# see its module docstring). That import must stay behind this platform guard
+# so collecting this file on non-Windows CI degrades to the skip above instead
+# of a collection error that would abort the whole pytest run.
+if sys.platform == "win32":
+    import os
+    import subprocess
+
+    from simaticml_decoder.windows_handles import NativeDirectory
 
 
 def test_native_enumeration_rejects_junction(tmp_path):
