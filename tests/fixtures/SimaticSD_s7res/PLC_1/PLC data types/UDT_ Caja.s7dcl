@@ -1,0 +1,6 @@
+﻿TYPE
+    "UDT_ Caja" : STRUCT
+        Alta : Bool;
+        Baja : Bool;
+    END_STRUCT;
+END_TYPE

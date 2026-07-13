@@ -1,0 +1,9 @@
+﻿MultiLingualTexts:
+  - id: MLC_4uX
+    de-DE: Sistema de carga de pallets para clasificacion
+  - id: MLC_U2
+    de-DE: Activar/Desactivar cinta para acercamiento de pallets a sensor
+  - id: MLC_4EM
+    de-DE: Activa/Descativar transferidor de Cajas Altas
+  - id: MLC_3X9
+    de-DE: Activa/Descativar transferidor de Cajas Bajas

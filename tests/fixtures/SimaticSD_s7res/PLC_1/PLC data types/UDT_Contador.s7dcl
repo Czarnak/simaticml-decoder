@@ -1,0 +1,7 @@
+﻿TYPE
+    UDT_Contador : STRUCT
+        Total : Int;
+        Altas : Int;
+        Bajas : Int;
+    END_STRUCT;
+END_TYPE

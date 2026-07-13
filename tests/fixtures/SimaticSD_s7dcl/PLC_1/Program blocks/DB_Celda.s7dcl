@@ -1,0 +1,20 @@
+﻿{
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK DB_Celda
+    VAR
+        { S7_Setpoint := "False" }
+        Caja : _."UDT_ Caja";
+        Contador : _.UDT_Contador;
+        { S7_Setpoint := "True" }
+        "Sistema en marcha" : Bool;
+        { S7_Setpoint := "True" }
+        "Modo auto" : Bool;
+        { S7_Setpoint := "True" }
+        Emergencia : Bool;
+        { S7_Setpoint := "True" }
+        Clasificando : Bool;
+    END_VAR
+END_DATA_BLOCK
