@@ -1,0 +1,178 @@
+﻿{
+    S7_BlockTitle := "MLC_dG";
+    S7_Optimized := "TRUE";
+    S7_PreferredLanguage := "LAD";
+    S7_Version := "0.1"
+}
+FUNCTION_BLOCK "FB_Sensores"
+    VAR_INPUT
+        High_sensor : Bool;
+        Low_sensor : Bool;
+        "At left" : Bool;
+        "At right" : Bool;
+        Reset_estados : Bool;
+        Loaded : Bool;
+        "At left exit" : Bool;
+        "At right exit" : Bool;
+    END_VAR
+    VAR_OUTPUT
+        Clasificando : Bool;
+        "Caja Alta" : Bool;
+        "Caja Baja" : Bool;
+    END_VAR
+    VAR_IN_OUT
+        CT_Total : Int;
+        CT_Cajas_Altas : Int;
+        CT_Cajas_Bajas : Int;
+    END_VAR
+    VAR
+        Mem_At_left : Bool;
+        Mem_At_right : Bool;
+        Mem_clasificando : Bool;
+        Mem_At_left_exit : Bool;
+        Mem_At_right_exit : Bool;
+    END_VAR
+
+    {
+        S7_Language := "LAD";
+        S7_NetworkComment := "MLC_4sx";
+        S7_NetworkTitle := "MLC_3d5"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #Loaded )
+            S_Coil( #Clasificando )
+        END_RUNG
+        RUNG wire#powerrail
+            P_Contact(
+                operand := #"At left",
+                bit := #Mem_At_left
+            )
+            wire#w1
+            R_Coil( #Clasificando )
+        END_RUNG
+        RUNG wire#powerrail
+            P_Contact(
+                operand := #"At right",
+                bit := #Mem_At_right
+            )
+        END_RUNG wire#w1
+        RUNG wire#powerrail
+            Contact( #Reset_estados )
+        END_RUNG wire#w1
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkComment := "MLC_4sH";
+        S7_NetworkTitle := "MLC_kQ"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            I_Contact( #Clasificando )
+            Contact( #High_sensor )
+            S_Coil( #"Caja Alta" )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkComment := "MLC_4UK";
+        S7_NetworkTitle := "MLC_3Sc"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            I_Contact( #Clasificando )
+            Contact( #Low_sensor )
+            I_Contact( #High_sensor )
+            S_Coil( #"Caja Baja" )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4Qb"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            N_Contact(
+                operand := #Clasificando,
+                bit := #Mem_clasificando
+            )
+            wire#w1
+            R_Coil( #"Caja Baja" )
+        END_RUNG
+        RUNG wire#powerrail
+            Contact( #Reset_estados )
+        END_RUNG wire#w1
+        RUNG wire#w1
+            R_Coil( #"Caja Alta" )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_Um"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            N_Contact(
+                operand := #"At left exit",
+                bit := #Mem_At_left_exit
+            )
+            Add(
+                in1 := #CT_Cajas_Altas,
+                in2 := 1,
+                out => #CT_Cajas_Altas
+            )
+            Add(
+                in1 := #CT_Cajas_Altas,
+                in2 := #CT_Cajas_Bajas,
+                out => #CT_Total
+            )
+        END_RUNG
+        RUNG wire#powerrail
+            N_Contact(
+                operand := #"At right exit",
+                bit := #Mem_At_right_exit
+            )
+            Add(
+                in1 := #CT_Cajas_Bajas,
+                in2 := 1,
+                out => #CT_Cajas_Bajas
+            )
+            Add(
+                in1 := #CT_Cajas_Altas,
+                in2 := #CT_Cajas_Bajas,
+                out => #CT_Total
+            )
+        END_RUNG
+    END_NETWORK
+    {
+        S7_Language := "LAD";
+        S7_NetworkTitle := "MLC_4bw"
+    }
+    NETWORK
+        RUNG wire#powerrail
+            Contact( #Reset_estados )
+            wire#w1
+            Move(
+                in := 0,
+                out1 => #CT_Cajas_Bajas
+            )
+        END_RUNG
+        RUNG wire#w1
+            Move(
+                in := 0,
+                out1 => #CT_Cajas_Altas
+            )
+        END_RUNG
+        RUNG wire#w1
+            Move(
+                in := 0,
+                out1 => #CT_Total
+            )
+        END_RUNG
+    END_NETWORK
+    { S7_Language := "LAD" }
+    NETWORK
+        RUNG wire#powerrail
+        END_RUNG
+    END_NETWORK
+END_FUNCTION_BLOCK

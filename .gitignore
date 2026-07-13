@@ -323,3 +323,4 @@ graphify-out/.graphify_root
 graphify-out/cache/
 docs/
 .codex/
+*.vci/

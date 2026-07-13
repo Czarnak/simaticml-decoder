@@ -1,0 +1,835 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.OB ID="0">
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input">
+            <Member Name="Initial_Call" Datatype="Bool" Informative="true" />
+            <Member Name="Remanence" Datatype="Bool" Informative="true" />
+          </Section>
+          <Section Name="Temp" />
+          <Section Name="Constant" />
+        </Sections>
+      </Interface>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <Name>Main</Name>
+      <Namespace />
+      <Number>1</Number>
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SecondaryType>ProgramCycle</SecondaryType>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>de-DE</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Call UId="21">
+                  <CallInfo Name="MHJ-PLC-Lab-Function-S71200" BlockType="FC" />
+                </Call>
+              </Parts>
+              <Wires>
+                <Wire UId="22">
+                  <Powerrail />
+                  <NameCon UId="21" Name="en" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="4" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="5" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>#Deutsch (#English below)
+Im Netzwerk 1 wird der Konnektierungsbaustein für PLC-Lab aufgerufen.
+Dieser Aufruf darf nicht entfernt werden!
+
+#English
+The connection block for PLC-Lab is called up in network 1.
+This call must not be removed!
+</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="6" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="7" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Konnektierungsbaustein für PLC-Lab</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="8" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Access Scope="GlobalVariable" UId="21">
+                  <Symbol>
+                    <Component Name="Emergency stop" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="22">
+                  <Symbol>
+                    <Component Name="Start" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="Stop" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="24">
+                  <Symbol>
+                    <Component Name="Reset" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="25">
+                  <Symbol>
+                    <Component Name="Auto" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="26">
+                  <Symbol>
+                    <Component Name="Start light" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="27">
+                  <Symbol>
+                    <Component Name="Reset light" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="28">
+                  <Symbol>
+                    <Component Name="Stop light" />
+                  </Symbol>
+                </Access>
+                <Call UId="29">
+                  <CallInfo Name="FC_Seguridad" BlockType="FC">
+                    <Parameter Name="Emergency stop" Section="Input" Type="Bool" />
+                    <Parameter Name="Start" Section="Input" Type="Bool" />
+                    <Parameter Name="Stop" Section="Input" Type="Bool" />
+                    <Parameter Name="Reset" Section="Input" Type="Bool" />
+                    <Parameter Name="Modo auto" Section="Input" Type="Bool" />
+                    <Parameter Name="Start Light" Section="Output" Type="Bool" />
+                    <Parameter Name="Reset Light" Section="Output" Type="Bool" />
+                    <Parameter Name="Stop Light" Section="Output" Type="Bool" />
+                  </CallInfo>
+                </Call>
+              </Parts>
+              <Wires>
+                <Wire UId="30">
+                  <Powerrail />
+                  <NameCon UId="29" Name="en" />
+                </Wire>
+                <Wire UId="31">
+                  <IdentCon UId="21" />
+                  <NameCon UId="29" Name="Emergency stop" />
+                </Wire>
+                <Wire UId="32">
+                  <IdentCon UId="22" />
+                  <NameCon UId="29" Name="Start" />
+                </Wire>
+                <Wire UId="33">
+                  <IdentCon UId="23" />
+                  <NameCon UId="29" Name="Stop" />
+                </Wire>
+                <Wire UId="34">
+                  <IdentCon UId="24" />
+                  <NameCon UId="29" Name="Reset" />
+                </Wire>
+                <Wire UId="35">
+                  <IdentCon UId="25" />
+                  <NameCon UId="29" Name="Modo auto" />
+                </Wire>
+                <Wire UId="36">
+                  <NameCon UId="29" Name="Start Light" />
+                  <IdentCon UId="26" />
+                </Wire>
+                <Wire UId="37">
+                  <NameCon UId="29" Name="Reset Light" />
+                  <IdentCon UId="27" />
+                </Wire>
+                <Wire UId="38">
+                  <NameCon UId="29" Name="Stop Light" />
+                  <IdentCon UId="28" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="9" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Condiciones de seguridad establecidas</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="B" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="C" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Seguridad del proceso</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="D" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Access Scope="GlobalVariable" UId="21">
+                  <Symbol>
+                    <Component Name="High sensor" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="22">
+                  <Symbol>
+                    <Component Name="Low sensor" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="At left entry" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="24">
+                  <Symbol>
+                    <Component Name="At right entry" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="25">
+                  <Symbol>
+                    <Component Name="Reset" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="26">
+                  <Symbol>
+                    <Component Name="Loaded" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="27">
+                  <Symbol>
+                    <Component Name="At left exit" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="28">
+                  <Symbol>
+                    <Component Name="At right exit" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="29">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Contador" />
+                    <Component Name="Total" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="30">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Contador" />
+                    <Component Name="Altas" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="31">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Contador" />
+                    <Component Name="Bajas" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="32">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Clasificando" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="33">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Caja" />
+                    <Component Name="Alta" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="34">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Caja" />
+                    <Component Name="Baja" />
+                  </Symbol>
+                </Access>
+                <Call UId="35">
+                  <CallInfo Name="FB_Sensores" BlockType="FB">
+                    <Instance Scope="GlobalVariable" UId="36">
+                      <Component Name="FB_Sensores_DB" />
+                    </Instance>
+                    <Parameter Name="High_sensor" Section="Input" Type="Bool" />
+                    <Parameter Name="Low_sensor" Section="Input" Type="Bool" />
+                    <Parameter Name="At left" Section="Input" Type="Bool" />
+                    <Parameter Name="At right" Section="Input" Type="Bool" />
+                    <Parameter Name="Reset_estados" Section="Input" Type="Bool" />
+                    <Parameter Name="Loaded" Section="Input" Type="Bool" />
+                    <Parameter Name="At left exit" Section="Input" Type="Bool" />
+                    <Parameter Name="At right exit" Section="Input" Type="Bool" />
+                    <Parameter Name="Clasificando" Section="Output" Type="Bool" />
+                    <Parameter Name="Caja Alta" Section="Output" Type="Bool" />
+                    <Parameter Name="Caja Baja" Section="Output" Type="Bool" />
+                    <Parameter Name="CT_Total" Section="InOut" Type="Int" />
+                    <Parameter Name="CT_Cajas_Altas" Section="InOut" Type="Int" />
+                    <Parameter Name="CT_Cajas_Bajas" Section="InOut" Type="Int" />
+                  </CallInfo>
+                </Call>
+              </Parts>
+              <Wires>
+                <Wire UId="37">
+                  <Powerrail />
+                  <NameCon UId="35" Name="en" />
+                </Wire>
+                <Wire UId="38">
+                  <IdentCon UId="21" />
+                  <NameCon UId="35" Name="High_sensor" />
+                </Wire>
+                <Wire UId="39">
+                  <IdentCon UId="22" />
+                  <NameCon UId="35" Name="Low_sensor" />
+                </Wire>
+                <Wire UId="40">
+                  <IdentCon UId="23" />
+                  <NameCon UId="35" Name="At left" />
+                </Wire>
+                <Wire UId="41">
+                  <IdentCon UId="24" />
+                  <NameCon UId="35" Name="At right" />
+                </Wire>
+                <Wire UId="42">
+                  <IdentCon UId="25" />
+                  <NameCon UId="35" Name="Reset_estados" />
+                </Wire>
+                <Wire UId="43">
+                  <IdentCon UId="26" />
+                  <NameCon UId="35" Name="Loaded" />
+                </Wire>
+                <Wire UId="44">
+                  <IdentCon UId="27" />
+                  <NameCon UId="35" Name="At left exit" />
+                </Wire>
+                <Wire UId="45">
+                  <IdentCon UId="28" />
+                  <NameCon UId="35" Name="At right exit" />
+                </Wire>
+                <Wire UId="46">
+                  <IdentCon UId="29" />
+                  <NameCon UId="35" Name="CT_Total" />
+                </Wire>
+                <Wire UId="47">
+                  <IdentCon UId="30" />
+                  <NameCon UId="35" Name="CT_Cajas_Altas" />
+                </Wire>
+                <Wire UId="48">
+                  <IdentCon UId="31" />
+                  <NameCon UId="35" Name="CT_Cajas_Bajas" />
+                </Wire>
+                <Wire UId="49">
+                  <NameCon UId="35" Name="Clasificando" />
+                  <IdentCon UId="32" />
+                </Wire>
+                <Wire UId="50">
+                  <NameCon UId="35" Name="Caja Alta" />
+                  <IdentCon UId="33" />
+                </Wire>
+                <Wire UId="51">
+                  <NameCon UId="35" Name="Caja Baja" />
+                  <IdentCon UId="34" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="E" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="F" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Emergencia: Existe emergencia
+Sistema en marcha: El sistema esta activo
+Clasificando: Pallets en seccion de carga
+- Caja Alta
+- Caja Baja</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="10" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="11" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>CLasificacion de estados del proceso</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="12" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Access Scope="GlobalVariable" UId="21">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Emergencia" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="22">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Sistema en marcha" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Clasificando" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="24">
+                  <Symbol>
+                    <Component Name="Pallet sensor" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="25">
+                  <Symbol>
+                    <Component Name="Conveyor entry" />
+                  </Symbol>
+                </Access>
+                <Call UId="26">
+                  <CallInfo Name="FC_Conveyor_entry" BlockType="FC">
+                    <Parameter Name="Emergencia" Section="Input" Type="Bool" />
+                    <Parameter Name="Sistema en marcha" Section="Input" Type="Bool" />
+                    <Parameter Name="Clasificando" Section="Input" Type="Bool" />
+                    <Parameter Name="Pallet sensor" Section="Input" Type="Bool" />
+                    <Parameter Name="Conveyor entry" Section="Output" Type="Bool" />
+                  </CallInfo>
+                </Call>
+              </Parts>
+              <Wires>
+                <Wire UId="27">
+                  <Powerrail />
+                  <NameCon UId="26" Name="en" />
+                </Wire>
+                <Wire UId="28">
+                  <IdentCon UId="21" />
+                  <NameCon UId="26" Name="Emergencia" />
+                </Wire>
+                <Wire UId="29">
+                  <IdentCon UId="22" />
+                  <NameCon UId="26" Name="Sistema en marcha" />
+                </Wire>
+                <Wire UId="30">
+                  <IdentCon UId="23" />
+                  <NameCon UId="26" Name="Clasificando" />
+                </Wire>
+                <Wire UId="31">
+                  <IdentCon UId="24" />
+                  <NameCon UId="26" Name="Pallet sensor" />
+                </Wire>
+                <Wire UId="32">
+                  <NameCon UId="26" Name="Conveyor entry" />
+                  <IdentCon UId="25" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="13" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="14" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Cinta en funcionamiento continuo con excepcion:
+- Se detiene si hay pallets en proceso de Clasificacion y 
+  el sensor de pallets detecta uno nuevo</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="15" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="16" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Manejo de cinta principal</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="17" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Access Scope="GlobalVariable" UId="21">
+                  <Symbol>
+                    <Component Name="Loaded" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="22">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Sistema en marcha" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Emergencia" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="24">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Caja" />
+                    <Component Name="Alta" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="25">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Caja" />
+                    <Component Name="Baja" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="26">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Clasificando" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="27">
+                  <Symbol>
+                    <Component Name="Load" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="28">
+                  <Symbol>
+                    <Component Name="Trans left" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="29">
+                  <Symbol>
+                    <Component Name="Trans right" />
+                  </Symbol>
+                </Access>
+                <Call UId="30">
+                  <CallInfo Name="FC_Cargador" BlockType="FC">
+                    <Parameter Name="Loaded" Section="Input" Type="Bool" />
+                    <Parameter Name="Sistema en marcha" Section="Input" Type="Bool" />
+                    <Parameter Name="Emergencia" Section="Input" Type="Bool" />
+                    <Parameter Name="Caja alta" Section="Input" Type="Bool" />
+                    <Parameter Name="Caja baja" Section="Input" Type="Bool" />
+                    <Parameter Name="Clasificando" Section="Input" Type="Bool" />
+                    <Parameter Name="Load" Section="Output" Type="Bool" />
+                    <Parameter Name="Transfer left" Section="Output" Type="Bool" />
+                    <Parameter Name="Transfer right" Section="Output" Type="Bool" />
+                  </CallInfo>
+                </Call>
+              </Parts>
+              <Wires>
+                <Wire UId="31">
+                  <Powerrail />
+                  <NameCon UId="30" Name="en" />
+                </Wire>
+                <Wire UId="32">
+                  <IdentCon UId="21" />
+                  <NameCon UId="30" Name="Loaded" />
+                </Wire>
+                <Wire UId="33">
+                  <IdentCon UId="22" />
+                  <NameCon UId="30" Name="Sistema en marcha" />
+                </Wire>
+                <Wire UId="34">
+                  <IdentCon UId="23" />
+                  <NameCon UId="30" Name="Emergencia" />
+                </Wire>
+                <Wire UId="35">
+                  <IdentCon UId="24" />
+                  <NameCon UId="30" Name="Caja alta" />
+                </Wire>
+                <Wire UId="36">
+                  <IdentCon UId="25" />
+                  <NameCon UId="30" Name="Caja baja" />
+                </Wire>
+                <Wire UId="37">
+                  <IdentCon UId="26" />
+                  <NameCon UId="30" Name="Clasificando" />
+                </Wire>
+                <Wire UId="38">
+                  <NameCon UId="30" Name="Load" />
+                  <IdentCon UId="27" />
+                </Wire>
+                <Wire UId="39">
+                  <NameCon UId="30" Name="Transfer left" />
+                  <IdentCon UId="28" />
+                </Wire>
+                <Wire UId="40">
+                  <NameCon UId="30" Name="Transfer right" />
+                  <IdentCon UId="29" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="18" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="19" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Activa/Desactiva la cinta de transporte en la zona de carga:
+- Si existe pallet sensado en la zona de carga, se detiene en espera de
+  que se transfiera a la cinta lateral correspondiente</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="1A" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="1B" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Acercamiento de pallets para clasificacion</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="1C" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Access Scope="GlobalVariable" UId="21">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Emergencia" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="22">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Sistema en marcha" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="23">
+                  <Symbol>
+                    <Component Name="Conveyor left" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="24">
+                  <Symbol>
+                    <Component Name="Conveyor right" />
+                  </Symbol>
+                </Access>
+                <Call UId="25">
+                  <CallInfo Name="FC_Conveyor_sides" BlockType="FC">
+                    <Parameter Name="Emergencia" Section="Input" Type="Bool" />
+                    <Parameter Name="Sistema en marcha" Section="Input" Type="Bool" />
+                    <Parameter Name="Conveyor left" Section="Output" Type="Bool" />
+                    <Parameter Name="Conveyor right" Section="Output" Type="Bool" />
+                  </CallInfo>
+                </Call>
+              </Parts>
+              <Wires>
+                <Wire UId="26">
+                  <Powerrail />
+                  <NameCon UId="25" Name="en" />
+                </Wire>
+                <Wire UId="27">
+                  <IdentCon UId="21" />
+                  <NameCon UId="25" Name="Emergencia" />
+                </Wire>
+                <Wire UId="28">
+                  <IdentCon UId="22" />
+                  <NameCon UId="25" Name="Sistema en marcha" />
+                </Wire>
+                <Wire UId="29">
+                  <NameCon UId="25" Name="Conveyor left" />
+                  <IdentCon UId="23" />
+                </Wire>
+                <Wire UId="30">
+                  <NameCon UId="25" Name="Conveyor right" />
+                  <IdentCon UId="24" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="1D" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="1E" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Siempre activas si el sistema esta en marcha</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="1F" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="20" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Manejo de Cintas Laterales</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="21" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Access Scope="GlobalVariable" UId="21">
+                  <Symbol>
+                    <Component Name="DB_Celda" />
+                    <Component Name="Contador" />
+                    <Component Name="Total" />
+                  </Symbol>
+                </Access>
+                <Access Scope="GlobalVariable" UId="22">
+                  <Symbol>
+                    <Component Name="Counter" />
+                  </Symbol>
+                </Access>
+                <Part Name="Move" UId="23" DisabledENO="true">
+                  <TemplateValue Name="Card" Type="Cardinality">1</TemplateValue>
+                </Part>
+              </Parts>
+              <Wires>
+                <Wire UId="24">
+                  <Powerrail />
+                  <NameCon UId="23" Name="en" />
+                </Wire>
+                <Wire UId="25">
+                  <IdentCon UId="21" />
+                  <NameCon UId="23" Name="in" />
+                </Wire>
+                <Wire UId="26">
+                  <NameCon UId="23" Name="out1" />
+                  <IdentCon UId="22" />
+                </Wire>
+              </Wires>
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="22" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="23" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Transferencia de Conteo Total de cajas al display</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="24" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="25" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text>Display</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="26" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource />
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="27" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="28" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="29" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="2A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <MultilingualText ID="2B" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="2C" CompositionName="Items">
+            <AttributeList>
+              <Culture>de-DE</Culture>
+              <Text>Main loop</Text>
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.OB>
+</Document>

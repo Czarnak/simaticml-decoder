@@ -1,0 +1,7 @@
+﻿{
+    S7_Optimized := "TRUE";
+    S7_StandardRetain := "FALSE";
+    S7_Version := "0.1"
+}
+DATA_BLOCK FB_Sensores_DB : FB_Sensores
+END_DATA_BLOCK
