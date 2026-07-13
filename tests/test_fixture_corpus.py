@@ -117,3 +117,17 @@ def test_every_unpaired_resource_has_the_published_diagnostic(tmp_path):
         outcome = cli.decode_file(source, tmp_path / source.stem, "scl")
         assert outcome.status == "error", relative
         assert outcome.error == f"{expected['code']}: {source.name}: {expected['message']}"
+
+
+def test_unpaired_resources_have_no_same_root_declaration():
+    """Regression: verify fixture corpus itself is set up correctly.
+
+    If unpaired resources accidentally had matching .s7dcl siblings,
+    the unpaired-resource diagnostic test would be testing the wrong thing.
+    """
+    manifest = _manifest()
+    for relative in manifest["unpaired_resources"]:
+        resource = _path(relative)
+        assert not resource.with_suffix(".s7dcl").exists(), (
+            f"{relative}: unpaired resource should not have same-root .s7dcl sibling"
+        )

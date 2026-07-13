@@ -73,11 +73,17 @@ other file types. A resource-only `.s7res` receives the explicit
 `SD_RESOURCE_WITHOUT_DCL` diagnostic when its declaration is absent from the
 same export root—files are never paired across separate exports.
 
-Directory scans include SIMATIC SD files solely to report those diagnostics;
-they do not decode SD. XML reads are bound to a verified file descriptor and
-rejected if the path changes before it is opened. Directory entries that are
-symlinks or Windows reparse points are rejected, and a directory that changes
-while it is being scanned aborts before any discovered file is decoded.
+Directory scans are handle-anchored per platform. On Windows, the root
+directory is opened once via native NT handles; child files are enumerated and
+opened relative to their parent directory's own handle, never by re-resolving
+the original path string. Every reparse point (junction, symlink, mount point)
+is rejected during enumeration. On POSIX platforms, file descriptors and
+`O_NOFOLLOW` are used to ensure traversal never follows symlinks. Platforms
+without descriptor-relative filesystem support (`os.supports_dir_fd` and
+`os.supports_follow_symlinks` unavailable) reject directory input outright
+rather than falling back to path-based traversal. SIMATIC SD files are included
+in discovery solely to report diagnostics; they are not decoded. A directory
+that changes while being scanned aborts before any discovered file is decoded.
 
 The current XML boundary rejects files over 10 MiB, input trees over 10,000 XML
 files or 32 levels, DTD/entity declarations, XML documents over 100,000 elements
