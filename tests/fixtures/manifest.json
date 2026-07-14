@@ -45,5 +45,24 @@
     "SimaticSD_s7res/Types/Blocks/deviceState.s7res",
     "SimaticSD_s7res/Types/UDTs/AnalogInputSettings.s7res",
     "SimaticSD_s7res/Types/UDTs/UDT_Device.s7res"
-  ]
+  ],
+  "project_mode": {
+    "layout_note": "Within each export root, Types/Blocks and Types/UDTs are project-library-origin artifacts; PLC_1/Program blocks and PLC_1/PLC data types are user-origin artifacts (2026-07-14 fixture-corpus-reuse amendment). SimaticML_synthetic/ mirrors that same PLC_1 vs Types layout for synthetic-only fixtures that the real corpus does not naturally exhibit; nothing under SimaticML_synthetic/ is a real TIA export.",
+    "artifacts": [
+      {"path": "SimaticML/PLC_1/Program blocks/100_Inputs/Inputs_FB.xml", "kind": "block", "origin": "user", "origin_tag": "native", "capability": "user-block-calls-library-block"},
+      {"path": "SimaticML/PLC_1/Program blocks/999_MISC/MotorSoftstart.xml", "kind": "block", "origin": "user", "origin_tag": "native", "capability": "user-block-calls-library-and-sibling-blocks-plus-udt-members"},
+      {"path": "SimaticML/PLC_1/Program blocks/999_MISC/TIME_COUNTER_FB.xml", "kind": "block", "origin": "user", "origin_tag": "native", "capability": "sibling-call-target-with-udt-member"},
+      {"path": "SimaticML/PLC_1/PLC data types/UDT_Settings.xml", "kind": "udt", "origin": "user", "origin_tag": "native", "capability": "udt-with-nested-udt-to-udt-reference"},
+      {"path": "SimaticML/PLC_1/PLC tags/Inputs.xml", "kind": "block", "origin": "user", "origin_tag": "native", "capability": "unsupported-root-element-sw-tags-plctagtable"},
+      {"path": "SimaticML/Types/Blocks/AnalogInput.xml", "kind": "block", "origin": "project-library", "origin_tag": "native", "capability": "library-block-call-target-with-udt-member"},
+      {"path": "SimaticML/Types/Blocks/deviceState.xml", "kind": "block", "origin": "project-library", "origin_tag": "native", "capability": "library-block-call-target"},
+      {"path": "SimaticML/Types/UDTs/AnalogInputSettings.xml", "kind": "udt", "origin": "project-library", "origin_tag": "native", "capability": "library-udt-reference-target"},
+      {"path": "SimaticML/Types/UDTs/UDT_Device.xml", "kind": "udt", "origin": "project-library", "origin_tag": "native", "capability": "library-udt-reference-target"},
+      {"path": "SimaticML_synthetic/PLC_1/Program blocks/SyntheticCases_FB.xml", "kind": "block", "origin": "user", "origin_tag": "synthetic", "capability": "missing-reference-and-ambiguous-reference-call-source", "test_purpose": "No call in the real committed corpus targets an un-exported name, and no two real exported blocks share (name, block_kind); this synthetic caller supplies both a missing-reference call (Unexported_Helper/FC) and an ambiguous-reference call (AmbiguousTarget/FC) that the real corpus does not naturally exhibit."},
+      {"path": "SimaticML_synthetic/PLC_1/Program blocks/AmbiguousTarget.xml", "kind": "block", "origin": "user", "origin_tag": "synthetic", "capability": "ambiguous-reference-target-user-half", "test_purpose": "Shares (name=AmbiguousTarget, block_kind=FC) with SimaticML_synthetic/Types/Blocks/AmbiguousTarget.xml so a call to that name cannot resolve to a unique candidate by name/kind alone."},
+      {"path": "SimaticML_synthetic/Types/Blocks/AmbiguousTarget.xml", "kind": "block", "origin": "project-library", "origin_tag": "synthetic", "capability": "ambiguous-reference-target-library-half", "test_purpose": "Library-origin half of the ambiguous-reference pair; see the user-origin half above."},
+      {"path": "SimaticML_synthetic/NonV21/UnsupportedVersion_FB.xml", "kind": "block", "origin": "unknown", "origin_tag": "synthetic", "capability": "unsupported-tia-version", "test_purpose": "Every real export in the committed corpus is consistently Engineering version=\"V21\" (verified by grep across the whole tree); this fixture declares V19 to exercise DiagnosticCode.UNSUPPORTED_TIA_VERSION, which does not occur naturally."},
+      {"path": "SimaticML_synthetic/NonV21/MissingVersion_FB.xml", "kind": "block", "origin": "unknown", "origin_tag": "synthetic", "capability": "unknown-tia-version", "test_purpose": "Every real export in the committed corpus declares an <Engineering version=\"V21\" /> element; this fixture omits it entirely to exercise DiagnosticCode.UNKNOWN_TIA_VERSION, which does not occur naturally."}
+    ]
+  }
 }

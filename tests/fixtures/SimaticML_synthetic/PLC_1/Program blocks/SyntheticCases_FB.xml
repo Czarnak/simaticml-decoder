@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Synthetic fixture (see tests/fixtures/manifest.json -> project_mode.artifacts).
+
+  The real committed V21 corpus (tests/fixtures/SimaticML/PLC_1/Program blocks/**)
+  was inventoried for Task 3 of docs/superpowers/plans/2026-07-13-project-scale-
+  simaticml-ingestion.md and contains exactly four <Call> sites, all of which
+  resolve uniquely to a real exported block. No naturally-occurring missing- or
+  ambiguous-reference call exists anywhere in that real corpus. This minimal,
+  explicitly-synthetic block supplies both cases so they have committed test
+  coverage without fabricating a false "native export" claim:
+
+    - "Unexported_Helper" (FC): no artifact anywhere in the corpus (real or
+      synthetic) is named Unexported_Helper -> a genuine missing-reference case.
+    - "AmbiguousTarget" (FC): two synthetic artifacts share this exact
+      (name, block_kind) under different origins; see
+      SimaticML_synthetic/PLC_1/Program blocks/AmbiguousTarget.xml (user) and
+      SimaticML_synthetic/Types/Blocks/AmbiguousTarget.xml (project-library).
+-->
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.FB ID="0">
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input" />
+          <Section Name="Output" />
+          <Section Name="InOut" />
+          <Section Name="Static" />
+          <Section Name="Temp" />
+          <Section Name="Constant" />
+        </Sections>
+      </Interface>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <Name>SyntheticCases_FB</Name>
+      <Namespace />
+      <Number>0</Number>
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList>
+      <SW.Blocks.CompileUnit ID="3" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource>
+            <FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+              <Parts>
+                <Call UId="10">
+                  <CallInfo Name="Unexported_Helper" BlockType="FC" />
+                </Call>
+                <Call UId="11">
+                  <CallInfo Name="AmbiguousTarget" BlockType="FC" />
+                </Call>
+              </Parts>
+              <Wires />
+            </FlgNet>
+          </NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList />
+      </SW.Blocks.CompileUnit>
+    </ObjectList>
+  </SW.Blocks.FB>
+</Document>

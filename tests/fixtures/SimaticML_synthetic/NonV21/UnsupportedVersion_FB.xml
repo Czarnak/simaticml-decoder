@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Synthetic fixture (see tests/fixtures/manifest.json -> project_mode.artifacts).
+  Every real export in the committed corpus is consistently "V21" (verified by
+  grep across the whole tree for Task 3), so an explicit non-V21 engineering
+  version does not occur naturally. This minimal block exercises
+  DiagnosticCode.UNSUPPORTED_TIA_VERSION.
+-->
+<Document>
+  <Engineering version="V19" />
+  <SW.Blocks.FB ID="0">
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input" />
+        </Sections>
+      </Interface>
+      <Name>UnsupportedVersion_FB</Name>
+      <Namespace />
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList />
+  </SW.Blocks.FB>
+</Document>

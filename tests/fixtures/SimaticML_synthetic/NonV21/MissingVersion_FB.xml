@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Synthetic fixture (see tests/fixtures/manifest.json -> project_mode.artifacts).
+  Every real export in the committed corpus declares an <Engineering version="V21" />
+  element (verified by grep across the whole tree for Task 3), so a missing
+  engineering version does not occur naturally. This minimal block (no
+  <Engineering> element at all) exercises DiagnosticCode.UNKNOWN_TIA_VERSION.
+-->
+<Document>
+  <SW.Blocks.FB ID="0">
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input" />
+        </Sections>
+      </Interface>
+      <Name>MissingVersion_FB</Name>
+      <Namespace />
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList />
+  </SW.Blocks.FB>
+</Document>

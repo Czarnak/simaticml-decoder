@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Synthetic fixture (see tests/fixtures/manifest.json -> project_mode.artifacts).
+  Project-library-origin half of the ambiguous-reference pair; see
+  SimaticML_synthetic/PLC_1/Program blocks/AmbiguousTarget.xml (user-origin,
+  same name and block_kind) for the full explanation.
+-->
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.FC ID="0">
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input" />
+          <Section Name="Output" />
+        </Sections>
+      </Interface>
+      <Name>AmbiguousTarget</Name>
+      <Namespace />
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList />
+  </SW.Blocks.FC>
+</Document>

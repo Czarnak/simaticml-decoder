@@ -112,8 +112,37 @@ def parse_document(xml_text: str) -> model.Document:
 
 
 def parse_file(path: str) -> model.Document:
-    """Read a boundary-validated SimaticML file and parse it."""
+    """Read a boundary-validated SimaticML file and parse it.
+
+    Shares ``parse_document``'s XML-to-``model.Document`` internals with
+    ``parse_bytes()`` below. This function's own path-based read
+    (``read_xml``) keeps its existing safety properties completely
+    unchanged: an ``O_NOFOLLOW`` open, a TOCTOU-closing ``os.fstat`` +
+    ``os.path.samestat`` re-check between the pre-open and post-open stat,
+    and a size-limit-before-decode check -- all before any XML decoding or
+    parsing happens. Do not replace this with ``path.read_bytes()``; that
+    has none of those protections (see
+    ``docs/superpowers/memory/native-handle-traversal-decision.md``).
+    """
     return parse_document(read_xml(Path(path)))
+
+
+def parse_bytes(raw: bytes) -> model.Document:
+    """Parse an already-read SimaticML XML byte string into a
+    ``model.Document``.
+
+    Performs **zero filesystem access** -- this is the entry point for
+    bytes obtained any way other than ``parse_file()``'s own safe,
+    path-based read above (e.g. a handle/descriptor-backed reader closure
+    such as ``input_policy.InputArtifact.read_bytes()``). Callers are
+    responsible for their own boundary validation (size limits, DTD/entity
+    rejection, structural-complexity limits) *before* calling this function;
+    see ``project_xml.preflight_xml_bytes()`` for the project-mode
+    ingestion path that does exactly that. Shares ``parse_document``'s
+    XML-to-``model.Document`` internals with ``parse_file()`` above, so
+    there is exactly one place that walks the element tree either way.
+    """
+    return parse_document(raw.decode("utf-8-sig"))
 
 
 # --------------------------------------------------------------------------- #

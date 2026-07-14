@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Synthetic fixture (see tests/fixtures/manifest.json -> project_mode.artifacts).
+  User-origin half of the ambiguous-reference pair: a project-library-origin
+  block of the exact same name and block_kind lives at
+  SimaticML_synthetic/Types/Blocks/AmbiguousTarget.xml. A call site naming
+  "AmbiguousTarget"/FC (see SyntheticCases_FB.xml) cannot tell which of the
+  two this file's origin refers to; that ambiguity is the point.
+-->
+<Document>
+  <Engineering version="V21" />
+  <SW.Blocks.FC ID="0">
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+          <Section Name="Input" />
+          <Section Name="Output" />
+        </Sections>
+      </Interface>
+      <Name>AmbiguousTarget</Name>
+      <Namespace />
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList />
+  </SW.Blocks.FC>
+</Document>

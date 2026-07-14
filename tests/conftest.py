@@ -45,3 +45,14 @@ def load_fixture():
         return parse.parse_file(str(_require(name)))
 
     return _load
+
+
+@pytest.fixture
+def project_fixture_root() -> Path:
+    """Root directory containing every native (``SimaticML/``) and
+    explicitly-labeled synthetic (``SimaticML_synthetic/``) V21 project-mode
+    corpus fixture. Required paths in project-mode tests are expressed
+    relative to this root (e.g. ``"SimaticML/PLC_1/..."``), matching how
+    ``tests/fixtures/manifest.json``'s own paths are rooted.
+    """
+    return FIXTURES_DIR
