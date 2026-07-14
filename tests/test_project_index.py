@@ -52,11 +52,38 @@ def _call_network(call_uid: str, name: str, block_type: str) -> model.Network:
     )
 
 
-def _block_document(networks: list[model.Network]) -> model.Document:
+def _block_document(
+    networks: list[model.Network], interface: model.Interface | None = None
+) -> model.Document:
     return model.Document(
         engineering_version="V21",
-        block=model.Block(kind=model.BlockKind.FC, id="1", name="Body", networks=networks),
+        block=model.Block(
+            kind=model.BlockKind.FC,
+            id="1",
+            name="Body",
+            networks=networks,
+            interface=interface or model.Interface(),
+        ),
     )
+
+
+def _udt_member(name: str, referenced_udt: str) -> model.Member:
+    """A Static (or any other section) member whose ``Datatype`` was the
+    quoted-UDT-reference syntax observed in the real corpus (e.g.
+    ``UDT_Settings.xml``'s ``Datatype="&quot;AnalogInputSettings&quot;"``,
+    unescaped to a literal-quoted string) -- see
+    ``project_xml.extract_udt_references`` /
+    ``_collect_udt_member_references``, which reads ``member.is_udt`` and
+    strips the surrounding quotes off ``member.datatype`` to get the
+    referenced name.
+    """
+    return model.Member(name=name, datatype=f'"{referenced_udt}"', is_udt=True)
+
+
+def _interface_with_members(
+    members: list[model.Member], section_name: str = "Static"
+) -> model.Interface:
+    return model.Interface(sections=[model.Section(name=section_name, members=members)])
 
 
 def _record(
@@ -155,6 +182,42 @@ def test_resolves_a_request_with_exactly_one_matching_candidate():
     assert edge.target == target_identity
     assert edge.kind == ArtifactKind.BLOCK
     assert edge.location == SourceLocation(PurePosixPath("PLC_1/Caller.xml"), "10")
+
+
+# --------------------------------------------------------------------------- #
+# UDT member reference (extract_udt_references path)                          #
+# --------------------------------------------------------------------------- #
+
+
+def test_resolves_a_udt_member_reference_to_an_edge():
+    """Mirrors the real scenario project_xml.py's own docstring cites:
+    UDT_Settings.xml's Tank_1/Tank_2 members reference the AnalogInputSettings
+    UDT via quoted Datatype syntax. This exercises _collect_requests's
+    extract_udt_references call end to end through index_project_artifacts --
+    every other test in this file only ever builds documents via
+    _block_document() with no interface, so extract_udt_references always
+    returned () for them; this is the one test with a non-empty interface."""
+    caller_identity = _identity(ArtifactKind.BLOCK, ArtifactOrigin.USER, "Caller", "FC")
+    udt_identity = _identity(ArtifactKind.UDT, ArtifactOrigin.PROJECT_LIBRARY, "AnalogInputSettings")
+
+    interface = _interface_with_members([_udt_member("Tank_1", "AnalogInputSettings")])
+    caller_document = _block_document([], interface=interface)
+    caller_record = _record(caller_identity, "PLC_1/Caller.xml")
+
+    artifacts = (
+        ParsedArtifact(record=caller_record, document=caller_document),
+        _leaf_artifact(udt_identity, "Types/UDTs/AnalogInputSettings.xml"),
+    )
+
+    index = index_project_artifacts(artifacts, ProjectLimits())
+
+    assert index.diagnostics == ()
+    assert len(index.edges) == 1
+    edge = index.edges[0]
+    assert edge.source == caller_identity
+    assert edge.target == udt_identity
+    assert edge.kind == ArtifactKind.UDT
+    assert edge.location == SourceLocation(PurePosixPath("PLC_1/Caller.xml"))
 
 
 # --------------------------------------------------------------------------- #
