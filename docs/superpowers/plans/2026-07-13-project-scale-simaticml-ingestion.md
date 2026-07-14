@@ -188,8 +188,12 @@ def test_discovery_is_relative_sorted_and_never_follows_a_symlink(tmp_path):
     result = discover_project_files(root, {".xml": InputFormat.SIMATICML_XML}, ProjectLimits())
 
     assert [item.location.relative_path.as_posix() for item in result.files] == [
-        "a/First.xml", "z/Second.xml"
-    ]
+        "a/First.xml", "outside.xml", "z/Second.xml"
+    ]  # 2026-07-14 fix: outside.xml is a plain file physically inside root (only
+       # link.xml is the symlink under test); the Global Constraints require
+       # processing every regular file contained by the root, so it belongs in
+       # the expected set. An earlier draft of this example omitted it, which
+       # contradicted that constraint -- caught during Task 2's review.
     assert [item.code for item in result.diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
     assert all(
         isinstance(item.artifact, input_policy.InputArtifact) for item in result.files
