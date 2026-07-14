@@ -18,6 +18,21 @@ def test_missing_path_is_soft_noop(capsys):
     assert "not found" in capsys.readouterr().err
 
 
+def test_no_arguments_is_a_reported_error_not_a_system_exit(capsys):
+    """``input`` is ``nargs="?"`` (optional at the argparse level) now that
+    ``--project`` exists as an alternative mode, so a bare ``cli.main([])``
+    no longer triggers argparse's own "required argument missing" SystemExit.
+    Enforcement of "exactly one of PATH or --project" is main()'s own job;
+    it must still reject a genuinely missing input, but by returning a
+    nonzero int rather than raising -- so callers can keep doing
+    ``cli.main([...]) == code`` without ``pytest.raises(SystemExit)``.
+    """
+    code = cli.main([])
+    assert code != 0
+    assert code == 2
+    assert "PATH" in capsys.readouterr().err
+
+
 def test_malformed_xml_returns_1(tmp_path, capsys):
     bad = tmp_path / "bad.xml"
     bad.write_text("<not><closed>", encoding="utf-8")

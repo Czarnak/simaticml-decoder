@@ -3,6 +3,7 @@
 Surface:
 
     simaticml-decode PATH [-o OUTDIR] [--format {scl,json,both}] [--no-recursive] [-q]
+    simaticml-decode --project ROOT [-o OUTDIR] [--library-root RELATIVE_PATH]... [-q]
 
 ``PATH`` is either a single exported SimaticML ``.xml`` block (decoded as before) or
 a **directory**. For a directory the tool discovers every ``.xml`` block beneath it
@@ -20,6 +21,12 @@ Artifacts are written as ``<stem>.scl`` and ``<stem>.json`` either next to the i
 (deferred constructs, unknown instructions) are reported on stderr but do not fail
 the run. In directory mode one bad file is reported and skipped without aborting the
 batch; the process exits non-zero only when at least one file failed.
+
+``--project ROOT`` is a separate, explicit mode: it indexes a whole V21 project
+export (``project.index_simaticml_project``) instead of decoding blocks, and always
+writes a single ``project-manifest.json`` analysis artifact -- never ``.scl``/
+``.json`` sidecars. Exactly one of ``PATH`` or ``--project`` must be given; the two
+modes are mutually exclusive and never combined in one invocation.
 """
 
 from __future__ import annotations
@@ -41,6 +48,9 @@ from .input_policy import (
     safe_text,
     validate_artifact_format,
 )
+from .project import index_simaticml_project
+from .project_emit import write_project_manifest
+from .project_model import ArtifactStatus, ProjectLimits
 
 _EPILOG = """\
 examples:
@@ -49,6 +59,8 @@ examples:
   simaticml-decode Motor.xml --format scl    # SCL only
   simaticml-decode blocks/ -o decoded/       # bulk: mirror blocks/'s subtree into decoded/
   simaticml-decode blocks/ --no-recursive    # only the top level of blocks/
+  simaticml-decode --project MyProject/      # index a V21 project export
+  simaticml-decode --project MyProject/ -o out/ --library-root "PLC_1/Libraries"
 """
 
 
@@ -75,15 +87,18 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "input",
         metavar="PATH",
+        nargs="?",
+        default=None,
         help="a SimaticML .xml block, or a directory to decode in bulk "
-        "(its subtree is mirrored into --output)",
+        "(its subtree is mirrored into --output). Omit when using --project.",
     )
     p.add_argument(
         "-o",
         "--output",
         metavar="DIR",
-        help="output directory (default: alongside each input file). In "
-        "directory mode the input's relative subtree is preserved here.",
+        help="output directory (default: alongside each input file, or the "
+        "project root itself in --project mode). In directory mode the "
+        "input's relative subtree is preserved here.",
     )
     p.add_argument(
         "--format",
@@ -103,12 +118,83 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="suppress the per-file progress/warning summary on stderr",
     )
+    p.add_argument(
+        "--project",
+        metavar="ROOT",
+        default=None,
+        help="index a whole V21 project export instead of decoding a block; "
+        "writes ROOT/project-manifest.json (or OUTDIR/project-manifest.json "
+        "with -o). Mutually exclusive with PATH.",
+    )
+    p.add_argument(
+        "--library-root",
+        action="append",
+        default=[],
+        metavar="RELATIVE_PATH",
+        help="project-relative path (repeatable) to force as "
+        "ArtifactOrigin.PROJECT_LIBRARY, overriding the Types/ vs PLC_1/ "
+        "path convention; must be a normalized relative path under --project",
+    )
+    p.add_argument(
+        "--max-files",
+        type=int,
+        default=ProjectLimits().max_files,
+        help="--project mode: maximum number of files to discover (default: %(default)s)",
+    )
+    p.add_argument(
+        "--max-file-bytes",
+        type=int,
+        default=ProjectLimits().max_file_bytes,
+        help="--project mode: maximum size of any one file, in bytes (default: %(default)s)",
+    )
+    p.add_argument(
+        "--max-total-bytes",
+        type=int,
+        default=ProjectLimits().max_total_bytes,
+        help="--project mode: maximum combined size of all discovered files, in bytes "
+        "(default: %(default)s)",
+    )
+    p.add_argument(
+        "--max-depth",
+        type=int,
+        default=ProjectLimits().max_relative_depth,
+        help="--project mode: maximum directory nesting depth under ROOT (default: %(default)s)",
+    )
+    p.add_argument(
+        "--max-xml-elements",
+        type=int,
+        default=ProjectLimits().max_xml_elements,
+        help="--project mode: maximum XML element count per artifact (default: %(default)s)",
+    )
+    p.add_argument(
+        "--max-xml-depth",
+        type=int,
+        default=ProjectLimits().max_xml_depth,
+        help="--project mode: maximum XML nesting depth per artifact (default: %(default)s)",
+    )
+    p.add_argument(
+        "--max-reference-edges",
+        type=int,
+        default=ProjectLimits().max_reference_edges,
+        help="--project mode: maximum resolved reference edges (default: %(default)s)",
+    )
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     return p
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+
+    has_input = args.input is not None
+    has_project = args.project is not None
+    if has_input == has_project:
+        given = "both PATH and --project" if has_input else "neither PATH nor --project"
+        print(f"error: pass exactly one of PATH or --project (got {given})", file=sys.stderr)
+        return 2
+
+    if has_project:
+        return _main_project(args)
+
     input_path = Path(args.input)
     fmt = args.format
 
@@ -138,6 +224,39 @@ def main(argv: list[str] | None = None) -> int:
     # Neither file nor directory: nothing to decode. Soft no-op (exit 0).
     print(f"no input to decode: {input_path} not found", file=sys.stderr)
     return 0
+
+
+def _main_project(args: argparse.Namespace) -> int:
+    """``--project`` mode: index a whole V21 project export and write a single
+    ``project-manifest.json``. Never calls ``fold.fold_block()`` or
+    ``emit.emit_scl()``/``emit.emit_sidecar()`` -- project mode's only output
+    is the analysis-only, non-re-importable manifest.
+    """
+    project_root = Path(args.project)
+    limits = ProjectLimits(
+        max_files=args.max_files,
+        max_file_bytes=args.max_file_bytes,
+        max_total_bytes=args.max_total_bytes,
+        max_relative_depth=args.max_depth,
+        max_xml_elements=args.max_xml_elements,
+        max_xml_depth=args.max_xml_depth,
+        max_reference_edges=args.max_reference_edges,
+    )
+    index = index_simaticml_project(project_root, tuple(args.library_root), limits)
+
+    out_dir = Path(args.output) if args.output else project_root
+    manifest_path = write_project_manifest(index, out_dir / "project-manifest.json")
+
+    if not args.quiet:
+        failed = sum(1 for record in index.artifacts if record.status == ArtifactStatus.FAILED)
+        print(
+            f"{len(index.artifacts)} artifact(s) indexed ({failed} failed), "
+            f"{len(index.edges)} reference edge(s), {len(index.diagnostics)} "
+            f"diagnostic(s) -> {manifest_path}",
+            file=sys.stderr,
+        )
+
+    return 1 if any(record.status == ArtifactStatus.FAILED for record in index.artifacts) else 0
 
 
 def decode_file(source: Path, out_dir: Path, fmt: str) -> FileOutcome:
