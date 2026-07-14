@@ -150,6 +150,7 @@ class SourceLocation:
     """Immutable reference to a location in project source files."""
 
     relative_path: PurePosixPath
+    element_id: str | None = None
 
 
 @dataclass(frozen=True)

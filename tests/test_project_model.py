@@ -42,3 +42,8 @@ def test_non_complete_status_requires_a_diagnostic():
 def test_project_limits_rejects_a_non_positive_field():
     with pytest.raises(ValueError):
         ProjectLimits(max_files=0)
+
+
+def test_source_location_carries_an_optional_call_site_element_id():
+    source = SourceLocation(PurePosixPath("blocks/Axis.xml"), "uid1")
+    assert source.element_id == "uid1"
