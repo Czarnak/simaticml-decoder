@@ -6,6 +6,8 @@
 
 **Architecture:** Keep `parse.py -> model.py -> fold.py -> ir.py -> emit.py` as the block-level pipeline. Put project-only, immutable records above it: a safe discovery stage, a V21 SimaticML adapter, a conservative reference resolver, and an analysis-only manifest writer. The adapter may preserve unknown/unsupported artifacts, but it must not invent a UDT grammar, library origin, or reference target.
 
+**Discovery/read reuse (2026-07-14 amendment, architect + security review):** Project-mode discovery and the later per-artifact read must reuse `input_policy.py`'s existing handle-anchored walk (native NT handles on Windows, `dir_fd`+`O_NOFOLLOW` on POSIX) rather than introduce a second, path-based traversal. An earlier draft of Task 2 used `Path.rglob()` + `is_symlink()` + `resolve()`, with Task 3 later reopening each file by its stored path via `parse.parse_file(str(path))`. Independent architect and security review confirmed this reintroduces — with a *larger* window, since discovery fully walks the tree before any parsing starts — the exact TOCTOU race `docs/superpowers/memory/native-handle-traversal-decision.md` already closed for the existing CLI: an attacker with write access to the scanned tree can swap a discovered file for a symlink/junction between discovery and the later path-based reopen, redirecting the read outside the resolved project root. Tasks 2 and 3 below are corrected to route through `input_policy.py`'s existing machinery instead.
+
 **Tech Stack:** Python 3.11+, standard-library `dataclasses`, `enum`, `hashlib`, `json`, `pathlib`, and `xml.etree.ElementTree`; pytest with coverage; Ruff; existing package entry point.
 
 ## Global Constraints
@@ -25,8 +27,10 @@
 | Path | Responsibility |
 | --- | --- |
 | `src/simaticml_decoder/project_model.py` | Immutable project identities, provenance, limits, diagnostics, statuses, records, and index types. |
-| `src/simaticml_decoder/project_discovery.py` | Bounded, root-contained discovery and format classification without parsing semantics. |
-| `src/simaticml_decoder/project_xml.py` | V21 SimaticML preflight, block adapter, observed-schema UDT adapter, and reference extraction. |
+| `src/simaticml_decoder/input_policy.py` | *(modified, not replaced)* Adds soft-diagnostic sibling walk functions (`_walk_windows_softdiag`/`_walk_posix_softdiag`) and `discover_project_artifacts()`, reusing the existing handle-anchored machinery; existing hard-fail directory-mode behavior (`discover_input_files`) is unchanged. |
+| `src/simaticml_decoder/project_discovery.py` | Thin adapter over `input_policy.discover_project_artifacts()`: project-shaped limits/diagnostics and format classification. No path-based traversal of its own. |
+| `src/simaticml_decoder/parse.py` | *(modified)* Adds `parse_bytes()` so a discovered artifact's already-read bytes can be parsed without reopening its path; `parse_file()` becomes a thin wrapper that reads once and delegates. |
+| `src/simaticml_decoder/project_xml.py` | V21 SimaticML preflight, block adapter, observed-schema UDT adapter, and reference extraction — operates on bytes obtained from `DiscoveredFile.artifact.read_bytes()`, never a re-opened path. |
 | `src/simaticml_decoder/project_index.py` | Deterministic identity construction, unique-only resolution, and call/type edges. |
 | `src/simaticml_decoder/project_emit.py` | Canonical analysis-only project-manifest construction and atomic writing. |
 | `src/simaticml_decoder/project.py` | Explicit SimaticML project-index orchestration. |
@@ -150,17 +154,22 @@ git add src/simaticml_decoder/project_model.py tests/test_project_model.py
 git commit -m "feat: add immutable project index contracts"
 ```
 
-### Task 2: Add safe, bounded, deterministic discovery
+### Task 2: Add safe, bounded, deterministic discovery on top of the existing hardened walk
 
 **Files:**
 
+- Modify: `src/simaticml_decoder/input_policy.py` (add soft-diagnostic walk siblings and `discover_project_artifacts()`)
 - Create: `src/simaticml_decoder/project_discovery.py`
 - Create: `tests/test_project_discovery.py`
 
 **Interfaces:**
 
-- Consumes: `InputFormat`, `ProjectDiagnostic`, `ProjectLimits`, and `SourceLocation` from `project_model.py`.
-- Produces: `DiscoveredFile` and `discover_project_files(root, suffixes, limits) -> DiscoveryResult` for the XML and later SIMATIC SD adapters.
+- Consumes: `InputFormat`, `ProjectDiagnostic`, `ProjectLimits`, and `SourceLocation` from `project_model.py`; `input_policy.InputArtifact`/`InputLimits`.
+- Produces, split across two layers to keep the module boundary unambiguous:
+  - `input_policy.py` adds `discover_project_artifacts(root, suffixes, limits) -> tuple[tuple[InputArtifact, ...], tuple[ProjectDiagnostic, ...]]` — the handle-anchored, soft-diagnostic walk itself. Nothing project-shaped beyond `ProjectDiagnostic` leaks into `input_policy.py`.
+  - `project_discovery.py` adds `discover_project_files(root, suffixes, limits) -> DiscoveryResult` — the project-facing wrapper that calls `input_policy.discover_project_artifacts()` and composes each returned `InputArtifact` into a `DiscoveredFile`. This is the only `discover_project_files` name; callers (Task 3 onward) import it from `project_discovery`, never from `input_policy`.
+
+**Security constraint:** must not reimplement path-based traversal (`rglob` + `is_symlink()` + `resolve()`). See the Architecture note above and `docs/superpowers/memory/native-handle-traversal-decision.md`. Every kept file's bytes must remain reachable only through a reader closure bound to a handle/fd opened *during this same walk* — never re-derived from a stored path later.
 
 - [ ] **Step 1: Write failing root-containment and ordering tests**
 
@@ -180,6 +189,9 @@ def test_discovery_is_relative_sorted_and_never_follows_a_symlink(tmp_path):
         "a/First.xml", "z/Second.xml"
     ]
     assert [item.code for item in result.diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
+    assert all(
+        isinstance(item.artifact, input_policy.InputArtifact) for item in result.files
+    )
 ```
 
 - [ ] **Step 2: Run the discovery test and verify it fails**
@@ -188,60 +200,64 @@ Run: `./.venv/Scripts/python.exe -m pytest tests/test_project_discovery.py -v -p
 
 Expected: FAIL because the discovery module is absent.
 
-- [ ] **Step 3: Implement containment, classification, and every budget check**
+- [ ] **Step 3: Add soft-diagnostic walk siblings in `input_policy.py`; never touch the existing hard-fail walkers**
+
+`_walk_windows_directory`/`_walk_posix_directory` raise `InputViolation` immediately on any symlink/depth/count breach; that fail-the-whole-walk contract is load-bearing for the existing CLI's directory mode and must not change. Add new sibling functions instead, mirroring their shape but appending a `ProjectDiagnostic` and continuing instead of raising, and still opening every child relative to its parent's own already-open handle:
 
 ```python
-def discover_project_files(
-    root: Path,
-    suffixes: Mapping[str, InputFormat],
-    limits: ProjectLimits,
-) -> DiscoveryResult:
-    resolved_root = root.resolve(strict=True)
-    files: list[DiscoveredFile] = []
-    diagnostics: list[ProjectDiagnostic] = []
-    total_bytes = 0
-    for candidate in sorted(root.rglob("*"), key=lambda item: item.as_posix().casefold()):
-        if candidate.is_symlink():
-            diagnostics.append(_diagnostic(DiagnosticCode.SYMLINK_SKIPPED, candidate, root))
-            continue
-        if not candidate.is_file():
-            continue
-        resolved = candidate.resolve(strict=True)
-        relative = resolved.relative_to(resolved_root)
-        if len(relative.parts) > limits.max_relative_depth:
-            diagnostics.append(_diagnostic(DiagnosticCode.DEPTH_LIMIT, candidate, root))
-            continue
-        size = resolved.stat().st_size
-        if size > limits.max_file_bytes:
-            diagnostics.append(_diagnostic(DiagnosticCode.FILE_SIZE_LIMIT, candidate, root))
-            continue
-        if total_bytes + size > limits.max_total_bytes:
-            diagnostics.append(_diagnostic(DiagnosticCode.TOTAL_SIZE_LIMIT, candidate, root))
-            continue
-        input_format = suffixes.get(resolved.suffix.casefold())
-        if input_format is None:
-            continue
-        if len(files) == limits.max_files:
-            diagnostics.append(_diagnostic(DiagnosticCode.FILE_COUNT_LIMIT, candidate, root))
-            break
-        total_bytes += size
-        files.append(DiscoveredFile(resolved, SourceLocation(PurePosixPath(relative.as_posix())), input_format, size))
-    return DiscoveryResult(tuple(files), tuple(_sorted_diagnostics(diagnostics)))
+def _walk_windows_softdiag(
+    directory, relative_prefix, depth, limits, suffixes, artifacts, diagnostics
+) -> None:
+    """Mirrors _walk_windows_directory; records a diagnostic and continues
+    past a reparse point / depth / file-count breach instead of raising.
+    Still opens every child relative to its parent's own already-open
+    handle -- the TOCTOU-closing invariant from native-handle-traversal-
+    decision.md is unchanged, only the failure policy differs."""
+    ...  # same entries()/open_child() shape as _walk_windows_directory
+
+
+def _walk_posix_softdiag(
+    dir_fd, relative_prefix, depth, limits, suffixes, artifacts, diagnostics
+) -> None:
+    ...  # same dir_fd/O_NOFOLLOW shape as _walk_posix_directory
+
+
+def discover_project_artifacts(
+    root: Path, suffixes: set[str], limits: "InputLimits"
+) -> tuple[tuple[InputArtifact, ...], tuple["ProjectDiagnostic", ...]]:
+    """Handle-anchored sibling of discover_input_files() for project mode:
+    same TOCTOU-resistant traversal, soft per-item diagnostics instead of
+    hard failure, delegating to _walk_windows_softdiag/_walk_posix_softdiag.
+    Returns raw InputArtifacts; project_discovery.py wraps these into
+    DiscoveredFile -- this function stays free of project-shaped types
+    beyond the ProjectDiagnostic it already needs to report violations."""
+    ...
 ```
 
-Convert `ValueError` from `relative_to` into an `OUTSIDE_ROOT` diagnostic rather than letting it escape. Add independent tests for file count, file size, total size, relative depth, case-insensitive suffixes, and a root that does not exist.
+`project_discovery.py` adapts this into project types without touching the filesystem itself: it builds an `InputLimits` from the relevant `ProjectLimits` fields, calls `input_policy.discover_project_artifacts()`, applies the project-only total-bytes budget and format classification, and wraps each result — this is the module's own `discover_project_files()`, the sole function of that name:
+
+```python
+@dataclass(frozen=True)
+class DiscoveredFile:
+    artifact: input_policy.InputArtifact  # bytes obtained only via artifact.read_bytes(limits)
+    location: SourceLocation
+    input_format: InputFormat
+    size: int
+```
+
+Convert any `OUTSIDE_ROOT`-shaped failure from the underlying walk into a `ProjectDiagnostic` rather than letting it escape. Add independent tests for file count, file size, total size, relative depth, case-insensitive suffixes, and a root that does not exist.
 
 - [ ] **Step 4: Run focused safety tests**
 
-Run: `./.venv/Scripts/python.exe -m pytest tests/test_project_discovery.py -v -p no:cacheprovider`
+Run: `./.venv/Scripts/python.exe -m pytest tests/test_project_discovery.py tests/test_input_policy.py -v -p no:cacheprovider`
 
-Expected: PASS; each exceeded limit has its own diagnostic code and no path outside `root` occurs in `result.files`.
+Expected: PASS; each exceeded limit has its own diagnostic code, no path outside `root` occurs in `result.files`, existing `discover_input_files()`/CLI directory-mode tests are unaffected.
 
 - [ ] **Step 5: Commit the discovery boundary**
 
 ```bash
-git add src/simaticml_decoder/project_discovery.py tests/test_project_discovery.py
-git commit -m "feat: add bounded project file discovery"
+git add src/simaticml_decoder/input_policy.py src/simaticml_decoder/project_discovery.py tests/test_project_discovery.py
+git commit -m "feat: add bounded project file discovery on the hardened walk"
 ```
 
 ### Task 3: Adapt observed V21 XML artifacts without broadening the single-block parser
@@ -249,14 +265,17 @@ git commit -m "feat: add bounded project file discovery"
 **Files:**
 
 - Create: `src/simaticml_decoder/project_xml.py`
+- Modify: `src/simaticml_decoder/parse.py` (add `parse_bytes()`; `parse_file()` becomes read-once-then-delegate)
 - Create: `tests/test_project_xml.py`
 - Modify: `tests/fixtures/corpus/v21/metadata.json`
 - Create: `tests/fixtures/corpus/v21/simaticml/project/` native sanitized exports after the user supplies them
 
 **Interfaces:**
 
-- Consumes: `DiscoveredFile`, `ProjectLimits`, `ArtifactRecord`, and existing `parse.parse_file()`.
-- Produces: `parse_simaticml_artifact(candidate, root, limits) -> ParsedArtifact`, `extract_block_references(document, source)`, and `extract_udt_references(document, source)`.
+- Consumes: `DiscoveredFile`, `ProjectLimits`, `ArtifactRecord`, and the new `parse.parse_bytes()`.
+- Produces: `parse_simaticml_artifact(candidate, limits) -> ParsedArtifact`, `extract_block_references(document, source)`, and `extract_udt_references(document, source)`.
+
+**Security constraint:** must read a discovered artifact's content exactly once, via `candidate.artifact.read_bytes(limits)` (the reader closure captured at discovery time in Task 2). Never call `parse.parse_file(str(candidate.path))` or otherwise reopen the file by a stored path — that reintroduces the TOCTOU race described in the Architecture note above.
 
 - [ ] **Step 1: Establish the native corpus contract before parser changes**
 
@@ -278,14 +297,15 @@ Run: `./.venv/Scripts/python.exe -m pytest tests/test_project_xml.py::test_nativ
 
 Expected: FAIL for an absent or incomplete committed native corpus. Do not replace this with `pytest.skip`.
 
-- [ ] **Step 3: Implement bounded XML preflight and narrow block adaptation**
+- [ ] **Step 3: Implement bounded XML preflight and narrow block adaptation over already-read bytes**
 
 ```python
 def parse_simaticml_artifact(
-    candidate: DiscoveredFile, root: Path, limits: ProjectLimits
+    candidate: DiscoveredFile, limits: ProjectLimits
 ) -> ParsedArtifact:
-    preflight_xml(candidate.path, limits)
-    document = parse.parse_file(str(candidate.path))
+    raw = candidate.artifact.read_bytes(_as_input_limits(limits))  # single consuming read
+    preflight_xml_bytes(raw, limits)
+    document = parse.parse_bytes(raw)
     version = document.engineering_version
     if version and "V21" not in version:
         return _preserved_version(candidate, DiagnosticCode.UNSUPPORTED_TIA_VERSION, version)
@@ -294,7 +314,7 @@ def parse_simaticml_artifact(
     return _block_artifact(document, candidate)
 ```
 
-`preflight_xml()` must use `ElementTree.iterparse` to count elements and nesting depth before calling the existing parser. It must return `MALFORMED_XML`, `XML_ELEMENT_LIMIT`, or `XML_DEPTH_LIMIT` as structured diagnostics. Reuse `parse.parse_file()` only for recognized `SW.Blocks.*` exports. Preserve unrecognized XML as an artifact with `UNSUPPORTED_ARTIFACT`; do not modify `model.Document` into a broad XML union.
+`preflight_xml_bytes()` must use `ElementTree.iterparse` over `io.BytesIO(raw)` — the bytes already obtained from `read_bytes()`, never a reopened path — to count elements and nesting depth before calling the parser. It must return `MALFORMED_XML`, `XML_ELEMENT_LIMIT`, or `XML_DEPTH_LIMIT` as structured diagnostics. In `parse.py`, add `parse_bytes(raw: bytes) -> model.Document` sharing `_parse_block`'s internals with `parse_file()`, and refactor `parse_file()` into `parse_bytes(path.read_bytes())` so there is exactly one parsing entry point that doesn't require a filesystem path. Reuse the resulting parse only for recognized `SW.Blocks.*` exports. Preserve unrecognized XML as an artifact with `UNSUPPORTED_ARTIFACT`; do not modify `model.Document` into a broad XML union.
 
 Implement a UDT adapter only from the supplied V21 UDT export. If the observed UDT shape cannot be parsed safely, create an `ArtifactKind.UDT` record with `PRESERVED` status, SHA-256, source location, and diagnostic; do not infer an XML schema.
 
@@ -610,15 +630,15 @@ def test_pytest_coverage_floor_is_80_percent():
     assert "--cov-fail-under=80" in config
 ```
 
-- [ ] **Step 2: Run it and verify the current 70% floor fails the test**
+- [ ] **Step 2: Run it and verify the test fails against the current `pyproject.toml`**
 
 Run: `./.venv/Scripts/python.exe -m pytest tests/test_quality_configuration.py::test_pytest_coverage_floor_is_80_percent -v -p no:cacheprovider`
 
-Expected: FAIL while the repository still specifies `--cov-fail-under=70`.
+Expected: FAIL — `.github/workflows/ci.yml` already runs with `--cov-fail-under=80` (verified 2026-07-14), but `pyproject.toml` doesn't encode any coverage floor at all today. This step is not "raise 70% to 80%"; it closes the gap between an already-enforced CI floor and an undocumented `pyproject.toml`.
 
-- [ ] **Step 3: Raise and document the enforced floor**
+- [ ] **Step 3: Record the already-enforced floor in `pyproject.toml`**
 
-Set the pytest coverage threshold to 80. Align CI's Python versions with the package's stated support or narrow the stated support deliberately; do not advertise untested versions. Keep the quality command in `README.md` identical to CI.
+Add the 80% floor to `pyproject.toml` (e.g. `[tool.pytest.ini_options] addopts = "--cov-fail-under=80"`, or an equivalent `[tool.coverage.report] fail_under = 80`) so `pyproject.toml` and the quality command documented in `README.md` match CI exactly, rather than CI being the only place this floor is defined. Align CI's Python versions with the package's stated support or narrow the stated support deliberately; do not advertise untested versions.
 
 - [ ] **Step 4: Run the full quality gate**
 
@@ -643,6 +663,7 @@ git commit -m "ci: enforce supported-format coverage gate"
 - Evidence gates: the exact UDT syntax, V21 version field, and library-origin metadata are read from the supplied native exports before semantic parsing; the plan contains preservation behavior when that evidence is absent.
 - Completeness scan: no generic parser, implicit library-path inference, or unsupported TIA import behavior is prescribed.
 - Type consistency: every later task consumes immutable `ProjectIndex`/`ArtifactRecord`/`ProjectDiagnostic` contracts defined in Task 1; SIMATIC SD will extend the format registry rather than creating another project model.
+- Security (2026-07-14 amendment): Tasks 2 and 3 were corrected after independent architect and security review confirmed the original path-based discovery + reopen-by-path design reintroduced a TOCTOU race already closed by `input_policy.py`'s handle-anchored walk (see the Architecture note and `docs/superpowers/memory/native-handle-traversal-decision.md`). Discovery now delegates to new soft-diagnostic siblings of the existing hard-fail walk functions, and artifact bytes flow through a single `read_bytes()`/`parse_bytes()` call — never a stored path reopened later.
 
 ## Execution Handoff
 
