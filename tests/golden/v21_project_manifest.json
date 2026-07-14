@@ -1,0 +1,735 @@
+{
+  "artifacts": [
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_WORK_CNT:_",
+        "kind": "udt",
+        "name": "UDT_WORK_CNT",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC data types/HMI_COUNTERS_UDTs/UDT_WORK_CNT.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_Settings:_",
+        "kind": "udt",
+        "name": "UDT_Settings",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC data types/UDT_Settings.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [
+        {
+          "code": "unsupported_artifact",
+          "location": {
+            "element_id": null,
+            "relative_path": "PLC_1/PLC tags/DIAG.xml"
+          },
+          "message": "root element(s) [Engineering, SW.Tags.PlcTagTable] are not a recognized SimaticML block or UDT export",
+          "severity": "warning"
+        }
+      ],
+      "identity": {
+        "block_kind": null,
+        "key": "block:user:_:DIAG:_",
+        "kind": "block",
+        "name": "DIAG",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC tags/DIAG.xml"
+      },
+      "status": "preserved"
+    },
+    {
+      "diagnostics": [
+        {
+          "code": "unsupported_artifact",
+          "location": {
+            "element_id": null,
+            "relative_path": "PLC_1/PLC tags/Default tag table.xml"
+          },
+          "message": "root element(s) [Engineering, SW.Tags.PlcTagTable] are not a recognized SimaticML block or UDT export",
+          "severity": "warning"
+        }
+      ],
+      "identity": {
+        "block_kind": null,
+        "key": "block:user:_:Default tag table:_",
+        "kind": "block",
+        "name": "Default tag table",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC tags/Default tag table.xml"
+      },
+      "status": "preserved"
+    },
+    {
+      "diagnostics": [
+        {
+          "code": "unsupported_artifact",
+          "location": {
+            "element_id": null,
+            "relative_path": "PLC_1/PLC tags/Inputs.xml"
+          },
+          "message": "root element(s) [Engineering, SW.Tags.PlcTagTable] are not a recognized SimaticML block or UDT export",
+          "severity": "warning"
+        }
+      ],
+      "identity": {
+        "block_kind": null,
+        "key": "block:user:_:Inputs:_",
+        "kind": "block",
+        "name": "Inputs",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC tags/Inputs.xml"
+      },
+      "status": "preserved"
+    },
+    {
+      "diagnostics": [
+        {
+          "code": "unsupported_artifact",
+          "location": {
+            "element_id": null,
+            "relative_path": "PLC_1/PLC tags/Outputs.xml"
+          },
+          "message": "root element(s) [Engineering, SW.Tags.PlcTagTable] are not a recognized SimaticML block or UDT export",
+          "severity": "warning"
+        }
+      ],
+      "identity": {
+        "block_kind": null,
+        "key": "block:user:_:Outputs:_",
+        "kind": "block",
+        "name": "Outputs",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC tags/Outputs.xml"
+      },
+      "status": "preserved"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:InputValues_DB:UNKNOWN",
+        "kind": "block",
+        "name": "InputValues_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/100_Inputs/InputValues_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:user:_:Inputs_FB:FB",
+        "kind": "block",
+        "name": "Inputs_FB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/100_Inputs/Inputs_FB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:user:_:AlarmsContainer:FB",
+        "kind": "block",
+        "name": "AlarmsContainer",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/200_Alarms/AlarmsContainer.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:AlarmsLogic_DB:UNKNOWN",
+        "kind": "block",
+        "name": "AlarmsLogic_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/200_Alarms/AlarmsLogic_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:Alarms_DB:UNKNOWN",
+        "kind": "block",
+        "name": "Alarms_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/200_Alarms/Alarms_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:user:_:StateMachine:FB",
+        "kind": "block",
+        "name": "StateMachine",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/300_StateMachine/StateMachine.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:HMI_Counters_DB:UNKNOWN",
+        "kind": "block",
+        "name": "HMI_Counters_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/700_HMI/HMI_Counters_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:HMI_DB:UNKNOWN",
+        "kind": "block",
+        "name": "HMI_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/700_HMI/HMI_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:HMI_Settings_DB:UNKNOWN",
+        "kind": "block",
+        "name": "HMI_Settings_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/700_HMI/HMI_Settings_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:user:_:MotorSoftstart:FB",
+        "kind": "block",
+        "name": "MotorSoftstart",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/999_MISC/MotorSoftstart.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:user:_:TIME_COUNTER_FB:FB",
+        "kind": "block",
+        "name": "TIME_COUNTER_FB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/999_MISC/TIME_COUNTER_FB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "OB",
+        "key": "block:user:_:Main:OB",
+        "kind": "block",
+        "name": "Main",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/Main.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:user:_:SimulationManagement:FB",
+        "kind": "block",
+        "name": "SimulationManagement",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/SimulationManagement.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:Simulation_DB:UNKNOWN",
+        "kind": "block",
+        "name": "Simulation_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/Simulation_DB.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FB",
+        "key": "block:project-library:_:AnalogInput:FB",
+        "kind": "block",
+        "name": "AnalogInput",
+        "namespace": [],
+        "origin": "project-library"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "Types/Blocks/AnalogInput.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": "FC",
+        "key": "block:project-library:_:deviceState:FC",
+        "kind": "block",
+        "name": "deviceState",
+        "namespace": [],
+        "origin": "project-library"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "Types/Blocks/deviceState.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": null,
+        "key": "udt:project-library:_:AnalogInputSettings:_",
+        "kind": "udt",
+        "name": "AnalogInputSettings",
+        "namespace": [],
+        "origin": "project-library"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "Types/UDTs/AnalogInputSettings.xml"
+      },
+      "status": "complete"
+    },
+    {
+      "diagnostics": [],
+      "identity": {
+        "block_kind": null,
+        "key": "udt:project-library:_:UDT_Device:_",
+        "kind": "udt",
+        "name": "UDT_Device",
+        "namespace": [],
+        "origin": "project-library"
+      },
+      "location": {
+        "element_id": null,
+        "relative_path": "Types/UDTs/UDT_Device.xml"
+      },
+      "status": "complete"
+    }
+  ],
+  "diagnostics": [],
+  "edges": [
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "Types/Blocks/AnalogInput.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:project-library:_:AnalogInput:FB",
+        "kind": "block",
+        "name": "AnalogInput",
+        "namespace": [],
+        "origin": "project-library"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:project-library:_:AnalogInputSettings:_",
+        "kind": "udt",
+        "name": "AnalogInputSettings",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/700_HMI/HMI_Counters_DB.xml"
+      },
+      "source": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:HMI_Counters_DB:UNKNOWN",
+        "kind": "block",
+        "name": "HMI_Counters_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_WORK_CNT:_",
+        "kind": "udt",
+        "name": "UDT_WORK_CNT",
+        "namespace": [],
+        "origin": "user"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/700_HMI/HMI_Settings_DB.xml"
+      },
+      "source": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:HMI_Settings_DB:UNKNOWN",
+        "kind": "block",
+        "name": "HMI_Settings_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:project-library:_:AnalogInputSettings:_",
+        "kind": "udt",
+        "name": "AnalogInputSettings",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/700_HMI/HMI_Settings_DB.xml"
+      },
+      "source": {
+        "block_kind": "UNKNOWN",
+        "key": "block:user:_:HMI_Settings_DB:UNKNOWN",
+        "kind": "block",
+        "name": "HMI_Settings_DB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:project-library:_:AnalogInputSettings:_",
+        "kind": "udt",
+        "name": "AnalogInputSettings",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "block",
+      "location": {
+        "element_id": "28",
+        "relative_path": "PLC_1/Program blocks/100_Inputs/Inputs_FB.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:Inputs_FB:FB",
+        "kind": "block",
+        "name": "Inputs_FB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": "FB",
+        "key": "block:project-library:_:AnalogInput:FB",
+        "kind": "block",
+        "name": "AnalogInput",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "block",
+      "location": {
+        "element_id": "28",
+        "relative_path": "PLC_1/Program blocks/100_Inputs/Inputs_FB.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:Inputs_FB:FB",
+        "kind": "block",
+        "name": "Inputs_FB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": "FB",
+        "key": "block:project-library:_:AnalogInput:FB",
+        "kind": "block",
+        "name": "AnalogInput",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "block",
+      "location": {
+        "element_id": "27",
+        "relative_path": "PLC_1/Program blocks/999_MISC/MotorSoftstart.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:MotorSoftstart:FB",
+        "kind": "block",
+        "name": "MotorSoftstart",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": "FC",
+        "key": "block:project-library:_:deviceState:FC",
+        "kind": "block",
+        "name": "deviceState",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "block",
+      "location": {
+        "element_id": "23",
+        "relative_path": "PLC_1/Program blocks/999_MISC/MotorSoftstart.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:MotorSoftstart:FB",
+        "kind": "block",
+        "name": "MotorSoftstart",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": "FB",
+        "key": "block:user:_:TIME_COUNTER_FB:FB",
+        "kind": "block",
+        "name": "TIME_COUNTER_FB",
+        "namespace": [],
+        "origin": "user"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/999_MISC/MotorSoftstart.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:MotorSoftstart:FB",
+        "kind": "block",
+        "name": "MotorSoftstart",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:project-library:_:UDT_Device:_",
+        "kind": "udt",
+        "name": "UDT_Device",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/999_MISC/MotorSoftstart.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:MotorSoftstart:FB",
+        "kind": "block",
+        "name": "MotorSoftstart",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_WORK_CNT:_",
+        "kind": "udt",
+        "name": "UDT_WORK_CNT",
+        "namespace": [],
+        "origin": "user"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/Program blocks/999_MISC/TIME_COUNTER_FB.xml"
+      },
+      "source": {
+        "block_kind": "FB",
+        "key": "block:user:_:TIME_COUNTER_FB:FB",
+        "kind": "block",
+        "name": "TIME_COUNTER_FB",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_WORK_CNT:_",
+        "kind": "udt",
+        "name": "UDT_WORK_CNT",
+        "namespace": [],
+        "origin": "user"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC data types/UDT_Settings.xml"
+      },
+      "source": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_Settings:_",
+        "kind": "udt",
+        "name": "UDT_Settings",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:project-library:_:AnalogInputSettings:_",
+        "kind": "udt",
+        "name": "AnalogInputSettings",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    },
+    {
+      "kind": "udt",
+      "location": {
+        "element_id": null,
+        "relative_path": "PLC_1/PLC data types/UDT_Settings.xml"
+      },
+      "source": {
+        "block_kind": null,
+        "key": "udt:user:_:UDT_Settings:_",
+        "kind": "udt",
+        "name": "UDT_Settings",
+        "namespace": [],
+        "origin": "user"
+      },
+      "target": {
+        "block_kind": null,
+        "key": "udt:project-library:_:AnalogInputSettings:_",
+        "kind": "udt",
+        "name": "AnalogInputSettings",
+        "namespace": [],
+        "origin": "project-library"
+      }
+    }
+  ],
+  "output_contract": {
+    "fidelity": "analysis-only",
+    "reimportable": false
+  },
+  "schema_version": 1
+}

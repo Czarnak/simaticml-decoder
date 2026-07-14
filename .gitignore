@@ -324,5 +324,6 @@ graphify-out/.graphify_root
 graphify-out/cache/
 docs/*
 !docs/superpowers/
+!docs/PROJECT_INPUT_CONTRACT.md
 .codex/
 *.vci/

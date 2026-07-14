@@ -129,6 +129,38 @@ skipped rather than aborting the run, and the process exits non-zero only when a
 least one file failed. Pointing at a missing path or an empty directory is a quiet
 no-op (exit 0). `-q` silences the per-file progress summary.
 
+## Project mode
+
+```bash
+# Index a whole exported V21 project tree instead of decoding individual blocks:
+simaticml-decode --project MyProject/
+simaticml-decode --project MyProject/ -o out/ --library-root "PLC_1/Libraries"
+
+# Every discovery/parse budget is independently overridable:
+simaticml-decode --project MyProject/ --max-files 20000 --max-file-bytes 33554432
+```
+
+`--project ROOT` is a separate, explicit mode from the single-file/directory `PATH`
+mode above -- exactly one of the two must be given. It discovers every `.xml`
+artifact under `ROOT` (the same handle-anchored, symlink-rejecting walk described
+below), classifies each as a block or UDT, resolves block-call and UDT-member
+references across the whole project, and writes one analysis-only
+`project-manifest.json` -- never `.scl`/`.json` sidecars. `--library-root` (repeatable)
+overrides the default `Types/`-vs-`PLC_1/` origin convention for a given
+project-relative subtree. The process exits `0` on success, `1` if any artifact
+failed to be recorded at all, and `2` on a CLI usage error (e.g. passing both `PATH`
+and `--project`).
+
+Project mode is exercised against the same temporary, non-redistributable compatibility
+corpus described above (see "Fixture provenance and compatibility") -- it demonstrates
+that project-scale discovery/indexing runs against a real V21 export tree, not that
+project-mode feature coverage itself is validated against a licensed corpus.
+
+See [`docs/PROJECT_INPUT_CONTRACT.md`](docs/PROJECT_INPUT_CONTRACT.md) for the full
+input contract: the V21-only compatibility profile, `--library-root` semantics, every
+default budget, the diagnostic-code vocabulary, exit-code behavior, determinism, and
+the explicit non-re-importability of the output.
+
 ## Layout
 
 ```

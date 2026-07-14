@@ -54,5 +54,16 @@ def project_fixture_root() -> Path:
     corpus fixture. Required paths in project-mode tests are expressed
     relative to this root (e.g. ``"SimaticML/PLC_1/..."``), matching how
     ``tests/fixtures/manifest.json``'s own paths are rooted.
+
+    Fails loudly (``AssertionError``) rather than ``pytest.skip``-ing when
+    the committed corpus is absent: a missing corpus is a broken clone/CI
+    checkout, not an optional capability to quietly skip past. Mirrors
+    ``_require()``'s fail-loud pattern for single-block fixtures above.
     """
+    manifest = FIXTURES_DIR / "manifest.json"
+    if not manifest.is_file():
+        raise AssertionError(f"committed fixture-corpus manifest missing: {manifest}")
+    corpus = FIXTURES_DIR / "SimaticML"
+    if not corpus.is_dir():
+        raise AssertionError(f"committed V21 fixture corpus missing: {corpus}")
     return FIXTURES_DIR
