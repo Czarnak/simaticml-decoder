@@ -8,6 +8,8 @@
 
 **Discovery/read reuse (2026-07-14 amendment, architect + security review):** Project-mode discovery and the later per-artifact read must reuse `input_policy.py`'s existing handle-anchored walk (native NT handles on Windows, `dir_fd`+`O_NOFOLLOW` on POSIX) rather than introduce a second, path-based traversal. An earlier draft of Task 2 used `Path.rglob()` + `is_symlink()` + `resolve()`, with Task 3 later reopening each file by its stored path via `parse.parse_file(str(path))`. Independent architect and security review confirmed this reintroduces — with a *larger* window, since discovery fully walks the tree before any parsing starts — the exact TOCTOU race `docs/superpowers/memory/native-handle-traversal-decision.md` already closed for the existing CLI: an attacker with write access to the scanned tree can swap a discovered file for a symlink/junction between discovery and the later path-based reopen, redirecting the read outside the resolved project root. Tasks 2 and 3 below are corrected to route through `input_policy.py`'s existing machinery instead.
 
+**Fixture corpus reuse (2026-07-14 amendment, confirmed with the project owner):** Task 3 and Task 7 originally called for a brand-new fixture tree at `tests/fixtures/corpus/v21/...`, on the assumption that no native V21 corpus existed yet. It already exists and is already committed: `tests/fixtures/SimaticML/` is a real exported TIA V21 PLC project (with sibling `SimaticSD*/` cross-format exports), indexed by the already-committed `tests/fixtures/manifest.json` (`provenance` + `cross_format_mapping` + `cases`), and already consumed by `tests/test_fixture_corpus.py`/`tests/conftest.py`. Within each export root, `Types/Blocks/` and `Types/UDTs/` are project-library-origin artifacts; `PLC_1/Program blocks/` and `PLC_1/PLC data types/` are user-origin. Confirmed real evidence already in this tree: a nested user block (`PLC_1/Program blocks/100_Inputs/Inputs_FB.xml`), UDT exports (`PLC_1/PLC data types/UDT_Settings.xml`, `Types/UDTs/UDT_Device.xml`), project-library blocks (`Types/Blocks/AnalogInput.xml`, `Types/Blocks/deviceState.xml`), and real user-to-library calls (`Inputs_FB.xml` calls `AnalogInput`; `PLC_1/Program blocks/999_MISC/MotorSoftstart.xml` calls `deviceState` and the sibling user block `TIME_COUNTER_FB`). Tasks 3 and 7 below are corrected to extend this existing tree and manifest in place rather than fork a duplicate `corpus/v21/` structure; any fixture this real corpus does not already exhibit (e.g. a missing-reference, ambiguous-reference, or non-V21/missing-version case, if inventory does not find one occurring naturally) must be added as a small, clearly-labeled synthetic addition (`"origin": "synthetic"` in `tests/fixtures/manifest.json`), never presented as a native export.
+
 **Tech Stack:** Python 3.11+, standard-library `dataclasses`, `enum`, `hashlib`, `json`, `pathlib`, and `xml.etree.ElementTree`; pytest with coverage; Ruff; existing package entry point.
 
 ## Global Constraints
@@ -20,7 +22,7 @@
 - Defaults are `max_files=10_000`, `max_file_bytes=16 MiB`, `max_total_bytes=512 MiB`, `max_relative_depth=32`, `max_xml_elements=500_000`, `max_xml_depth=128`, and `max_reference_edges=100_000`.
 - Initial project ingestion is serial and deterministic. Concurrency, cancellation, streaming, and resume/checkpoints are deferred scale milestones, not hidden behavior in this release.
 - Project output is analysis-only and non-re-importable. GRAPH, generation of TIA import files, and generic YAML parsing are out of scope.
-- Use `tests/fixtures/corpus/v21/cross-format-map.json` as the sole cross-format mapping oracle. It may map zero, one, or many source artifacts across the separate SimaticML and SIMATIC SD roots; production code must not read it.
+- Use `tests/fixtures/manifest.json`'s `cross_format_mapping` array as the sole cross-format mapping oracle (2026-07-14 amendment: this already-committed manifest replaces the originally planned, nonexistent `tests/fixtures/corpus/v21/cross-format-map.json`). It may map zero, one, or many source artifacts across the separate SimaticML and SIMATIC SD roots; production code must not read it.
 
 ## Planned File Structure
 
@@ -37,8 +39,8 @@
 | `src/simaticml_decoder/cli.py` | New `--project` command path; legacy `PATH` mode remains unchanged. |
 | `docs/PROJECT_INPUT_CONTRACT.md` | V21 input boundaries, layout selection, statuses, limits, diagnostics, and non-re-importability. |
 | `tests/test_project_*.py` | Unit, integration, manifest, CLI, input-safety, and determinism coverage. |
-| `tests/fixtures/corpus/v21/simaticml/project/` | Sanitized native V21 project fixture root, added only with provenance metadata and goldens. |
-| `tests/fixtures/corpus/v21/cross-format-map.json` | Test-only relation between separate SimaticML and SIMATIC SD exports. |
+| `tests/fixtures/SimaticML/`, `tests/fixtures/SimaticSD*/` | *(reused, not duplicated — 2026-07-14 amendment)* Already-committed native V21 project fixture root; see the Fixture corpus reuse note above for the user/library split. |
+| `tests/fixtures/manifest.json` | *(extended, not replaced)* Already-committed provenance + `cross_format_mapping` oracle; project mode adds identity/origin/reference-case annotations here instead of a new file. |
 
 ---
 
@@ -267,8 +269,7 @@ git commit -m "feat: add bounded project file discovery on the hardened walk"
 - Create: `src/simaticml_decoder/project_xml.py`
 - Modify: `src/simaticml_decoder/parse.py` (add `parse_bytes()`; `parse_file()` becomes read-once-then-delegate)
 - Create: `tests/test_project_xml.py`
-- Modify: `tests/fixtures/corpus/v21/metadata.json`
-- Create: `tests/fixtures/corpus/v21/simaticml/project/` native sanitized exports after the user supplies them
+- Modify: `tests/fixtures/manifest.json` (extend in place — see the Fixture corpus reuse amendment above; do not fork a new `corpus/v21/metadata.json`)
 
 **Interfaces:**
 
@@ -279,23 +280,25 @@ git commit -m "feat: add bounded project file discovery on the hardened walk"
 
 - [ ] **Step 1: Establish the native corpus contract before parser changes**
 
-Add `metadata.json` entries that identify the V21 export method, redaction/license status, each source path, known artifact kind/origin, and expected capability label. Include a nested user block, a nested project-library block, at least one UDT export, an independent valid block, a user-to-library call, a missing-reference case, an ambiguous-reference case, and an explicit non-V21 or missing-version preservation case.
+Extend `tests/fixtures/manifest.json` in place (do not fork a new `metadata.json`) with entries identifying, per project-mode fixture, its known artifact kind/origin (`user` vs `project-library`, per the `Types/` vs `PLC_1/` split in the amendment above) and expected capability label; mark any added synthetic case with `"origin": "synthetic"` plus its test purpose. The real corpus already confirmed present: a nested user block, a UDT export, project-library blocks, and real user-to-library calls (see amendment above for exact paths). Before authoring anything synthetic, inventory the real call graph across `SimaticML/PLC_1/Program blocks/**` for a naturally-occurring missing-reference case (e.g. a call to an un-exported standard/system block) and an ambiguous-reference case; only add a minimal synthetic fixture for whichever of these — plus the non-V21/missing-version case, since real exports are consistently V21 — the real corpus does not already exhibit.
 
 ```python
 def test_native_v21_project_corpus_is_complete(project_fixture_root):
-    expected = {
-        "types/DriveType.xml", "user/Motion/Axis.xml", "library/Motion/AxisSupport.xml",
-        "negative/MissingCall.xml", "negative/AmbiguousCall.xml", "valid/Independent.xml",
-    }
+    required = {
+        "SimaticML/PLC_1/Program blocks/100_Inputs/Inputs_FB.xml",
+        "SimaticML/PLC_1/PLC data types/UDT_Settings.xml",
+        "SimaticML/Types/Blocks/AnalogInput.xml",
+        "SimaticML/Types/UDTs/AnalogInputSettings.xml",
+    }  # extend with whichever missing-ref/ambiguous-ref/non-V21 fixtures Step 1 finds or adds
     actual = {path.relative_to(project_fixture_root).as_posix() for path in project_fixture_root.rglob("*.xml")}
-    assert expected <= actual
+    assert required <= actual
 ```
 
-- [ ] **Step 2: Run the corpus test and verify it fails until the committed fixture arrives**
+- [ ] **Step 2: Run the corpus test and verify the already-real cases pass, only the not-yet-added cases fail**
 
 Run: `./.venv/Scripts/python.exe -m pytest tests/test_project_xml.py::test_native_v21_project_corpus_is_complete -v -p no:cacheprovider`
 
-Expected: FAIL for an absent or incomplete committed native corpus. Do not replace this with `pytest.skip`.
+Expected: the real-data assertions PASS immediately (these fixtures are already committed); only assertions for a case Step 1 determined must be added synthetically FAIL until that fixture exists. Do not replace a failing case with `pytest.skip`.
 
 - [ ] **Step 3: Implement bounded XML preflight and narrow block adaptation over already-read bytes**
 
@@ -350,9 +353,11 @@ Expected: PASS, including preservation of unsupported/non-V21 input and V21 user
 - [ ] **Step 6: Commit the V21 XML adapter**
 
 ```bash
-git add src/simaticml_decoder/project_xml.py tests/test_project_xml.py tests/fixtures/corpus/v21
+git add src/simaticml_decoder/project_xml.py tests/test_project_xml.py tests/fixtures/manifest.json
 git commit -m "feat: adapt V21 SimaticML project artifacts"
 ```
+
+(Add any new synthetic fixture files created this task alongside `tests/fixtures/manifest.json` in the same commit.)
 
 ### Task 4: Build a conservative deterministic identity index and resolver
 
@@ -578,8 +583,8 @@ git commit -m "feat: add explicit project index command"
 
 ```python
 def test_committed_project_corpus_has_metadata_mapping_and_golden():
-    assert (CORPUS_ROOT / "metadata.json").is_file()
-    assert (CORPUS_ROOT / "cross-format-map.json").is_file()
+    assert (FIXTURES_ROOT / "manifest.json").is_file()
+    assert (FIXTURES_ROOT / "SimaticML").is_dir()
     assert (GOLDEN_ROOT / "v21_project_manifest.json").is_file()
     assert not _fixture_helper_uses_pytest_skip_for_committed_v21_cases()
 ```
@@ -605,7 +610,7 @@ Expected: PASS with zero fixture-related skips for project indexing.
 - [ ] **Step 5: Commit the reproducible corpus contract**
 
 ```bash
-git add tests/conftest.py tests/test_project_corpus_integrity.py tests/fixtures/corpus tests/golden docs/PROJECT_INPUT_CONTRACT.md README.md .gitignore
+git add tests/conftest.py tests/test_project_corpus_integrity.py tests/fixtures/manifest.json tests/golden docs/PROJECT_INPUT_CONTRACT.md README.md .gitignore
 git commit -m "docs: define V21 project input contract"
 ```
 
@@ -664,6 +669,7 @@ git commit -m "ci: enforce supported-format coverage gate"
 - Completeness scan: no generic parser, implicit library-path inference, or unsupported TIA import behavior is prescribed.
 - Type consistency: every later task consumes immutable `ProjectIndex`/`ArtifactRecord`/`ProjectDiagnostic` contracts defined in Task 1; SIMATIC SD will extend the format registry rather than creating another project model.
 - Security (2026-07-14 amendment): Tasks 2 and 3 were corrected after independent architect and security review confirmed the original path-based discovery + reopen-by-path design reintroduced a TOCTOU race already closed by `input_policy.py`'s handle-anchored walk (see the Architecture note and `docs/superpowers/memory/native-handle-traversal-decision.md`). Discovery now delegates to new soft-diagnostic siblings of the existing hard-fail walk functions, and artifact bytes flow through a single `read_bytes()`/`parse_bytes()` call — never a stored path reopened later.
+- Fixture reuse (2026-07-14 amendment): Tasks 3 and 7 were corrected after confirming with the project owner that a native, already-committed V21 corpus already exists (`tests/fixtures/SimaticML/` + `tests/fixtures/manifest.json`) rather than needing to be supplied fresh. Both tasks now extend this existing tree/manifest in place; any evidence category it doesn't already exhibit gets a minimal, explicitly-labeled synthetic addition rather than a fabricated "native" export.
 
 ## Execution Handoff
 
