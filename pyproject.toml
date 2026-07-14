@@ -48,3 +48,12 @@ src = ["src", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+# windows_handles.py is Windows-only ctypes/NTAPI glue: input_policy.py only
+# imports and calls it from behind _use_windows_native_discovery(), so on
+# Linux CI it never executes and would sit at ~0% coverage, dragging the
+# aggregate below the --cov-fail-under=80 gate for reasons unrelated to any
+# regression. It has its own platform-gated suite (test_windows_handles.py,
+# skipif'd to run only on windows-latest) that verifies it directly instead.
+omit = ["src/simaticml_decoder/windows_handles.py"]
