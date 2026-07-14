@@ -148,7 +148,7 @@ def test_decode_file_rejects_direct_symlink(tmp_path):
 
     assert result.status == "error"
     assert result.error is not None
-    assert result.error.startswith("INPUT_REJECTED: linked.xml: symlink_not_allowed")
+    assert result.error.startswith("INPUT_REJECTED: linked.xml: symbolic links are not accepted")
 
 
 def test_malformed_xml_diagnostic_redacts_path_and_controls(tmp_path, capsys):
