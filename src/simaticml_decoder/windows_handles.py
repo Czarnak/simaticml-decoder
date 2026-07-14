@@ -227,10 +227,18 @@ _GetFileInformationByHandle.argtypes = (
 
 @dataclass(frozen=True, slots=True)
 class NativeEntry:
-    """One directory entry discovered through a native handle."""
+    """One directory entry discovered through a native handle.
+
+    ``is_reparse_point``/``size`` are populated from the same
+    `FILE_ID_BOTH_DIR_INFORMATION` record `entries()` already reads for every
+    entry -- no extra native call. ``size`` mirrors `EndOfFile` and is only
+    meaningful for non-directory entries.
+    """
 
     name: str
     is_directory: bool
+    is_reparse_point: bool = False
+    size: int = 0
 
 
 # --- Helpers ----------------------------------------------------------------
@@ -446,12 +454,25 @@ class NativeDirectory:
             _close_handle(handle)
             raise
 
-    def entries(self) -> tuple[NativeEntry, ...]:
+    def entries(self, *, reject_reparse_points: bool = True) -> tuple[NativeEntry, ...]:
         """Enumerate immediate children by this directory's own handle.
 
-        Any child carrying `FILE_ATTRIBUTE_REPARSE_POINT` (symlink,
-        junction, or mount point) aborts the whole enumeration rather than
-        being silently skipped.
+        By default (``reject_reparse_points=True`` -- the existing hard-fail
+        directory-mode contract, unchanged), any child carrying
+        `FILE_ATTRIBUTE_REPARSE_POINT` (symlink, junction, or mount point)
+        aborts the whole enumeration rather than being silently skipped.
+
+        ``reject_reparse_points=False`` (used only by project-mode's
+        soft-diagnostic walk) keeps the identical native enumeration but
+        stops treating a reparse point as fatal: it is still classified via
+        `NativeEntry.is_reparse_point` -- callers MUST check this flag and
+        must never pass such an entry's name to `open_child` -- but the rest
+        of the listing (siblings unaffected by that one reparse point) is
+        still returned instead of being discarded wholesale. `open_child`
+        independently re-checks every opened entry for
+        `FILE_ATTRIBUTE_REPARSE_POINT` regardless of this flag, so a caller
+        that ignores `is_reparse_point` still fails closed rather than
+        silently following the reparse point.
         """
         if self._handle is None:
             raise InputViolation("unreadable_input", "native handle is already closed")
@@ -488,12 +509,20 @@ class NativeDirectory:
                     base + offset + entry_header_size, entry.FileNameLength // 2
                 )
                 if name not in (".", ".."):
-                    if entry.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT:
+                    is_reparse_point = bool(entry.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
+                    if is_reparse_point and reject_reparse_points:
                         raise InputViolation(
                             "symlink_not_allowed", "symbolic links are not accepted"
                         )
                     is_directory = bool(entry.FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                    found.append(NativeEntry(name=name, is_directory=is_directory))
+                    found.append(
+                        NativeEntry(
+                            name=name,
+                            is_directory=is_directory,
+                            is_reparse_point=is_reparse_point,
+                            size=int(entry.EndOfFile),
+                        )
+                    )
                 if entry.NextEntryOffset == 0:
                     break
                 offset += entry.NextEntryOffset

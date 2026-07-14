@@ -9,8 +9,10 @@ import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from io import StringIO
-from pathlib import Path, PurePath
+from pathlib import Path, PurePath, PurePosixPath
 from xml.etree import ElementTree as ET
+
+from .project_model import DiagnosticCode, ProjectDiagnostic, SourceLocation
 
 
 @dataclass(frozen=True)
@@ -42,6 +44,13 @@ class InputArtifact:
     suffix: str
     _reader: Callable[[InputLimits], bytes] = field(repr=False, compare=False)
     has_declaration: bool = False
+    size: int = 0
+    """Byte size observed *during the same walk* that produced this artifact
+    (from the native directory listing on Windows, or the classifying
+    `os.stat` on POSIX) -- never a separate, later filesystem touch. Only
+    populated by `discover_project_artifacts`'s soft-diagnostic walk; the
+    existing hard-fail walkers and `direct_input_artifact` leave this at the
+    default `0` since none of their callers need it."""
 
     def read_bytes(self, limits: InputLimits) -> bytes:
         """Read and validate the file content as bytes."""
@@ -493,6 +502,404 @@ def _walk_posix_directory(
                 has_declaration=has_declaration,
             )
         )
+
+
+# --- Project-mode: soft-diagnostic siblings of the walkers above -------------
+#
+# Same handle-anchored, TOCTOU-resistant traversal as `_walk_windows_directory`
+# / `_walk_posix_directory` / `discover_input_files` above -- native NT
+# handles on Windows, `dir_fd` + `O_NOFOLLOW` on POSIX, every child opened
+# relative to its parent's own already-open handle, never by re-resolving a
+# composed path. The only difference is failure policy: a reparse point,
+# depth breach, file-count breach, or size breach records a `ProjectDiagnostic`
+# and the walk continues (skipping just the offending item/subtree), instead
+# of raising and aborting the whole walk. `_walk_windows_directory`,
+# `_walk_posix_directory`, and `discover_input_files` above are untouched by
+# this section.
+
+
+class _SoftWalkState:
+    """Mutable accumulator threaded through the soft-diagnostic walk.
+
+    Not exported -- purely internal bookkeeping for
+    `discover_project_artifacts`, extending the existing hard-fail walkers'
+    single-counter (`counter: list[int]`) pattern to the three values a
+    *soft* walk needs to track: how many matching files have been kept, how
+    many bytes they total, and whether a global (file-count/total-size)
+    budget has already been exceeded -- in which case every remaining call
+    frame returns immediately without recording further diagnostics.
+    """
+
+    __slots__ = ("file_count", "total_bytes", "halted")
+
+    def __init__(self) -> None:
+        self.file_count = 0
+        self.total_bytes = 0
+        self.halted = False
+
+
+def _project_diagnostic(
+    code: DiagnosticCode, relative_path: PurePath, message: str, *, severity: str = "warning"
+) -> ProjectDiagnostic:
+    """Build a `ProjectDiagnostic` for a location discovered during this
+    walk, normalizing `relative_path` to posix separators the way
+    `SourceLocation.relative_path` (a `PurePosixPath`) requires."""
+    return ProjectDiagnostic(
+        code=code,
+        severity=severity,
+        message=message,
+        location=SourceLocation(PurePosixPath(relative_path.as_posix())),
+    )
+
+
+def _walk_windows_softdiag(
+    directory: object,
+    relative_prefix: PurePath,
+    depth: int,
+    limits: InputLimits,
+    max_total_bytes: int,
+    suffixes: set[str],
+    artifacts: list[InputArtifact],
+    diagnostics: list[ProjectDiagnostic],
+    state: _SoftWalkState,
+) -> None:
+    """Mirrors `_walk_windows_directory`, using the same `NativeDirectory`
+    handle-relative `entries()`/`open_child()` shape, but calls
+    `entries(reject_reparse_points=False)` so one reparse point among this
+    directory's children does not discard the rest of the listing. Every
+    kept file's handle is still opened via `directory.open_child(...)` --
+    relative to this directory's own already-open handle -- exactly as in
+    the hard-fail walker; `open_child`'s own post-open reparse-point re-check
+    (closing the enumerate-then-open race) still applies unconditionally, so
+    a race that slips past the `is_reparse_point` flag is still caught and
+    downgraded to a diagnostic here rather than silently followed.
+
+    Note: this function is only ever entered (top-level or recursively) with
+    `state.halted` already `False` -- the per-iteration guard below is what
+    actually stops a halted walk from recursing further, so there is no
+    separate top-of-function guard to duplicate that check.
+    """
+    entries = directory.entries(reject_reparse_points=False)
+    for entry in entries:
+        if state.halted:
+            return
+        child_relative = relative_prefix / entry.name
+        if entry.is_reparse_point:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.SYMLINK_SKIPPED,
+                    child_relative,
+                    "symbolic links and other reparse points are not followed",
+                )
+            )
+            continue
+        if entry.is_directory:
+            if depth + 1 > limits.max_depth:
+                diagnostics.append(
+                    _project_diagnostic(
+                        DiagnosticCode.DEPTH_LIMIT,
+                        child_relative,
+                        "directory exceeds the configured relative depth limit "
+                        "and was not entered",
+                    )
+                )
+                continue
+            try:
+                with directory.open_child(entry.name, directory=True) as child_dir:
+                    _walk_windows_softdiag(
+                        child_dir,
+                        child_relative,
+                        depth + 1,
+                        limits,
+                        max_total_bytes,
+                        suffixes,
+                        artifacts,
+                        diagnostics,
+                        state,
+                    )
+            except InputViolation as exc:
+                if exc.code != "symlink_not_allowed":
+                    raise
+                diagnostics.append(
+                    _project_diagnostic(DiagnosticCode.SYMLINK_SKIPPED, child_relative, exc.message)
+                )
+            continue
+        suffix = PurePath(entry.name).suffix.lower()
+        if suffix not in suffixes:
+            continue
+        if state.file_count >= limits.max_files:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.FILE_COUNT_LIMIT,
+                    child_relative,
+                    "project tree exceeds the configured file-count limit; "
+                    "remaining files were not discovered",
+                    severity="error",
+                )
+            )
+            state.halted = True
+            return
+        if entry.size > limits.max_file_bytes:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.FILE_SIZE_LIMIT,
+                    child_relative,
+                    "file exceeds the configured per-file byte limit and was skipped",
+                )
+            )
+            continue
+        if state.total_bytes + entry.size > max_total_bytes:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.TOTAL_SIZE_LIMIT,
+                    child_relative,
+                    "project tree exceeds the configured total-byte budget; "
+                    "remaining files were not discovered",
+                    severity="error",
+                )
+            )
+            state.halted = True
+            return
+        try:
+            handle = directory.open_child(entry.name, directory=False)
+        except InputViolation as exc:
+            if exc.code != "symlink_not_allowed":
+                raise
+            diagnostics.append(
+                _project_diagnostic(DiagnosticCode.SYMLINK_SKIPPED, child_relative, exc.message)
+            )
+            continue
+        state.file_count += 1
+        state.total_bytes += entry.size
+        artifacts.append(
+            InputArtifact(
+                relative_path=child_relative,
+                suffix=suffix,
+                _reader=_make_handle_reader(handle),
+                size=entry.size,
+            )
+        )
+
+
+def _walk_posix_softdiag(
+    dir_fd: int,
+    relative_prefix: PurePath,
+    depth: int,
+    limits: InputLimits,
+    max_total_bytes: int,
+    suffixes: set[str],
+    artifacts: list[InputArtifact],
+    diagnostics: list[ProjectDiagnostic],
+    state: _SoftWalkState,
+) -> None:
+    """Mirrors `_walk_posix_directory`, reusing its exact `dir_fd`/
+    `O_NOFOLLOW` primitives (`_scandir_names`, `_lstat_child`,
+    `_open_dir_child`, `_open_file_child`) unchanged. The lstat-based
+    classification already lets us skip a symlink without opening it at all;
+    `_open_dir_child`/`_open_file_child`'s `O_NOFOLLOW` still independently
+    rejects a TOCTOU-raced rename (lstat said "regular", the open's ELOOP
+    says otherwise) -- that race is caught here too and downgraded to a
+    diagnostic instead of raising.
+
+    Note: as with `_walk_windows_softdiag`, this function is only ever
+    entered with `state.halted` already `False`; the per-iteration guard
+    below is what stops a halted walk from recursing further.
+    """
+    names = _scandir_names(dir_fd)
+    infos = {name: _lstat_child(dir_fd, name) for name in names}
+    for name in names:
+        if state.halted:
+            return
+        info = infos[name]
+        child_relative = relative_prefix / name
+        if stat.S_ISLNK(info.st_mode):
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.SYMLINK_SKIPPED,
+                    child_relative,
+                    "symbolic links and other reparse points are not followed",
+                )
+            )
+            continue
+        if stat.S_ISDIR(info.st_mode):
+            if depth + 1 > limits.max_depth:
+                diagnostics.append(
+                    _project_diagnostic(
+                        DiagnosticCode.DEPTH_LIMIT,
+                        child_relative,
+                        "directory exceeds the configured relative depth limit "
+                        "and was not entered",
+                    )
+                )
+                continue
+            try:
+                child_fd = _open_dir_child(dir_fd, name)
+            except InputViolation as exc:
+                if exc.code != "symlink_not_allowed":
+                    raise
+                diagnostics.append(
+                    _project_diagnostic(DiagnosticCode.SYMLINK_SKIPPED, child_relative, exc.message)
+                )
+                continue
+            try:
+                _walk_posix_softdiag(
+                    child_fd,
+                    child_relative,
+                    depth + 1,
+                    limits,
+                    max_total_bytes,
+                    suffixes,
+                    artifacts,
+                    diagnostics,
+                    state,
+                )
+            finally:
+                os.close(child_fd)
+            continue
+        if not stat.S_ISREG(info.st_mode):
+            continue
+        suffix = PurePath(name).suffix.lower()
+        if suffix not in suffixes:
+            continue
+        if state.file_count >= limits.max_files:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.FILE_COUNT_LIMIT,
+                    child_relative,
+                    "project tree exceeds the configured file-count limit; "
+                    "remaining files were not discovered",
+                    severity="error",
+                )
+            )
+            state.halted = True
+            return
+        size = info.st_size
+        if size > limits.max_file_bytes:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.FILE_SIZE_LIMIT,
+                    child_relative,
+                    "file exceeds the configured per-file byte limit and was skipped",
+                )
+            )
+            continue
+        if state.total_bytes + size > max_total_bytes:
+            diagnostics.append(
+                _project_diagnostic(
+                    DiagnosticCode.TOTAL_SIZE_LIMIT,
+                    child_relative,
+                    "project tree exceeds the configured total-byte budget; "
+                    "remaining files were not discovered",
+                    severity="error",
+                )
+            )
+            state.halted = True
+            return
+        try:
+            file_fd = _open_file_child(dir_fd, name)
+        except InputViolation as exc:
+            if exc.code != "symlink_not_allowed":
+                raise
+            diagnostics.append(
+                _project_diagnostic(DiagnosticCode.SYMLINK_SKIPPED, child_relative, exc.message)
+            )
+            continue
+        state.file_count += 1
+        state.total_bytes += size
+        artifacts.append(
+            InputArtifact(
+                relative_path=child_relative,
+                suffix=suffix,
+                _reader=_make_handle_reader(_PosixFileHandle(file_fd)),
+                size=size,
+            )
+        )
+
+
+def discover_project_artifacts(
+    root: Path, suffixes: set[str], limits: InputLimits, max_total_bytes: int
+) -> tuple[tuple[InputArtifact, ...], tuple[ProjectDiagnostic, ...]]:
+    """Handle-anchored sibling of `discover_input_files()` for project mode:
+    same TOCTOU-resistant traversal (native NT handles on Windows, `dir_fd` +
+    `O_NOFOLLOW` on POSIX), soft per-item diagnostics instead of hard
+    failure, delegating to `_walk_windows_softdiag`/`_walk_posix_softdiag`.
+
+    Returns raw `InputArtifact`s; `project_discovery.py` wraps these into
+    `DiscoveredFile` -- this function stays free of project-shaped types
+    beyond the `ProjectDiagnostic` it already needs to report violations.
+
+    `max_total_bytes` is accepted as a plain `int` (not folded into
+    `InputLimits`, which has no total-budget concept and is shared with the
+    directory-mode hard-fail walkers) so the running byte total can halt the
+    walk itself -- bounding how much this call opens handles for -- rather
+    than only being checked after the fact by the caller once the whole
+    walk (and every handle it opened) already exists.
+
+    Always recurses (there is no `recursive=False` project-mode concept);
+    `limits.max_depth` bounds nesting instead.
+
+    This function never raises. The two soft walkers already downgrade the
+    breach types they know about (reparse point, depth, file-count,
+    file-size, total-size) to per-item diagnostics without raising. As a
+    final safety net, any *other* `InputViolation` that still escapes --
+    whether the root itself could not be safely opened at all (missing
+    root, root is a symlink/reparse point, unsupported platform) or an
+    unexpected failure occurred deep inside the recursive walk -- is caught
+    here and appended as one final `ProjectDiagnostic(code=OUTSIDE_ROOT,
+    ...)` to whatever artifacts/diagnostics had already been accumulated,
+    instead of propagating out of this call.
+    """
+    artifacts: list[InputArtifact] = []
+    diagnostics: list[ProjectDiagnostic] = []
+    state = _SoftWalkState()
+    try:
+        if _use_windows_native_discovery():
+            from . import windows_handles
+
+            with windows_handles.NativeDirectory.open_root(root) as root_dir:
+                _walk_windows_softdiag(
+                    root_dir,
+                    PurePath(),
+                    0,
+                    limits,
+                    max_total_bytes,
+                    suffixes,
+                    artifacts,
+                    diagnostics,
+                    state,
+                )
+        else:
+            if not _dir_fd_available():
+                raise InputViolation(
+                    "unsupported_platform",
+                    "directory discovery requires descriptor-relative filesystem support",
+                )
+            root_fd = _open_posix_root(root)
+            try:
+                _walk_posix_softdiag(
+                    root_fd,
+                    PurePath(),
+                    0,
+                    limits,
+                    max_total_bytes,
+                    suffixes,
+                    artifacts,
+                    diagnostics,
+                    state,
+                )
+            finally:
+                os.close(root_fd)
+    except InputViolation as exc:
+        diagnostics.append(
+            _project_diagnostic(
+                DiagnosticCode.OUTSIDE_ROOT,
+                PurePath(),
+                safe_text(f"{exc.code}: {exc.message}"),
+                severity="error",
+            )
+        )
+        return tuple(artifacts), tuple(diagnostics)
+    return tuple(artifacts), tuple(diagnostics)
 
 
 def _discover(root: Path, recursive: bool, limits: InputLimits, suffixes: set[str]) -> list[Path]:

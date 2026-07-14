@@ -643,3 +643,463 @@ def test_posix_walk_rejects_unavailable_root_open_as_input_violation(monkeypatch
 
     with pytest.raises(InputViolation, match="unreadable_input"):
         discover_input_files(Path("root"), recursive=True)
+
+
+# --- Windows soft-diagnostic walk (project mode), via a duck-typed stub ---
+#
+# `_walk_windows_softdiag` only ever calls `directory.entries(...)` and
+# `directory.open_child(...)`; nothing else about `windows_handles.
+# NativeDirectory` is required, so a minimal duck-typed stand-in lets the
+# TOCTOU-race downgrade branches (an `open_child` call raising
+# "symlink_not_allowed" for an entry `entries()` did *not* flag as a reparse
+# point -- the enumerate-then-open race window `_reject_if_reparse_point`
+# exists to close) be exercised directly and deterministically, the same way
+# `_FakePosixFs` exercises the POSIX walker's equivalent race without a real
+# race condition.
+
+
+class _FakeNativeEntry:
+    def __init__(self, name, *, is_directory=False, is_reparse_point=False, size=0):
+        self.name = name
+        self.is_directory = is_directory
+        self.is_reparse_point = is_reparse_point
+        self.size = size
+
+
+class _FakeNativeHandle:
+    def __init__(self, content: bytes = b"") -> None:
+        self._content = content
+        self.closed = False
+
+    def read_limited(self, limit: int) -> bytes:
+        return self._content[: limit + 1]
+
+    def close(self) -> None:
+        self.closed = True
+
+
+class _FakeNativeDirectory:
+    """Duck-typed stand-in for `windows_handles.NativeDirectory`, exposing
+    only the `entries()`/`open_child()` surface `_walk_windows_softdiag`
+    actually uses. `racy_names` simulates `open_child` losing a TOCTOU race
+    against an entry `entries()` did not flag as a reparse point."""
+
+    def __init__(self, entries, children=None, racy_names=frozenset()):
+        self._entries = tuple(entries)
+        self._children = children or {}
+        self._racy_names = racy_names
+
+    def entries(self, *, reject_reparse_points: bool = True):
+        return self._entries
+
+    def open_child(self, name: str, directory: bool):
+        if name in self._racy_names:
+            raise InputViolation("symlink_not_allowed", "symbolic links are not accepted")
+        return self._children[name]
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_exc: object) -> None:
+        return None
+
+
+def test_project_windows_walk_downgrades_a_toctou_file_open_race_to_a_soft_diagnostic():
+    directory = _FakeNativeDirectory(
+        entries=[
+            _FakeNativeEntry("kept.xml", size=11),
+            _FakeNativeEntry("race.xml", size=11),
+        ],
+        children={"kept.xml": _FakeNativeHandle(b"<Document/>")},
+        racy_names={"race.xml"},
+    )
+    artifacts: list = []
+    diagnostics: list = []
+    state = input_policy._SoftWalkState()
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    input_policy._walk_windows_softdiag(
+        directory, PurePath(), 0, InputLimits(), 10_000, {".xml"}, artifacts, diagnostics, state
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
+
+
+def test_project_windows_walk_ignores_non_matching_suffixes_without_a_diagnostic():
+    directory = _FakeNativeDirectory(
+        entries=[
+            _FakeNativeEntry("notes.txt", size=4),
+            _FakeNativeEntry("kept.xml", size=11),
+        ],
+        children={"kept.xml": _FakeNativeHandle(b"<Document/>")},
+    )
+    artifacts: list = []
+    diagnostics: list = []
+    state = input_policy._SoftWalkState()
+
+    input_policy._walk_windows_softdiag(
+        directory, PurePath(), 0, InputLimits(), 10_000, {".xml"}, artifacts, diagnostics, state
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert diagnostics == []
+
+
+def test_project_windows_walk_propagates_a_non_symlink_dir_open_failure():
+    directory = _FakeNativeDirectory(
+        entries=[_FakeNativeEntry("broken", is_directory=True)],
+    )
+
+    def _broken_open_child(*_args: object, **_kwargs: object):
+        raise InputViolation("unreadable_input", "boom")
+
+    directory.open_child = _broken_open_child
+    artifacts: list = []
+    diagnostics: list = []
+    state = input_policy._SoftWalkState()
+
+    with pytest.raises(InputViolation, match="unreadable_input"):
+        input_policy._walk_windows_softdiag(
+            directory, PurePath(), 0, InputLimits(), 10_000, {".xml"}, artifacts, diagnostics, state
+        )
+
+
+def test_project_windows_walk_propagates_a_non_symlink_file_open_failure():
+    directory = _FakeNativeDirectory(
+        entries=[_FakeNativeEntry("broken.xml", size=1)],
+    )
+
+    def _broken_open_child(*_args: object, **_kwargs: object):
+        raise InputViolation("unreadable_input", "boom")
+
+    directory.open_child = _broken_open_child
+    artifacts: list = []
+    diagnostics: list = []
+    state = input_policy._SoftWalkState()
+
+    with pytest.raises(InputViolation, match="unreadable_input"):
+        input_policy._walk_windows_softdiag(
+            directory, PurePath(), 0, InputLimits(), 10_000, {".xml"}, artifacts, diagnostics, state
+        )
+
+
+def test_project_windows_walk_halts_a_sibling_after_a_nested_global_breach():
+    inner = _FakeNativeDirectory(
+        entries=[
+            _FakeNativeEntry("x.xml", size=1),
+            _FakeNativeEntry("y.xml", size=1),
+        ],
+        children={"x.xml": _FakeNativeHandle(b"x"), "y.xml": _FakeNativeHandle(b"y")},
+    )
+    root = _FakeNativeDirectory(
+        entries=[
+            _FakeNativeEntry("a", is_directory=True),
+            _FakeNativeEntry("b.xml", size=1),
+        ],
+        children={"a": inner, "b.xml": _FakeNativeHandle(b"b")},
+    )
+    artifacts: list = []
+    diagnostics: list = []
+    state = input_policy._SoftWalkState()
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    input_policy._walk_windows_softdiag(
+        root, PurePath(), 0, InputLimits(max_files=1), 10_000, {".xml"}, artifacts, diagnostics, state
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == [str(PurePath("a") / "x.xml")]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.FILE_COUNT_LIMIT]
+
+
+def test_project_windows_walk_downgrades_a_toctou_dir_open_race_to_a_soft_diagnostic():
+    directory = _FakeNativeDirectory(
+        entries=[
+            _FakeNativeEntry("race", is_directory=True),
+            _FakeNativeEntry("kept.xml", size=11),
+        ],
+        children={"kept.xml": _FakeNativeHandle(b"<Document/>")},
+        racy_names={"race"},
+    )
+    artifacts: list = []
+    diagnostics: list = []
+    state = input_policy._SoftWalkState()
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    input_policy._walk_windows_softdiag(
+        directory, PurePath(), 0, InputLimits(), 10_000, {".xml"}, artifacts, diagnostics, state
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
+
+
+# --- POSIX dir_fd soft-diagnostic walk (project mode), also via the fake fs -
+#
+# `discover_project_artifacts`/`_walk_posix_softdiag` reuse the exact same
+# dir_fd-relative primitives exercised above for the hard-fail walker
+# (`_scandir_names`, `_lstat_child`, `_open_dir_child`, `_open_file_child`);
+# this is a substitute for, not a replacement of, a real run on a POSIX CI
+# runner, matching the existing hard-fail-walker fake-fs tests' own caveat.
+
+
+def test_project_posix_walk_discovers_nested_files_and_never_halts_without_a_breach(monkeypatch):
+    fake = _FakePosixFs(
+        _fake_dir(
+            {
+                "a.xml": _fake_file(b"<Document/>"),
+                "nested": _fake_dir({"block.xml": _fake_file(b"<Document/>")}),
+            }
+        )
+    )
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert sorted(str(a.relative_path) for a in artifacts) == [
+        "a.xml",
+        str(PurePath("nested") / "block.xml"),
+    ]
+    assert diagnostics == ()
+    for artifact in artifacts:
+        assert artifact.read_bytes(InputLimits()) == b"<Document/>"
+
+
+def test_project_posix_walk_reports_a_symlink_as_a_soft_diagnostic_not_a_raise(monkeypatch):
+    fake = _FakePosixFs(
+        _fake_dir({"linked.xml": _fake_symlink(), "kept.xml": _fake_file(b"<Document/>")})
+    )
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
+
+
+def test_project_posix_walk_downgrades_a_toctou_open_race_to_a_soft_diagnostic(monkeypatch):
+    """Mirrors test_posix_walk_treats_a_toctou_rename_race_on_a_file_as_symlink_rejection,
+    but for the soft walker: the lstat says "regular file", the O_NOFOLLOW
+    open then fails with ELOOP anyway (simulated rename/reparse-point swap in
+    the narrow window between the two calls) -- the soft walker must record a
+    diagnostic and continue, not raise."""
+    fake = _FakePosixFs(_fake_dir({"race.xml": _fake_racy_file(), "kept.xml": _fake_file()}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
+
+
+def test_project_posix_walk_downgrades_a_toctou_dir_open_race_to_a_soft_diagnostic(monkeypatch):
+    """Mirrors test_posix_walk_treats_a_toctou_rename_race_on_a_directory_as_symlink_rejection
+    for the soft walker: the lstat says "directory", `_open_dir_child`'s
+    O_NOFOLLOW open then fails with ELOOP anyway."""
+    fake = _FakePosixFs(_fake_dir({"race": _fake_racy_dir(), "kept.xml": _fake_file()}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.SYMLINK_SKIPPED]
+
+
+def test_project_posix_walk_enforces_file_size_limit_per_file(monkeypatch):
+    fake = _FakePosixFs(
+        _fake_dir({"small.xml": _fake_file(b"ok"), "big.xml": _fake_file(b"x" * 64)})
+    )
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(max_file_bytes=16), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["small.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.FILE_SIZE_LIMIT]
+
+
+def test_project_posix_walk_enforces_total_size_budget_and_halts(monkeypatch):
+    fake = _FakePosixFs(_fake_dir({"a.xml": _fake_file(b"x" * 10), "b.xml": _fake_file(b"x" * 10)}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 15
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["a.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.TOTAL_SIZE_LIMIT]
+
+
+def test_project_posix_walk_halts_a_sibling_after_a_nested_global_breach(monkeypatch):
+    """Exercises the per-iteration halted-guard itself: the breach happens
+    inside subdirectory "a", and once that recursive call returns, the
+    parent directory's loop must skip its next sibling ("b.xml") without
+    processing it -- rather than only the mid-recursion halt taking effect."""
+    fake = _FakePosixFs(
+        _fake_dir(
+            {
+                "a": _fake_dir({"x.xml": _fake_file(), "y.xml": _fake_file()}),
+                "b.xml": _fake_file(),
+            }
+        )
+    )
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(max_files=1), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == [str(PurePath("a") / "x.xml")]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.FILE_COUNT_LIMIT]
+
+
+def test_project_posix_walk_ignores_non_matching_suffixes_without_a_diagnostic(monkeypatch):
+    fake = _FakePosixFs(_fake_dir({"notes.txt": _fake_file(b"hi"), "kept.xml": _fake_file()}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["kept.xml"]
+    assert diagnostics == ()
+
+
+def test_project_posix_walk_propagates_a_non_symlink_dir_open_failure(monkeypatch):
+    """Unlike a symlink race (downgraded to a diagnostic), a genuinely
+    unexpected `_open_dir_child` failure must still propagate out of
+    `_walk_posix_softdiag` itself -- it is `discover_project_artifacts`'s
+    own outer try/except (tested separately below) that turns *that* into
+    a final OUTSIDE_ROOT diagnostic, not the walker swallowing it quietly."""
+    fake = _FakePosixFs(_fake_dir({"broken": _fake_dir({})}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+    root_fd = input_policy._open_posix_root(Path("root"))
+
+    def _raise_open(*_args: object, **_kwargs: object) -> int:
+        raise InputViolation("unreadable_input", "permission denied")
+
+    monkeypatch.setattr(input_policy, "_open_dir_child", _raise_open)
+
+    with pytest.raises(InputViolation, match="unreadable_input"):
+        input_policy._walk_posix_softdiag(
+            root_fd, PurePath(), 0, InputLimits(), 10_000, {".xml"}, [], [], input_policy._SoftWalkState()
+        )
+
+
+def test_project_posix_walk_propagates_a_non_symlink_file_open_failure(monkeypatch):
+    fake = _FakePosixFs(_fake_dir({"broken.xml": _fake_file()}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+    root_fd = input_policy._open_posix_root(Path("root"))
+
+    def _raise_open(*_args: object, **_kwargs: object) -> int:
+        raise InputViolation("unreadable_input", "permission denied")
+
+    monkeypatch.setattr(input_policy, "_open_file_child", _raise_open)
+
+    with pytest.raises(InputViolation, match="unreadable_input"):
+        input_policy._walk_posix_softdiag(
+            root_fd, PurePath(), 0, InputLimits(), 10_000, {".xml"}, [], [], input_policy._SoftWalkState()
+        )
+
+
+def test_project_discover_artifacts_converts_any_deep_walk_failure_to_outside_root(monkeypatch):
+    """`discover_project_artifacts`'s own outer try/except is a final safety
+    net: even a genuinely unexpected failure deep inside the walk (not just
+    a root-open failure) must never raise out of this function -- it is
+    reported as a single OUTSIDE_ROOT diagnostic instead, with whatever was
+    already discovered before the failure preserved."""
+    fake = _FakePosixFs(_fake_dir({"a_kept.xml": _fake_file(), "z_broken.xml": _fake_file()}))
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    real_open_file_child = input_policy._open_file_child
+
+    def _raise_for_broken(dir_fd: int, name: str) -> int:
+        if name == "z_broken.xml":
+            raise InputViolation("unreadable_input", "boom")
+        return real_open_file_child(dir_fd, name)
+
+    monkeypatch.setattr(input_policy, "_open_file_child", _raise_for_broken)
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["a_kept.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.OUTSIDE_ROOT]
+
+
+def test_project_posix_walk_enforces_file_count_limit_and_halts(monkeypatch):
+    fake = _FakePosixFs(
+        _fake_dir({"one.xml": _fake_file(), "two.xml": _fake_file(), "three.xml": _fake_file()})
+    )
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(max_files=1), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["one.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.FILE_COUNT_LIMIT]
+
+
+def test_project_posix_walk_enforces_depth_limit_per_subtree_without_halting_siblings(monkeypatch):
+    fake = _FakePosixFs(
+        _fake_dir(
+            {
+                "top.xml": _fake_file(),
+                "sub": _fake_dir({"deep.xml": _fake_file()}),
+            }
+        )
+    )
+    _patch_posix_dir_fd(monkeypatch, fake)
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(max_depth=0), 10_000
+    )
+
+    assert [str(a.relative_path) for a in artifacts] == ["top.xml"]
+    assert [d.code for d in diagnostics] == [DiagnosticCode.DEPTH_LIMIT]
+
+
+def test_project_posix_walk_reports_missing_root_as_outside_root_diagnostic(monkeypatch):
+    monkeypatch.setattr(input_policy, "_use_windows_native_discovery", lambda: False)
+    monkeypatch.setattr(input_policy.os, "supports_dir_fd", frozenset())
+
+    from simaticml_decoder.project_model import DiagnosticCode
+
+    artifacts, diagnostics = input_policy.discover_project_artifacts(
+        Path("root"), {".xml"}, InputLimits(), 10_000
+    )
+
+    assert artifacts == ()
+    assert [d.code for d in diagnostics] == [DiagnosticCode.OUTSIDE_ROOT]
