@@ -1,8 +1,10 @@
 from pathlib import PurePosixPath
 
+import pytest
+
 from simaticml_decoder.project_model import (
-    ArtifactKind, ArtifactOrigin, ArtifactStatus, DiagnosticCode,
-    ProjectDiagnostic, QualifiedIdentity, SourceLocation,
+    ArtifactKind, ArtifactOrigin, DiagnosticCode,
+    ProjectDiagnostic, ProjectLimits, QualifiedIdentity, SourceLocation,
 )
 
 
@@ -35,3 +37,8 @@ def test_non_complete_status_requires_a_diagnostic():
         location=source,
     )
     assert diagnostic.location.relative_path.as_posix() == "blocks/Axis.xml"
+
+
+def test_project_limits_rejects_a_non_positive_field():
+    with pytest.raises(ValueError):
+        ProjectLimits(max_files=0)

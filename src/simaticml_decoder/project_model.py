@@ -21,6 +21,7 @@ class ArtifactKind(str, Enum):
     """Kind of artifact in a project."""
 
     BLOCK = "block"
+    UDT = "udt"
 
 
 class ArtifactOrigin(str, Enum):
@@ -28,6 +29,13 @@ class ArtifactOrigin(str, Enum):
 
     USER = "user"
     PROJECT_LIBRARY = "project-library"
+    UNKNOWN = "unknown"
+
+
+class InputFormat(str, Enum):
+    """Recognized input file formats for project ingestion."""
+
+    SIMATICML_XML = "simaticml-xml"
 
 
 class ArtifactStatus(str, Enum):
@@ -177,18 +185,25 @@ class ArtifactRecord:
     diagnostics: tuple[ProjectDiagnostic, ...] = ()
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class ReferenceRequest:
     """Immutable request to resolve a reference from source to target.
 
     Used during reference edge construction to track explicit or inferred
-    dependencies between artifacts.
+    dependencies between artifacts. ``source_identity`` is left unset (``None``)
+    when a request is first extracted from a block body; the code that
+    assembles per-artifact requests attaches it later, before resolution,
+    via ``dataclasses.replace``. All fields are keyword-only so construction
+    order matches how callers (e.g. ``extract_block_references``) build these
+    with keyword arguments.
     """
 
-    source_identity: QualifiedIdentity
-    target_name: str
-    target_namespace: tuple[str, ...] = ()
-    source_location: SourceLocation | None = None
+    source: SourceLocation
+    source_identity: QualifiedIdentity | None = None
+    requested_name: str
+    requested_block_kind: str | None
+    namespace: tuple[str, ...]
+    kind: ArtifactKind
 
 
 @dataclass(frozen=True)
@@ -196,11 +211,14 @@ class ReferenceEdge:
     """Immutable resolved reference edge between two artifacts.
 
     Represents a dependency from source to target after resolution.
+    Field order matters: resolvers construct this positionally as
+    ``ReferenceEdge(request.source, request.source_identity, matches[0], request.kind)``.
     """
 
-    source_identity: QualifiedIdentity
-    target_identity: QualifiedIdentity
     location: SourceLocation
+    source: QualifiedIdentity
+    target: QualifiedIdentity
+    kind: ArtifactKind
 
 
 @dataclass(frozen=True)
