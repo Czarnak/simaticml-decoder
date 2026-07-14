@@ -113,6 +113,17 @@ def preflight_xml_bytes(raw: bytes, limits: ProjectLimits) -> DiagnosticCode | N
     loop, which would defeat the point of reusing it. This is a deliberate,
     documented choice (per the task's own guidance): any ``xml_too_complex``
     violation is reported as ``XML_ELEMENT_LIMIT``.
+
+    Note on reachability: ``parse_simaticml_artifact()`` calls
+    ``candidate.artifact.read_bytes(limits)`` with the *same* ``InputLimits``
+    this function derives from ``limits`` -- and that read already runs
+    ``_validate_xml_complexity`` internally (see
+    ``_read_violation_diagnostic``/``_READ_VIOLATION_CODES`` there for how
+    its ``InputViolation.code`` is routed). So on the real, handle-backed
+    pipeline, a bytes payload that reaches this function already passed (or
+    the read already raised and returned before this was ever called) --
+    this is deliberate defense-in-depth / a self-contained, independently
+    testable gate, not the only place these violations are caught.
     """
     try:
         text = raw.decode("utf-8-sig")
@@ -422,6 +433,40 @@ def _adapt_non_block_artifact(raw: bytes, candidate: DiscoveredFile) -> ParsedAr
 # --------------------------------------------------------------------------- #
 
 
+_READ_VIOLATION_CODES: dict[str, DiagnosticCode] = {
+    # `read_bytes()`'s underlying reader (`_make_handle_reader` ->
+    # `_decode_and_validate_xml_text` -> `_validate_xml_complexity`) already
+    # runs the size/complexity gate *during* this same read, using the exact
+    # `InputLimits` `_as_input_limits(limits)` produces. So on the real
+    # (non-test-double) pipeline, an oversized or too-complex artifact never
+    # reaches `preflight_xml_bytes()` at all -- it raises right here, with a
+    # specific `InputViolation.code` that must be routed to the matching
+    # `DiagnosticCode` instead of being discarded.
+    "file_too_large": DiagnosticCode.FILE_SIZE_LIMIT,
+    # `_validate_xml_complexity` raises the *identical*
+    # `InputViolation("xml_too_complex", "XML exceeds the structural
+    # limit")` for both an element-count breach and a depth breach (as well
+    # as an attribute-count/text-length/FlgNet-count breach, which has no
+    # dedicated `DiagnosticCode` either) -- there is no way to tell them
+    # apart from the raised violation alone without re-deriving its
+    # counting loop, which would defeat the point of reusing it (Trap 2).
+    # This is a deliberate, disclosed limitation of reusing
+    # `_validate_xml_complexity` as-is, not something fixed by touching
+    # `input_policy.py`: every `"xml_too_complex"` violation is reported as
+    # `XML_ELEMENT_LIMIT`, whether the real cause was element count, depth,
+    # or one of the other three sub-checks that function also guards.
+    "xml_too_complex": DiagnosticCode.XML_ELEMENT_LIMIT,
+    # Everything else raised by a read (`invalid_encoding`,
+    # `xml_forbidden_declaration`, `unreadable_input`, `input_changed`, ...)
+    # is genuinely malformed/unsafe input from this adapter's point of view;
+    # MALFORMED_XML is the correct catch-all diagnostic for those.
+}
+
+
+def _read_violation_diagnostic(exc: input_policy.InputViolation) -> DiagnosticCode:
+    return _READ_VIOLATION_CODES.get(exc.code, DiagnosticCode.MALFORMED_XML)
+
+
 def parse_simaticml_artifact(candidate: DiscoveredFile, limits: ProjectLimits) -> ParsedArtifact:
     """Adapt one discovered SimaticML XML artifact into a project-index
     record.
@@ -435,9 +480,11 @@ def parse_simaticml_artifact(candidate: DiscoveredFile, limits: ProjectLimits) -
     input_limits = _as_input_limits(limits)
     try:
         raw = candidate.artifact.read_bytes(input_limits)
-    except input_policy.InputViolation:
+    except input_policy.InputViolation as exc:
         return _failed(
-            candidate, DiagnosticCode.MALFORMED_XML, "artifact could not be safely read as XML"
+            candidate,
+            _read_violation_diagnostic(exc),
+            f"artifact could not be safely read as XML ({exc.code})",
         )
     except ET.ParseError:
         return _failed(candidate, DiagnosticCode.MALFORMED_XML, "artifact is not well-formed XML")

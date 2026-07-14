@@ -319,6 +319,62 @@ def test_read_bytes_input_violation_is_failed_with_malformed_xml():
     assert [d.code for d in outcome.record.diagnostics] == [DiagnosticCode.MALFORMED_XML]
 
 
+def test_real_pipeline_element_count_breach_maps_to_xml_element_limit(tmp_path):
+    """Regression for a real routing bug: on the REAL pipeline (real
+    ``discover_project_files`` -> real handle-backed ``read_bytes()``, not
+    ``_FakeArtifact``), an oversized-element-count artifact is caught by
+    ``_validate_xml_complexity`` *during* ``read_bytes()`` itself (it runs
+    with the identical ``InputLimits`` derived from the same
+    ``ProjectLimits``), raising ``InputViolation("xml_too_complex", ...)``
+    at that call site -- not inside ``preflight_xml_bytes()``, which never
+    even runs for this file. A blanket ``except InputViolation`` that
+    discards ``exc.code`` would previously misreport this as
+    ``MALFORMED_XML``. Discovery only checks byte size, not element count,
+    so this small-in-bytes/many-elements file survives discovery and
+    reaches the read exactly as a real large project export would.
+    """
+    root = tmp_path / "project"
+    root.mkdir()
+    raw = ("<Document>" + "<X/>" * 50 + "</Document>").encode("utf-8")
+    (root / "many_elements.xml").write_bytes(raw)
+    limits = ProjectLimits(max_xml_elements=10)
+
+    result = discover_project_files(root, _XML_SUFFIXES, limits)
+    assert len(result.files) == 1  # discovery's byte-size check does not reject this file
+    candidate = result.files[0]
+
+    outcome = project_xml.parse_simaticml_artifact(candidate, limits)
+
+    assert outcome.record.status == ArtifactStatus.FAILED
+    assert [d.code for d in outcome.record.diagnostics] == [DiagnosticCode.XML_ELEMENT_LIMIT]
+
+
+def test_real_pipeline_file_size_breach_at_read_time_maps_to_file_size_limit(tmp_path):
+    """Regression for the same routing bug, for the ``file_too_large``
+    violation code: discovers a file under a generous
+    ``max_file_bytes`` (so it survives discovery), then reads it back
+    through ``parse_simaticml_artifact`` with a stricter, smaller
+    ``max_file_bytes`` -- exactly the real ``read_bytes()``-internal
+    size-limit-before-decode check firing at read time, independent of
+    whatever budget discovery itself used. Must map to
+    ``DiagnosticCode.FILE_SIZE_LIMIT``, not ``MALFORMED_XML``.
+    """
+    root = tmp_path / "project"
+    root.mkdir()
+    raw = b"<Document>" + b"x" * 200 + b"</Document>"
+    (root / "big.xml").write_bytes(raw)
+
+    result = discover_project_files(root, _XML_SUFFIXES, ProjectLimits())
+    assert len(result.files) == 1
+    candidate = result.files[0]
+
+    stricter_limits = ProjectLimits(max_file_bytes=len(raw) - 1)
+    outcome = project_xml.parse_simaticml_artifact(candidate, stricter_limits)
+
+    assert outcome.record.status == ArtifactStatus.FAILED
+    assert [d.code for d in outcome.record.diagnostics] == [DiagnosticCode.FILE_SIZE_LIMIT]
+
+
 def test_synthetic_udt_with_unsupported_version_is_preserved():
     raw = (
         b'<Document><Engineering version="V19" /><SW.Types.PlcStruct ID="0">'
