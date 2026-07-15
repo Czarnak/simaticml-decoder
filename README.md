@@ -97,6 +97,8 @@ basenames only, and single-line bounded detail; they do not expose absolute
 paths, raw parser output, or control characters. Folding/emission failures are
 also isolated so another file in the same batch can continue.
 
+See [`SECURITY.md`](SECURITY.md) for the full security model and vulnerability reporting.
+
 ## Install
 
 ```bash
@@ -129,6 +131,8 @@ Python 3.11-3.14 on Ubuntu and Python 3.11 on Windows (the Windows job is a
 platform-specific smoke test for the native, handle-anchored directory walk;
 see "Untrusted-input policy" above), matching the versions declared in
 `pyproject.toml`'s classifiers.
+
+Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) for development setup, the fixture policy, and the pull request workflow.
 
 ## Usage
 
