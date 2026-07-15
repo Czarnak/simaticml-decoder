@@ -32,6 +32,7 @@ diagnostic.
 from __future__ import annotations
 
 import dataclasses
+import re
 from pathlib import Path, PurePosixPath
 
 from .project_discovery import discover_project_files
@@ -67,6 +68,12 @@ def _diagnostic_sort_key(diagnostic: ProjectDiagnostic) -> tuple[str, str, str, 
 # --library-root validation                                                    #
 # --------------------------------------------------------------------------- #
 
+# Matches a Windows drive-letter prefix (e.g. ``C:\Lib`` or ``C:/Lib``).
+# ``PurePosixPath.is_absolute()`` is False for these under POSIX semantics
+# (POSIX has no drive letters), so this must be checked explicitly -- see
+# ``_validate_library_roots``'s docstring.
+_DRIVE_LETTER_PREFIX = re.compile(r"^[A-Za-z]:")
+
 
 def _validate_library_roots(
     library_roots: tuple[str, ...],
@@ -74,16 +81,39 @@ def _validate_library_roots(
     """Normalize and validate every raw ``--library-root`` value.
 
     A value is rejected -- with an ``OUTSIDE_ROOT`` diagnostic, never a raised
-    exception -- when it is absolute or contains a ``..`` segment; either
-    would let a caller point the override outside the project root it
-    nominally applies to. Valid values are returned as normalized
+    exception -- when it is:
+
+    - empty (``PurePosixPath('')`` normalizes to ``'.'``, which is
+      "relative to" every artifact and would silently reclassify the whole
+      project as ``PROJECT_LIBRARY``);
+    - a path containing a backslash (Windows-style separators are never
+      reinterpreted as POSIX separators here -- doing so silently would
+      turn a caller's typo into either an opaque single segment that
+      matches nothing, or a different path than intended; rejecting
+      outright is clearer than silently guessing);
+    - a Windows drive-letter-prefixed path (e.g. ``C:\\Lib``) -- these are
+      not ``PurePosixPath.is_absolute()`` under POSIX semantics, so they
+      must be checked separately from the absolute-path check below;
+    - absolute (POSIX-style, ``PurePosixPath.is_absolute()``); or
+    - containing a ``..`` segment.
+
+    Any of these would otherwise let a caller point the override outside
+    the project root it nominally applies to, or silently no-op instead of
+    matching anything. Valid values are returned as normalized
     ``PurePosixPath``s ready for the ``is_relative_to`` check below.
     """
     valid: list[PurePosixPath] = []
     diagnostics: list[ProjectDiagnostic] = []
     for raw in library_roots:
         candidate = PurePosixPath(raw)
-        if candidate.is_absolute() or ".." in candidate.parts:
+        is_invalid = (
+            not raw
+            or "\\" in raw
+            or _DRIVE_LETTER_PREFIX.match(raw) is not None
+            or candidate.is_absolute()
+            or ".." in candidate.parts
+        )
+        if is_invalid:
             diagnostics.append(
                 ProjectDiagnostic(
                     code=DiagnosticCode.OUTSIDE_ROOT,

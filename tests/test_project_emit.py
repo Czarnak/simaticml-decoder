@@ -236,6 +236,9 @@ def test_write_project_manifest_leaves_no_destination_on_replace_failure(tmp_pat
         write_project_manifest(_project_index(), destination)
 
     assert not destination.exists()
+    # write_text succeeded before replace raised -- the .tmp sibling must be
+    # cleaned up rather than left orphaned on disk.
+    assert not (tmp_path / ".manifest.json.tmp").exists()
 
 
 def test_write_project_manifest_does_not_clobber_a_previous_manifest_on_replace_failure(
@@ -253,3 +256,4 @@ def test_write_project_manifest_does_not_clobber_a_previous_manifest_on_replace_
         write_project_manifest(_project_index(), destination)
 
     assert json.loads(destination.read_text(encoding="utf-8")) == {"schema_version": 0}
+    assert not (tmp_path / ".manifest.json.tmp").exists()

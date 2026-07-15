@@ -134,12 +134,13 @@ def write_project_manifest(index: ProjectIndex, destination: Path) -> Path:
     so a reader never observes a partially-written manifest and a failure
     partway through never leaves ``destination`` truncated or corrupted.
 
-    A failure in ``temporary.replace(destination)`` propagates as a normal
-    Python exception rather than being swallowed here: this function's own
-    contract is only that ``destination`` is left untouched on failure (any
-    previous complete manifest at that path survives unmodified), not that
-    the exception is translated into a user-facing error -- that translation
-    belongs to the CLI layer, not this module.
+    A failure in ``temporary.write_text(...)`` or ``temporary.replace(...)``
+    propagates as a normal Python exception rather than being swallowed here:
+    this function's own contract is only that ``destination`` is left
+    untouched on failure (any previous complete manifest at that path
+    survives unmodified) and that the ``.tmp`` sibling never lingers past a
+    failed write, not that the exception is translated into a user-facing
+    error -- that translation belongs to the CLI layer, not this module.
     """
     payload = (
         json.dumps(emit_project_manifest(index), indent=2, ensure_ascii=False, sort_keys=True)
@@ -147,6 +148,10 @@ def write_project_manifest(index: ProjectIndex, destination: Path) -> Path:
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(f".{destination.name}.tmp")
-    temporary.write_text(payload, encoding="utf-8")
-    temporary.replace(destination)
+    try:
+        temporary.write_text(payload, encoding="utf-8")
+        temporary.replace(destination)
+    except OSError:
+        temporary.unlink(missing_ok=True)
+        raise
     return destination

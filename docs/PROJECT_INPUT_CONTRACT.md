@@ -123,6 +123,33 @@ flag, covered above.) Inputs that exceed a limit are rejected -- never
 truncated -- and the corresponding diagnostic is attached at the point the
 limit was reached.
 
+### Known limitation: POSIX open-file-descriptor usage during discovery
+
+On POSIX platforms, project discovery's handle-anchored walk (see
+"Symlink and traversal policy" above) opens one file descriptor per
+matched artifact and keeps it open until the later parse loop reads and
+closes it, so the peak number of simultaneously open file descriptors
+during a run is approximately the number of matched files. The default
+`max_files` budget above (`10_000`) can exceed a typical POSIX `ulimit -n`
+(often around `1024`) on a large real-world project, before `max_files`
+itself is ever reached -- raising `EMFILE` mid-discovery, which today
+surfaces as a diagnostic shaped like an `OUTSIDE_ROOT`-style rejection
+rather than a dedicated resource-exhaustion diagnostic, and aborts
+discovery.
+
+This is a known, disclosed scale limitation, not a defect in the
+serial/deterministic ingestion design: Windows discovery uses native NT
+handles with very high limits and is unaffected, and the committed CI
+fixture corpus (24 files) never approaches this threshold. It is deferred
+alongside the other scale milestones this plan's Global Constraints
+already defer -- "Initial project ingestion is serial and deterministic.
+Concurrency, cancellation, streaming, and resume/checkpoints are deferred
+scale milestones, not hidden behavior in this release." Raising the
+process's open-file-descriptor limit (`ulimit -n`) before running
+`--project` against a very large tree, or lowering `--max-files`, are the
+current workarounds; no discovery/read code changes for this limitation
+in this release.
+
 ## Status vocabulary
 
 Every `ArtifactRecord.status` is exactly one of four values:

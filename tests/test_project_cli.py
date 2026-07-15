@@ -154,6 +154,138 @@ def test_invalid_library_root_dotdot_produces_outside_root_diagnostic(tmp_path):
     assert len(outside_root) == 1
 
 
+def test_invalid_library_root_empty_string_produces_outside_root_diagnostic(tmp_path):
+    """An empty ``--library-root`` normalizes to ``PurePosixPath('.')`` under
+    naive handling, which is "relative to" every artifact -- this must be
+    rejected, not silently treated as a match-everything root."""
+    out_dir = tmp_path / "out"
+    code = cli.main(
+        ["--project", str(PROJECT_ROOT), "-o", str(out_dir), "--library-root", "", "-q"]
+    )
+    assert code == 0
+    manifest = _manifest(out_dir)
+    outside_root = [d for d in manifest["diagnostics"] if d["code"] == "outside_root"]
+    assert len(outside_root) == 1
+
+    # The default path-convention classification must still hold -- an empty
+    # override must not silently reclassify every artifact as project-library.
+    by_path = {a["location"]["relative_path"]: a for a in manifest["artifacts"]}
+    assert (
+        by_path["PLC_1/Program blocks/999_MISC/MotorSoftstart.xml"]["identity"]["origin"]
+        == "user"
+    )
+
+
+def test_invalid_library_root_backslash_produces_outside_root_diagnostic(tmp_path):
+    """A Windows-style backslash path must be rejected outright, not
+    reinterpreted as POSIX separators -- under naive ``PurePosixPath``
+    handling it becomes one opaque segment that silently matches nothing."""
+    out_dir = tmp_path / "out"
+    code = cli.main(
+        [
+            "--project",
+            str(PROJECT_ROOT),
+            "-o",
+            str(out_dir),
+            "--library-root",
+            "Types\\Blocks",
+            "-q",
+        ]
+    )
+    assert code == 0
+    manifest = _manifest(out_dir)
+    outside_root = [d for d in manifest["diagnostics"] if d["code"] == "outside_root"]
+    assert len(outside_root) == 1
+
+
+def test_invalid_library_root_drive_letter_produces_outside_root_diagnostic(tmp_path):
+    """A Windows drive-letter path is not ``PurePosixPath.is_absolute()``
+    under POSIX semantics, so it must be flagged by a dedicated check rather
+    than silently accepted as a valid (but never-matching) relative path."""
+    out_dir = tmp_path / "out"
+    code = cli.main(
+        [
+            "--project",
+            str(PROJECT_ROOT),
+            "-o",
+            str(out_dir),
+            "--library-root",
+            "C:\\Lib",
+            "-q",
+        ]
+    )
+    assert code == 0
+    manifest = _manifest(out_dir)
+    outside_root = [d for d in manifest["diagnostics"] if d["code"] == "outside_root"]
+    assert len(outside_root) == 1
+
+
+def test_invalid_library_root_drive_letter_forward_slash_produces_outside_root_diagnostic(
+    tmp_path,
+):
+    """Isolates the drive-letter check from the backslash check: a
+    forward-slash drive-letter path has no backslash at all, so only the
+    dedicated drive-letter-prefix regex can catch it."""
+    out_dir = tmp_path / "out"
+    code = cli.main(
+        [
+            "--project",
+            str(PROJECT_ROOT),
+            "-o",
+            str(out_dir),
+            "--library-root",
+            "C:/Lib",
+            "-q",
+        ]
+    )
+    assert code == 0
+    manifest = _manifest(out_dir)
+    outside_root = [d for d in manifest["diagnostics"] if d["code"] == "outside_root"]
+    assert len(outside_root) == 1
+
+
+# --- manifest-write failure ---------------------------------------------------
+
+
+def test_project_mode_manifest_write_failure_produces_clean_error_and_nonzero_exit(
+    tmp_path, monkeypatch, capsys
+):
+    """``write_project_manifest`` deliberately propagates ``OSError`` (a
+    read-only ``-o`` directory, permission denied, disk full, ...); ``_main_project``
+    must translate that into a clean CLI error and a nonzero exit rather than
+    letting the exception escape as an uncaught traceback. Uses the same
+    ``Path.replace`` monkeypatch technique ``tests/test_project_emit.py``
+    already uses to simulate the failure."""
+    out_dir = tmp_path / "out"
+
+    def _boom(self, target):
+        raise OSError("simulated replace failure")
+
+    monkeypatch.setattr(Path, "replace", _boom)
+
+    code = cli.main(["--project", str(PROJECT_ROOT), "-o", str(out_dir), "-q"])
+
+    assert code != 0
+    err = capsys.readouterr().err
+    assert "OUTPUT_FAILED" in err
+    assert not (out_dir / "project-manifest.json").exists()
+
+
+def test_project_mode_manifest_write_failure_leaves_no_orphaned_tmp_file(
+    tmp_path, monkeypatch
+):
+    out_dir = tmp_path / "out"
+
+    def _boom(self, target):
+        raise OSError("simulated replace failure")
+
+    monkeypatch.setattr(Path, "replace", _boom)
+
+    cli.main(["--project", str(PROJECT_ROOT), "-o", str(out_dir), "-q"])
+
+    assert not (out_dir / ".project-manifest.json.tmp").exists()
+
+
 # --- nonzero exit on any FAILED artifact --------------------------------------
 
 

@@ -231,6 +231,13 @@ def _main_project(args: argparse.Namespace) -> int:
     ``project-manifest.json``. Never calls ``fold.fold_block()`` or
     ``emit.emit_scl()``/``emit.emit_sidecar()`` -- project mode's only output
     is the analysis-only, non-re-importable manifest.
+
+    ``write_project_manifest`` deliberately propagates ``OSError`` (its own
+    docstring scopes CLI-layer error translation out of that module) -- this
+    is the translation point: a write failure (read-only ``-o``, permission
+    denied, disk full, ...) is reported as a clean ``OUTPUT_FAILED`` CLI
+    error with a nonzero exit, the same convention ``_finish_decode`` already
+    uses for legacy-mode output failures, instead of an uncaught traceback.
     """
     project_root = Path(args.project)
     limits = ProjectLimits(
@@ -245,7 +252,12 @@ def _main_project(args: argparse.Namespace) -> int:
     index = index_simaticml_project(project_root, tuple(args.library_root), limits)
 
     out_dir = Path(args.output) if args.output else project_root
-    manifest_path = write_project_manifest(index, out_dir / "project-manifest.json")
+    manifest_target = out_dir / "project-manifest.json"
+    try:
+        manifest_path = write_project_manifest(index, manifest_target)
+    except OSError as exc:
+        print(f"error: {_error(manifest_target, 'OUTPUT_FAILED', safe_text(exc))}", file=sys.stderr)
+        return 1
 
     if not args.quiet:
         failed = sum(1 for record in index.artifacts if record.status == ArtifactStatus.FAILED)
