@@ -57,3 +57,9 @@ testpaths = ["tests"]
 # regression. It has its own platform-gated suite (test_windows_handles.py,
 # skipif'd to run only on windows-latest) that verifies it directly instead.
 omit = ["src/simaticml_decoder/windows_handles.py"]
+
+[tool.coverage.report]
+# Records, in pyproject.toml itself, the same 80% floor CI already passes
+# explicitly via `--cov-fail-under=80` -- so the gate is enforced even for a
+# bare `pytest --cov=...` run and isn't defined in CI alone.
+fail_under = 80

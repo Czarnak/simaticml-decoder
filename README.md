@@ -112,6 +112,24 @@ pip install -e ".[dev]"
 Runtime dependencies: none (standard-library `xml.etree.ElementTree`). The `dev`
 extra pulls lint, test, coverage, build, and package-validation tools.
 
+## Development
+
+After installing the `dev` extra, run the exact same two commands CI
+(`.github/workflows/ci.yml`) runs before committing:
+
+```bash
+ruff check .
+pytest -q --cov=simaticml_decoder --cov-report=term-missing --cov-fail-under=80
+```
+
+Both must pass locally. The 80% coverage floor is also recorded in
+`pyproject.toml` (`[tool.coverage.report] fail_under = 80`), so it is enforced
+even for a bare `pytest --cov=...` invocation, not only in CI. CI runs on
+Python 3.11-3.14 on Ubuntu and Python 3.11 on Windows (the Windows job is a
+platform-specific smoke test for the native, handle-anchored directory walk;
+see "Untrusted-input policy" above), matching the versions declared in
+`pyproject.toml`'s classifiers.
+
 ## Usage
 
 ```bash
