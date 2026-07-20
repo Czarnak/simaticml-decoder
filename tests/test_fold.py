@@ -207,6 +207,100 @@ def test_or_junction_negated_pin_wraps_not():
     assert negated[0].operand.name == "#a"
 
 
+def test_and_junction_negated_out_pin_wraps_not():
+    # NAND: <Negated Name="out"/> on the "A" Part itself negates the junction's
+    # result, not one of its input branches — distinct from an in-pin negation.
+    parts = {
+        "1": model.Part(uid="1", name="A", negated_pins=["out"]),
+        "2": model.Part(uid="2", name="Coil"),
+    }
+    accesses = {"10": _sym("10", "a"), "11": _sym("11", "b"), "12": _sym("12", "y")}
+    wires = [
+        Wire(uid="w1", endpoints=[_ic("10"), _nc("1", "in1")]),
+        Wire(uid="w2", endpoints=[_ic("11"), _nc("1", "in2")]),
+        Wire(uid="w3", endpoints=[_nc("1", "out"), _nc("2", "in")]),
+        Wire(uid="w4", endpoints=[_ic("12"), _nc("2", "operand")]),
+    ]
+    stmt = fold.fold_network(_net(parts, accesses, wires)).statements[0]
+    assert isinstance(stmt.value, ir.Not)
+    assert isinstance(stmt.value.operand, ir.And)
+    assert sorted(o.name for o in stmt.value.operand.operands) == ["#a", "#b"]
+
+
+def test_or_junction_negated_out_pin_wraps_not():
+    # NOR: same as the NAND case above, but for "O".
+    parts = {
+        "1": model.Part(uid="1", name="O", negated_pins=["out"]),
+        "2": model.Part(uid="2", name="Coil"),
+    }
+    accesses = {"10": _sym("10", "a"), "11": _sym("11", "b"), "12": _sym("12", "y")}
+    wires = [
+        Wire(uid="w1", endpoints=[_ic("10"), _nc("1", "in1")]),
+        Wire(uid="w2", endpoints=[_ic("11"), _nc("1", "in2")]),
+        Wire(uid="w3", endpoints=[_nc("1", "out"), _nc("2", "in")]),
+        Wire(uid="w4", endpoints=[_ic("12"), _nc("2", "operand")]),
+    ]
+    stmt = fold.fold_network(_net(parts, accesses, wires)).statements[0]
+    assert isinstance(stmt.value, ir.Not)
+    assert isinstance(stmt.value.operand, ir.Or)
+    assert sorted(o.name for o in stmt.value.operand.operands) == ["#a", "#b"]
+
+
+def test_flipflop_negated_set_reset_pins_wrap_not():
+    # <Negated Name="r1"/> on an "Sr" Part negates its reset input, the same way
+    # per-pin negation applies to junction and box inputs.
+    parts = {"1": model.Part(uid="1", name="Sr", negated_pins=["r1"])}
+    accesses = {
+        "10": _sym("10", "set_cond"),
+        "11": _sym("11", "reset_cond"),
+        "12": _sym("12", "q"),
+    }
+    wires = [
+        Wire(uid="w1", endpoints=[_ic("10"), _nc("1", "s")]),
+        Wire(uid="w2", endpoints=[_ic("11"), _nc("1", "r1")]),
+        Wire(uid="w3", endpoints=[_ic("12"), _nc("1", "operand")]),
+    ]
+    stmt = fold.fold_network(_net(parts, accesses, wires)).statements[0]
+    assert isinstance(stmt, ir.FlipFlop)
+    assert isinstance(stmt.set_expr, ir.VarRef) and stmt.set_expr.name == "#set_cond"
+    assert isinstance(stmt.reset_expr, ir.Not)
+    assert stmt.reset_expr.operand.name == "#reset_cond"
+
+
+def test_box_negated_en_pin_wraps_not():
+    # <Negated Name="en"/> on a box Part negates its enable condition, the same
+    # way per-pin negation applies to the box's other input pins.
+    parts = {"1": model.Part(uid="1", name="Move", negated_pins=["en"])}
+    accesses = {"10": _sym("10", "inhibit"), "11": _sym("11", "src"), "12": _sym("12", "dst")}
+    wires = [
+        Wire(uid="w1", endpoints=[_ic("10"), _nc("1", "en")]),
+        Wire(uid="w2", endpoints=[_ic("11"), _nc("1", "in")]),
+        Wire(uid="w3", endpoints=[_nc("1", "out1"), _ic("12")]),
+    ]
+    stmt = fold.fold_network(_net(parts, accesses, wires)).statements[0]
+    assert isinstance(stmt, ir.BoxCall)
+    assert isinstance(stmt.enable, ir.Not)
+    assert stmt.enable.operand.name == "#inhibit"
+
+
+def test_box_negated_output_pin_read_wraps_not():
+    # <Negated Name="Q"/> on a TON Part negates its own Q output where that
+    # output is read as a sub-expression feeding downstream logic.
+    parts = {
+        "1": model.Part(uid="1", name="TON", negated_pins=["Q"]),
+        "2": model.Part(uid="2", name="Coil"),
+    }
+    accesses = {"10": _sym("10", "y")}
+    wires = [
+        Wire(uid="w1", endpoints=[_nc("1", "Q"), _nc("2", "in")]),
+        Wire(uid="w2", endpoints=[_ic("10"), _nc("2", "operand")]),
+    ]
+    statements = fold.fold_network(_net(parts, accesses, wires)).statements
+    stmt = next(s for s in statements if isinstance(s, ir.Assign))
+    assert isinstance(stmt.value, ir.Not)
+    assert stmt.value.operand.name == "#TON_1.Q"
+
+
 def test_f_system_safety_boxes_are_catalogued():
     # ACK_GL, ESTOP1, SFDOOR, FDBACK: S7 F-system safety instructions, boxed
     # like any other system FB (en/eno), just with F-specific pin names.
@@ -214,6 +308,18 @@ def test_f_system_safety_boxes_are_catalogued():
         spec = instructions.lookup(name)
         assert spec is not None, f"{name} missing from catalog"
         assert spec.category == Category.BOX
+
+
+def test_estop1_pins_match_real_export():
+    # ESTOP1 v1.6, confirmed against a real TIA V16 export: en/E_STOP/ACK_NEC/
+    # ACK/TIME_DEL in, Q/Q_DELAY/ACK_REQ/DIAG/eno out. Regression for a prior
+    # placeholder entry that listed generic in1/in2 pins that don't exist on
+    # this block.
+    spec = instructions.lookup("ESTOP1")
+    assert spec is not None
+    assert set(spec.pins) == {
+        "en", "E_STOP", "ACK_NEC", "ACK", "TIME_DEL", "Q", "Q_DELAY", "ACK_REQ", "DIAG", "eno",
+    }
 
 
 def test_ack_gl_box_call_folds_with_wired_pin():

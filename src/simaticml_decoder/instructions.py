@@ -105,7 +105,12 @@ CATALOG: dict[str, Spec] = {
     # official interface — unlisted wired pins are still discovered dynamically
     # from the network, since `pins` is informative only (see lookup()).
     "ACK_GL": _box("ACK_GL", ("en", "ACK_GLOB", "eno")),
-    "ESTOP1": _box("ESTOP1", ("en", "in1", "in2", "eno")),
+    # ESTOP1 v1.6 confirmed against a real TIA V16 export (temp/Main_Safety_RTG1.xml):
+    # en/E_STOP/ACK_NEC/ACK/TIME_DEL in, Q/Q_DELAY/ACK_REQ/DIAG/eno out.
+    "ESTOP1": _box(
+        "ESTOP1",
+        ("en", "E_STOP", "ACK_NEC", "ACK", "TIME_DEL", "Q", "Q_DELAY", "ACK_REQ", "DIAG", "eno"),
+    ),
     "SFDOOR": _box("SFDOOR", ("en", "IN1", "eno")),
     "FDBACK": _box("FDBACK", ("en", "ON", "QBAD_FIO", "eno")),
 }
