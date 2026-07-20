@@ -22,6 +22,7 @@ class Category(str, Enum):
     POWER_FLOW = "power_flow"  # in/out, contact-like: passes or blocks power
     COIL = "coil"  # in/out, writes its operand
     OR_JUNCTION = "or_junction"  # merges parallel branches (Part Name="O")
+    AND_JUNCTION = "and_junction"  # merges parallel branches (Part Name="A")
     COMPARISON = "comparison"  # pre/out, contact-like compare
     EDGE = "edge"  # pre/out or in/out, rising/falling detection
     FLIPFLOP = "flipflop"  # named set/reset inputs -> q
@@ -63,6 +64,7 @@ CATALOG: dict[str, Spec] = {
     "SCoil": _coil("SCoil", "S"),  # set coil  ( S )
     "RCoil": _coil("RCoil", "R"),  # reset coil ( R )
     "O": Spec("O", Category.OR_JUNCTION, None, "out", "OR", ("in1", "in2", "out")),
+    "A": Spec("A", Category.AND_JUNCTION, None, "out", "AND", ("in1", "in2", "out")),
     # --- comparisons (pre/out, contact-like) ------------------------------ #
     "Lt": _cmp("Lt", "<"),
     "Le": _cmp("Le", "<="),
@@ -97,6 +99,15 @@ CATALOG: dict[str, Spec] = {
     "TP": _box("TP", ("IN", "PT", "Q", "ET")),
     # --- system FC example ------------------------------------------------- #
     "RD_LOC_T": _box("RD_LOC_T", ("en", "RET_VAL", "OUT", "eno")),
+    # --- F-system safety instructions (S7 F-blocks; en/eno boxes like any --- #
+    # other system FB, just with F-specific pin names). Pin tuples below list
+    # only the pins observed as wired in practice, not necessarily the full
+    # official interface — unlisted wired pins are still discovered dynamically
+    # from the network, since `pins` is informative only (see lookup()).
+    "ACK_GL": _box("ACK_GL", ("en", "ACK_GLOB", "eno")),
+    "ESTOP1": _box("ESTOP1", ("en", "in1", "in2", "eno")),
+    "SFDOOR": _box("SFDOOR", ("en", "IN1", "eno")),
+    "FDBACK": _box("FDBACK", ("en", "ON", "QBAD_FIO", "eno")),
 }
 
 

@@ -240,6 +240,8 @@ class _NetFolder:
             return self._eval_edge(part, uid, spec)
         if cat == Category.OR_JUNCTION:
             return self._eval_or(uid)
+        if cat == Category.AND_JUNCTION:
+            return self._eval_and(uid)
         if cat == Category.FLIPFLOP:
             return self._operand_varref(uid) or _POWER
         if cat == Category.BOX:
@@ -263,12 +265,32 @@ class _NetFolder:
         return _and([incoming, edge])
 
     def _eval_or(self, uid: str) -> ir.Expr:
-        branches = []
-        for pin in self._sorted_input_pins(uid):
-            branches.append(_materialize(self._driver_expr(uid, pin)))
+        branches = self._junction_branches(uid)
         if not branches:
             return _POWER
         return _factor_or(branches)
+
+    def _eval_and(self, uid: str) -> ir.Expr:
+        branches = self._junction_branches(uid)
+        if not branches:
+            return _POWER
+        return _and(branches)
+
+    def _junction_branches(self, uid: str) -> list[ir.Expr]:
+        """Collect and materialize an OR/AND junction's input branches.
+
+        A ``Negated Name="inN"`` on the junction Part itself (distinct from a
+        negated *Contact* feeding it) wraps that one branch in ``Not`` — TIA lets
+        you negate an individual input pin of an AND/OR box directly.
+        """
+        part = self.net.parts.get(uid)
+        branches: list[ir.Expr] = []
+        for pin in self._sorted_input_pins(uid):
+            expr = _materialize(self._driver_expr(uid, pin))
+            if part is not None and pin in part.negated_pins:
+                expr = ir.Not(operand=expr)
+            branches.append(expr)
+        return branches
 
     # -- helpers used by eval ---------------------------------------------- #
     def _driver_expr(self, uid: str, pin: str | None):
@@ -392,7 +414,10 @@ class _NetFolder:
                 if expr is not _POWER:
                     enable = _materialize(expr)
             else:
-                inputs[pin] = _materialize(expr)
+                value = _materialize(expr)
+                if pin in part.negated_pins:
+                    value = ir.Not(operand=value)
+                inputs[pin] = value
 
         for (u, pin), sinks in self.pin_out_sinks.items():
             if u != uid or pin == spec.power_out:
