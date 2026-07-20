@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "simaticml-decoder"
-version = "0.2.2"
+version = "0.2.3"
 description = "Translate exported SimaticML LAD/FBD blocks (TIA V21) into readable SCL plus a JSON metadata sidecar."
 requires-python = ">=3.11"
 readme = "README.md"
