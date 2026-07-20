@@ -240,13 +240,18 @@ class _NetFolder:
             return self._eval_edge(part, uid, spec)
         if cat == Category.OR_JUNCTION:
             return self._eval_or(uid)
+        if cat == Category.AND_JUNCTION:
+            return self._eval_and(uid)
         if cat == Category.FLIPFLOP:
             return self._operand_varref(uid) or _POWER
         if cat == Category.BOX:
             # Reading a box output pin (Q/ET/OUT/RET_VAL): a member of its
             # instance, or a synthetic name when there is no instance.
             label = self._box_label(part)
-            return ir.VarRef(name=f"{label}.{pin}", uid=uid)
+            value = ir.VarRef(name=f"{label}.{pin}", uid=uid)
+            if pin in part.negated_pins:
+                return ir.Not(operand=value)
+            return value
         return ir.Unhandled(part.name, uid, "unclassified category")
 
     def _eval_edge(self, part: model.Part, uid: str, spec) -> ir.Expr:
@@ -263,12 +268,41 @@ class _NetFolder:
         return _and([incoming, edge])
 
     def _eval_or(self, uid: str) -> ir.Expr:
-        branches = []
-        for pin in self._sorted_input_pins(uid):
-            branches.append(_materialize(self._driver_expr(uid, pin)))
+        branches = self._junction_branches(uid)
         if not branches:
             return _POWER
-        return _factor_or(branches)
+        return self._negate_out(uid, _factor_or(branches))
+
+    def _eval_and(self, uid: str) -> ir.Expr:
+        branches = self._junction_branches(uid)
+        if not branches:
+            return _POWER
+        return self._negate_out(uid, _and(branches))
+
+    def _negate_out(self, uid: str, expr: ir.Expr) -> ir.Expr:
+        """Wrap in Not when the junction's own ``out`` pin is negated (NAND/NOR:
+        ``<Negated Name="out"/>`` on the A/O Part itself, distinct from a
+        negated input branch)."""
+        part = self.net.parts.get(uid)
+        if part is not None and "out" in part.negated_pins:
+            return ir.Not(operand=expr)
+        return expr
+
+    def _junction_branches(self, uid: str) -> list[ir.Expr]:
+        """Collect and materialize an OR/AND junction's input branches.
+
+        A ``Negated Name="inN"`` on the junction Part itself (distinct from a
+        negated *Contact* feeding it) wraps that one branch in ``Not`` — TIA lets
+        you negate an individual input pin of an AND/OR box directly.
+        """
+        part = self.net.parts.get(uid)
+        branches: list[ir.Expr] = []
+        for pin in self._sorted_input_pins(uid):
+            expr = _materialize(self._driver_expr(uid, pin))
+            if part is not None and pin in part.negated_pins:
+                expr = ir.Not(operand=expr)
+            branches.append(expr)
+        return branches
 
     # -- helpers used by eval ---------------------------------------------- #
     def _driver_expr(self, uid: str, pin: str | None):
@@ -340,7 +374,7 @@ class _NetFolder:
             return self._make_flipflop(uid, part)
         if cat == Category.BOX:
             return self._make_box(uid, part, spec)
-        # Contacts / comparisons / edges / OR are sub-expressions, not statements.
+        # Contacts / comparisons / edges / AND / OR are sub-expressions, not statements.
         return None
 
     def _make_assign(self, uid: str, part: model.Part, spec) -> ir.Statement:
@@ -371,10 +405,16 @@ class _NetFolder:
             self.warnings.append(f"Network {self.index}: {note} (UId {uid})")
             return ir.Unhandled(part_name=part.name, uid=uid, note=note)
         set_pin, reset_pin = _FLIPFLOP_PINS.get(part.name, ("s", "r"))
+        set_expr = _materialize(self._driver_expr(uid, set_pin))
+        if set_pin in part.negated_pins:
+            set_expr = ir.Not(operand=set_expr)
+        reset_expr = _materialize(self._driver_expr(uid, reset_pin))
+        if reset_pin in part.negated_pins:
+            reset_expr = ir.Not(operand=reset_expr)
         return ir.FlipFlop(
             target=target,
-            set_expr=_materialize(self._driver_expr(uid, set_pin)),
-            reset_expr=_materialize(self._driver_expr(uid, reset_pin)),
+            set_expr=set_expr,
+            reset_expr=reset_expr,
             reset_priority=(part.name == "Rs"),
             uid=uid,
         )
@@ -391,8 +431,13 @@ class _NetFolder:
             if pin == spec.power_in:  # the en pin
                 if expr is not _POWER:
                     enable = _materialize(expr)
+                    if pin in part.negated_pins:
+                        enable = ir.Not(operand=enable)
             else:
-                inputs[pin] = _materialize(expr)
+                value = _materialize(expr)
+                if pin in part.negated_pins:
+                    value = ir.Not(operand=value)
+                inputs[pin] = value
 
         for (u, pin), sinks in self.pin_out_sinks.items():
             if u != uid or pin == spec.power_out:

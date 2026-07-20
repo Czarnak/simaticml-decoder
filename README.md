@@ -36,11 +36,13 @@ authoritative-looking SCL is the worst possible failure.
 
 ## Scope
 
-Covered: FC/FB blocks; LAD/FBD folding (series→AND, `O`→OR, fan-out, `Negated`→NOT,
+Covered: FC/FB blocks; LAD/FBD folding (series→AND, `O`→OR, `A`→AND, fan-out,
+`Negated`→NOT on contacts *and* on individual AND/OR/box input pins,
 daisy-chained coils, structural latch detection); SCL network reconstruction;
 ground-truth interface types; cross-reference table; the instruction set seen in
-real V21 samples (Contact, Coil/SCoil/RCoil, `O`, Move/Add/Inc, comparisons,
-Rs/Sr, P/N edges, TON family, user FC/FB calls).
+real V21 samples (Contact, Coil/SCoil/RCoil, `O`, `A`, Move/Add/Inc, comparisons,
+Rs/Sr, P/N edges, TON family, F-system safety boxes ACK_GL/ESTOP1/SFDOOR/FDBACK,
+user FC/FB calls).
 
 Deferred (parsed losslessly, rendering flagged): GRAPH/SFC and STL networks;
 absolute-addressing / array / `Operation`-template rendering. Output is
